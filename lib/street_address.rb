@@ -63,8 +63,8 @@
 =end
 
 module StreetAddress
-  VERSION = '1.0.1'
   class US
+    VERSION = '1.0.2'
     DIRECTIONAL = {
       "north" => "N",
       "northeast" => "NE",

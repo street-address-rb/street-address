@@ -1,0 +1,34 @@
+StreetAddress
+    by Derrek Long
+    https://github.com/derrek/street-address
+
+== DESCRIPTION:
+  
+Parses one line street addresses and returns a normalized address object.
+
+This is a near direct port of the of the perl module 
+Geo::StreetAddress::US originally written by Schuyler D. Erle.  
+For more information see
+http://search.cpan.org/~sderle/Geo-StreetAddress-US-0.99/
+
+== SYNOPSIS:
+
+Parse United States addresses.
+
+=== Basic Usage:
+require 'street_address'
+address = StreetAddress::US.parse("1600 Pennsylvania Ave, Washington, DC, 20500")
+address.street # Pennsylvania
+address.number # 1600
+address.postal_code # 20500
+address.city # Washington
+address.state # DC
+address.state_name # District of columbia
+address.street_type # Ave
+address.intersection? # false
+
+StreetAddress::US.parse("1600 Pennsylvania Ave") # nil not a full address
+
+=== Gemfile:
+To use from your Gemfile:
+gem 'StreetAddress', '1.0.2', :require => "street_address
