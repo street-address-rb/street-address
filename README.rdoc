@@ -31,4 +31,4 @@ Parse United States addresses.
 
 === Gemfile:
 To use from your Gemfile:
-  gem 'StreetAddress', '1.0.2', :require => "street_address
+  gem 'StreetAddress', '1.0.2', :require => "street_address"
