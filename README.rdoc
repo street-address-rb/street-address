@@ -26,7 +26,8 @@ Parse United States addresses.
   address.state_name # District of columbia
   address.street_type # Ave
   address.intersection? # false
-
+  address.to_s # "1600 Pennsylvania Ave, Washington, DC 20500"
+  address.to_s(:line1) # 1600 Pennsylvania Ave
   StreetAddress::US.parse("1600 Pennsylvania Ave") # nil not a full address
 
 === Gemfile:
