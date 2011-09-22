@@ -809,37 +809,47 @@ module StreetAddress
         !street2.nil?
       end
 
-      def to_s
+      def line1(s = "")
+        s += number
+        s += " " + prefix unless prefix.nil?
+        s += " " + street unless street.nil?
+        s += " " + street_type unless street_type.nil?
+        if( !unit_prefix.nil? && !unit.nil? )
+          s += " " + unit_prefix 
+          s += " " + unit
+        elsif( unit_prefix.nil? && !unit.nil? )
+          s += " #" + unit
+        end
+        s += " " + suffix unless suffix.nil?
+        return s
+      end
+
+      def to_s(format = :default)
         s = ""
-        if intersection?
-          s += prefix + " " unless prefix.nil?
-          s += street 
-          s += " " + street_type unless street_type.nil?
-          s += " " + suffix unless suffix.nil?
-          s += " and"
-          s += " " + prefix2 unless prefix2.nil?
-          s += " " + street2
-          s += " " + street_type2 unless street_type2.nil?
-          s += " " + suffix2 unless suffix2.nil?
-          s += ", " + city unless city.nil?
-          s += ", " + state unless state.nil?
-          s += " " + postal_code unless postal_code.nil?
+        case format
+        when :line1
+          s += line1(s)
         else
-          s += number
-          s += " " + prefix unless prefix.nil?
-          s += " " + street unless street.nil?
-          s += " " + street_type unless street_type.nil?
-          if( !unit_prefix.nil? && !unit.nil? )
-            s += " " + unit_prefix 
-            s += " " + unit
-          elsif( unit_prefix.nil? && !unit.nil? )
-            s += " #" + unit
+          if intersection?
+            s += prefix + " " unless prefix.nil?
+            s += street 
+            s += " " + street_type unless street_type.nil?
+            s += " " + suffix unless suffix.nil?
+            s += " and"
+            s += " " + prefix2 unless prefix2.nil?
+            s += " " + street2
+            s += " " + street_type2 unless street_type2.nil?
+            s += " " + suffix2 unless suffix2.nil?
+            s += ", " + city unless city.nil?
+            s += ", " + state unless state.nil?
+            s += " " + postal_code unless postal_code.nil?
+          else
+            s += line1(s)
+            s += ", " + city unless city.nil?
+            s += ", " + state unless state.nil?
+            s += " " + postal_code unless postal_code.nil?
+            s += "-" + postal_code_ext unless postal_code_ext.nil?
           end
-          s += " " + suffix unless suffix.nil?
-          s += ", " + city unless city.nil?
-          s += ", " + state unless state.nil?
-          s += " " + postal_code unless postal_code.nil?
-          s += "-" + postal_code_ext unless postal_code_ext.nil?
         end
         return s
       end  
