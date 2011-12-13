@@ -1,7 +1,3 @@
-StreetAddress
-    by Derrek Long
-    https://github.com/derrek/street-address
-
 == DESCRIPTION:
   
 Parses one line street addresses and returns a normalized address object.
@@ -29,6 +25,20 @@ Parse United States addresses.
   address.to_s # "1600 Pennsylvania Ave, Washington, DC 20500"
   address.to_s(:line1) # 1600 Pennsylvania Ave
   StreetAddress::US.parse("1600 Pennsylvania Ave") # nil not a full address
+
+=== Informal/Loose Parsing
+  address = StreetAddress::US.parse("1600 Pennsylvania Avenue", :informal => true)
+  address.number # 1600
+  address.street # Pennsylvania
+  address.street_type # Ave
+  address.to_s # 1600 Pennsylvania Ave
+
+=== Zip+4
+  address = StreetAddress::US.parse("5904 Richmond Hwy Ste 340 Alexandria VA 22303-1864")
+  address.postal_code_ext # 1846
+  
+  address = StreetAddress::US.parse("5904 Richmond Hwy Ste 340 Alexandria VA 223031864")
+  address.postal_code_ext # 1846
 
 === Gemfile:
 To use from your Gemfile:
