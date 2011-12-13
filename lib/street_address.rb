@@ -576,13 +576,15 @@ module StreetAddress
         :number_regexp,
         :fraction_regexp,
         :state_regexp,
+        :city_and_state_regexp,
         :direct_regexp, 
         :zip_regexp,
         :corner_regexp,
         :unit_regexp,
         :street_regexp,
         :place_regexp,
-        :address_regexp
+        :address_regexp,
+        :informal_address_regexp
       )
     end
       
@@ -590,6 +592,12 @@ module StreetAddress
     self.number_regexp = '\d+-?\d*'
     self.fraction_regexp = '\d+\/\d+'
     self.state_regexp = STATE_CODES.to_a.join("|").gsub(/ /, "\\s")
+    self.city_and_state_regexp = '
+      (?:
+        ([^\d,]+?)\W+
+        (' + state_regexp + ')
+      )'
+      
     self.direct_regexp = DIRECTIONAL.keys.join("|") + 
       "|" + 
       DIRECTIONAL.values.sort{ |a,b| 
@@ -621,10 +629,7 @@ module StreetAddress
           )
         )'
     self.place_regexp = 
-      '(?:
-       ([^\d,]+?)\W+
-       ($' + state_regexp + ')\W*
-       )?
+      '(?:' + city_and_state_regexp + '\W*)?
        (?:' + zip_regexp + ')?'
     
     self.address_regexp =
@@ -636,26 +641,39 @@ module StreetAddress
         place_regexp +
       '\W*\Z'
       
+    self.informal_address_regexp =
+      '\A\s*
+        (' + number_regexp + ')\W*
+        (?:' + fraction_regexp + '\W*)?' +
+        street_regexp + '(?:\W+|\Z)
+        (?:' + unit_regexp + '(?:\W+|\Z))?' +
+        '(?:' + place_regexp + ')?'
+
 =begin rdoc
 
     parses either an address or intersection and returns an instance of
     StreetAddress::US::Address or nil if the location cannot be parsed
+
+    pass the arguement, :informal => true, to make parsing more lenient
     
 ====example
     StreetAddress::US.parse('1600 Pennsylvania Ave Washington, DC 20006')
     or:
     StreetAddress::US.parse('Hollywood & Vine, Los Angeles, CA')
+    or
+    StreetAddress::US.parse("1600 Pennsylvania Ave", :informal => true)
     
 =end
     class << self
-      def parse(location)
+      def parse(location, args = {})
         if Regexp.new(corner_regexp, Regexp::IGNORECASE).match(location)
-          parse_intersection(location);
+          parse_intersection(location)
+        elsif args[:informal]
+          parse_address(location) || parse_informal_address(location)
         else 
           parse_address(location);
         end
       end
-
 =begin rdoc
     
     parses only an intersection and returnsan instance of
@@ -705,6 +723,28 @@ module StreetAddress
 =end
       def parse_address(addr)
          regex = Regexp.new(address_regexp, Regexp::IGNORECASE + Regexp::EXTENDED)
+
+         return unless match = regex.match(addr)
+
+         normalize_address(
+           StreetAddress::US::Address.new(
+           :number => match[1],
+           :street => match[5] || match[10] || match[2],
+           :street_type => match[6] || match[3],
+           :unit => match[14],
+           :unit_prefix => match[13],
+           :suffix => match[7] || match[12],
+           :prefix => match[4],
+           :city => match[15],
+           :state => match[16],
+           :postal_code => match[17],
+           :postal_code_ext => match[18]
+           )
+        )
+      end
+
+      def parse_informal_address(addr)
+         regex = Regexp.new(informal_address_regexp, Regexp::IGNORECASE + Regexp::EXTENDED)
 
          return unless match = regex.match(addr)
 
