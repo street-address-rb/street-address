@@ -598,7 +598,7 @@ module StreetAddress
         f = x.gsub(/(\w)/, '\1.')
         [Regexp::quote(f), Regexp::quote(x)] 
       }.join("|")
-    self.zip_regexp = '(\d{5})(?:-(\d{4}))?'
+    self.zip_regexp = '(\d{5})(?:-?(\d{4})?)'
     self.corner_regexp = '(?:\band\b|\bat\b|&|\@)'
     self.unit_regexp = '(?:(su?i?te|p\W*[om]\W*b(?:ox)?|dept|apt|apartment|ro*m|fl|unit|box)\W+|\#\W*)([\w-]+)'
     self.street_regexp = 

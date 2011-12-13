@@ -17,6 +17,16 @@ class StreetAddressUsTest < Test::Unit::TestCase
 
   end
 
+  def test_zip_plus_4_with_dash
+    addr = StreetAddress::US.parse("2730 S Veitch St, Arlington, VA 22206-3333")
+    assert_equal "3333", addr.postal_code_ext
+  end
+
+  def test_zip_plus_4_without_dash
+    addr = StreetAddress::US.parse("2730 S Veitch St, Arlington, VA 222064444")
+    assert_equal "4444", addr.postal_code_ext
+  end
+
   def test_parse
     assert_equal StreetAddress::US.parse("&"), nil
     assert_equal StreetAddress::US.parse(" and "), nil
