@@ -850,6 +850,7 @@ module StreetAddress
       end
 
       def line1(s = "")
+        return nil if intersection?
         s += number
         s += " " + prefix unless prefix.nil?
         s += " " + street unless street.nil?
