@@ -165,6 +165,7 @@ module StreetAddress
       "crssng" => "xing",
       "crt" => "ct",
       "curve" => "curv",
+      "cur" => "curv",
       "dale" => "dl",
       "dam" => "dm",
       "div" => "dv",
