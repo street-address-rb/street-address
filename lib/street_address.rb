@@ -64,7 +64,7 @@
 
 module StreetAddress
   class US
-    VERSION = '1.0.4'
+    VERSION = '1.0.5'
     DIRECTIONAL = {
       "north" => "N",
       "northeast" => "NE",
@@ -850,6 +850,7 @@ module StreetAddress
       end
 
       def line1(s = "")
+        return if intersection?
         s += number
         s += " " + prefix unless prefix.nil?
         s += " " + street unless street.nil?
