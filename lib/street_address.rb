@@ -22,7 +22,7 @@
     Hollywood & Vine, Los Angeles, CA, 90028
     Hollywood Blvd and Vine St, Los Angeles, CA, 90028
     Mission Street at Valencia Street, San Francisco, CA, 90028
-    
+
 ==== License
 
     Copyright (c) 2007 Riderway (Derrek Long, Nicholas Schlueter)
@@ -47,19 +47,19 @@
     WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 ==== Notes
-    If parts of the address are omitted from the original string 
+    If parts of the address are omitted from the original string
     the accessor will be nil in StreetAddress::US::Address.
-    
+
     Example:
     address = StreetAddress::US.parse("1600 Pennsylvania Ave, washington, dc")
     assert address.postal_code.nil?
-    
+
 ==== Acknowledgements
-    
+
     This gem is a near direct port of the perl module Geo::StreetAddress::US
     originally written by Schuyler D. Erle.  For more information see
     http://search.cpan.org/~sderle/Geo-StreetAddress-US-0.99/
-    
+
 =end
 
 module StreetAddress
@@ -442,9 +442,9 @@ module StreetAddress
       "wells" => "wls",
       "wy" => "way"
     }
-  
+
     STREET_TYPES_LIST = {}
-    STREET_TYPES.to_a.each do |item| 
+    STREET_TYPES.to_a.each do |item|
       STREET_TYPES_LIST[item[0]] = true
       STREET_TYPES_LIST[item[1]] = true
     end
@@ -512,7 +512,7 @@ module StreetAddress
     }
 
     STATE_NAMES = STATE_CODES.invert
-    
+
     STATE_FIPS = {
       "01" => "AL",
       "02" => "AK",
@@ -570,7 +570,7 @@ module StreetAddress
     }
 
     FIPS_STATES = STATE_FIPS.invert
-    
+
     class << self
       attr_accessor(
         :street_type_regexp,
@@ -588,7 +588,7 @@ module StreetAddress
         :informal_address_regexp
       )
     end
-      
+
     self.street_type_regexp = STREET_TYPES_LIST.keys.join("|")
     self.number_regexp = '\d+-?\d*'
     self.fraction_regexp = '\d+\/\d+'
@@ -598,19 +598,19 @@ module StreetAddress
         ([^\d,]+?)\W+
         (' + state_regexp + ')
       )'
-      
-    self.direct_regexp = DIRECTIONAL.keys.join("|") + 
-      "|" + 
-      DIRECTIONAL.values.sort{ |a,b| 
-        b.length <=> a.length 
-      }.map{ |x| 
+
+    self.direct_regexp = DIRECTIONAL.keys.join("|") +
+      "|" +
+      DIRECTIONAL.values.sort{ |a,b|
+        b.length <=> a.length
+      }.map{ |x|
         f = x.gsub(/(\w)/, '\1.')
-        [Regexp::quote(f), Regexp::quote(x)] 
+        [Regexp::quote(f), Regexp::quote(x)]
       }.join("|")
     self.zip_regexp = '(\d{5})(?:-?(\d{4})?)'
     self.corner_regexp = '(?:\band\b|\bat\b|&|\@)'
     self.unit_regexp = '(?:(su?i?te|p\W*[om]\W*b(?:ox)?|dept|apt|apartment|ro*m|fl|unit|box)\W+|\#\W*)([\w-]+)'
-    self.street_regexp = 
+    self.street_regexp =
       '(?:
           (?:(' + direct_regexp + ')\W+
           (' + street_type_regexp + ')\b)
@@ -629,10 +629,10 @@ module StreetAddress
             (?:[^\w,]+(' + direct_regexp + ')\b)?
           )
         )'
-    self.place_regexp = 
+    self.place_regexp =
       '(?:' + city_and_state_regexp + '\W*)?
        (?:' + zip_regexp + ')?'
-    
+
     self.address_regexp =
       '\A\W*
         (' + number_regexp + ')\W*
@@ -641,7 +641,7 @@ module StreetAddress
         (?:' + unit_regexp + '\W+)?' +
         place_regexp +
       '\W*\Z'
-      
+
     self.informal_address_regexp =
       '\A\s*
         (' + number_regexp + ')\W*
@@ -656,14 +656,14 @@ module StreetAddress
     StreetAddress::US::Address or nil if the location cannot be parsed
 
     pass the arguement, :informal => true, to make parsing more lenient
-    
+
 ====example
     StreetAddress::US.parse('1600 Pennsylvania Ave Washington, DC 20006')
     or:
     StreetAddress::US.parse('Hollywood & Vine, Los Angeles, CA')
     or
     StreetAddress::US.parse("1600 Pennsylvania Ave", :informal => true)
-    
+
 =end
     class << self
       def parse(location, args = {})
@@ -676,14 +676,14 @@ module StreetAddress
         end
       end
 =begin rdoc
-    
-    parses only an intersection and returnsan instance of
+
+    parses only an intersection and returns an instance of
     StreetAddress::US::Address or nil if the intersection cannot be parsed
-    
+
 ====example
     address = StreetAddress::US.parse('Hollywood & Vine, Los Angeles, CA')
     assert address.intersection?
-    
+
 =end
       def parse_intersection(inter)
         regex = Regexp.new(
@@ -692,9 +692,9 @@ module StreetAddress
           street_regexp + '\W+' +
           place_regexp + '\W*\Z', Regexp::IGNORECASE + Regexp::EXTENDED
         )
-        
+
         return unless match = regex.match(inter)
-        
+
         normalize_address(
           StreetAddress::US::Address.new(
             :street => match[4] || match[9],
@@ -711,10 +711,10 @@ module StreetAddress
           )
         )
       end
-      
+
 =begin rdoc
 
-    parses only an address and returnsan instance of
+    parses only an address and returns an instance of
     StreetAddress::US::Address or nil if the address cannot be parsed
 
 ====example
@@ -765,7 +765,7 @@ module StreetAddress
            )
         )
       end
-      
+
       private
       def normalize_address(addr)
         addr.state = normalize_state(addr.state) unless addr.state.nil?
@@ -781,7 +781,7 @@ module StreetAddress
         addr.unit_prefix.capitalize! unless addr.unit_prefix.nil?
         return addr
       end
-      
+
       def normalize_state(state)
         if state.length < 3
           state.upcase
@@ -789,13 +789,13 @@ module StreetAddress
           STATE_CODES[state.downcase]
         end
       end
-      
+
       def normalize_street_type(s_type)
         s_type.downcase!
         s_type = STREET_TYPES[s_type] || s_type if STREET_TYPES_LIST[s_type]
         s_type.capitalize
       end
-      
+
       def normalize_directional(dir)
         if dir.length < 3
           dir.upcase
@@ -806,34 +806,34 @@ module StreetAddress
     end
 
 =begin rdoc
-  
-    This is class returned by StreetAddress::US::parse, StreetAddress::US::parse_address 
+
+    This is class returned by StreetAddress::US::parse, StreetAddress::US::parse_address
     and StreetAddress::US::parse_intersection.  If an instance represents an intersection
     the attribute street2 will be populated.
-  
+
 =end
     class Address
       attr_accessor(
-        :number, 
-        :street, 
-        :street_type, 
-        :unit, 
-        :unit_prefix, 
-        :suffix, 
-        :prefix, 
-        :city, 
-        :state, 
-        :postal_code, 
-        :postal_code_ext, 
-        :street2, 
-        :street_type2, 
-        :suffix2, 
+        :number,
+        :street,
+        :street_type,
+        :unit,
+        :unit_prefix,
+        :suffix,
+        :prefix,
+        :city,
+        :state,
+        :postal_code,
+        :postal_code_ext,
+        :street2,
+        :street_type2,
+        :suffix2,
         :prefix2
       )
 
       def initialize(args)
-        args.keys.each do |attrib| 
-          self.send("#{attrib}=", args[attrib]) 
+        args.keys.each do |attrib|
+          self.send("#{attrib}=", args[attrib])
         end
         return
       end
@@ -857,7 +857,7 @@ module StreetAddress
         s += " " + street unless street.nil?
         s += " " + street_type unless street_type.nil?
         if( !unit_prefix.nil? && !unit.nil? )
-          s += " " + unit_prefix 
+          s += " " + unit_prefix
           s += " " + unit
         elsif( unit_prefix.nil? && !unit.nil? )
           s += " #" + unit
@@ -874,7 +874,7 @@ module StreetAddress
         else
           if intersection?
             s += prefix + " " unless prefix.nil?
-            s += street 
+            s += street
             s += " " + street_type unless street_type.nil?
             s += " " + suffix unless suffix.nil?
             s += " and"
@@ -894,7 +894,7 @@ module StreetAddress
           end
         end
         return s
-      end  
+      end
     end
   end
 end
