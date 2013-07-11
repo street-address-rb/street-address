@@ -634,7 +634,7 @@ module StreetAddress
        (?:' + zip_regexp + ')?'
 
     self.address_regexp =
-      '\A\W*
+      '\A[^\w\#]*
         (' + number_regexp + ')\W*
         (?:' + fraction_regexp + '\W*)?' +
         street_regexp + '\W+
@@ -644,6 +644,7 @@ module StreetAddress
 
     self.informal_address_regexp =
       '\A\s*
+        (?:' + unit_regexp + '(?:\W+|\Z))?
         (' + number_regexp + ')\W*
         (?:' + fraction_regexp + '\W*)?' +
         street_regexp + '(?:\W+|\Z)
@@ -671,7 +672,7 @@ module StreetAddress
           parse_intersection(location)
         elsif args[:informal]
           parse_address(location) || parse_informal_address(location)
-        else 
+        else
           parse_address(location);
         end
       end
@@ -751,17 +752,17 @@ module StreetAddress
 
          normalize_address(
            StreetAddress::US::Address.new(
-           :number => match[1],
-           :street => match[5] || match[10] || match[2],
-           :street_type => match[6] || match[3],
-           :unit => match[14],
-           :unit_prefix => match[13],
-           :suffix => match[7] || match[12],
-           :prefix => match[4],
-           :city => match[15],
-           :state => match[16],
-           :postal_code => match[17],
-           :postal_code_ext => match[18]
+           :number => match[3],
+           :street => match[7] || match[12] || match[4],
+           :street_type => match[8] || match[5],
+           :unit => match[2] || match[16],
+           :unit_prefix => match[1] || match[15],
+           :suffix => match[9] || match[14],
+           :prefix => match[6],
+           :city => match[17],
+           :state => match[18],
+           :postal_code => match[19],
+           :postal_code_ext => match[20]
            )
         )
       end
