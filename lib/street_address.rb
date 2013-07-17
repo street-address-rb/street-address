@@ -609,7 +609,7 @@ module StreetAddress
       }.join("|")
     self.zip_regexp = '(\d{5})(?:-?(\d{4})?)'
     self.corner_regexp = '(?:\band\b|\bat\b|&|\@)'
-    self.unit_regexp = '(?:(su?i?te|p\W*[om]\W*b(?:ox)?|dept|apt|apartment|ro*m|fl|unit|box)\W+|\#\W*)([\w-]+)'
+    self.unit_regexp = '(?:(su?i?te|p\W*[om]\W*b(?:ox)?|dept|apt|apartment|ro*m|fl|unit|box)\W+|(\#)\W*)([\w-]+)'
     self.street_regexp =
       '(?:
           (?:(' + direct_regexp + ')\W+
@@ -647,7 +647,7 @@ module StreetAddress
         (?:' + unit_regexp + '(?:\W+|\Z))?
         (' + number_regexp + ')\W*
         (?:' + fraction_regexp + '\W*)?' +
-        street_regexp + '(?:\W+|\Z)
+        street_regexp + '(?:[^\#\w]+|\Z)
         (?:' + unit_regexp + '(?:\W+|\Z))?' +
         '(?:' + place_regexp + ')?'
 
@@ -733,14 +733,14 @@ module StreetAddress
            :number => match[1],
            :street => match[5] || match[10] || match[2],
            :street_type => match[6] || match[3],
-           :unit => match[14],
-           :unit_prefix => match[13],
+           :unit => match[15],
+           :unit_prefix => match[13] || match[14],
            :suffix => match[7] || match[12],
            :prefix => match[4],
-           :city => match[15],
-           :state => match[16],
-           :postal_code => match[17],
-           :postal_code_ext => match[18]
+           :city => match[16],
+           :state => match[17],
+           :postal_code => match[18],
+           :postal_code_ext => match[19]
            )
         )
       end
@@ -752,17 +752,17 @@ module StreetAddress
 
          normalize_address(
            StreetAddress::US::Address.new(
-           :number => match[3],
-           :street => match[7] || match[12] || match[4],
-           :street_type => match[8] || match[5],
-           :unit => match[2] || match[16],
-           :unit_prefix => match[1] || match[15],
-           :suffix => match[9] || match[14],
-           :prefix => match[6],
-           :city => match[17],
-           :state => match[18],
-           :postal_code => match[19],
-           :postal_code_ext => match[20]
+           :number => match[4],
+           :street => match[8] || match[13] || match[5],
+           :street_type => match[9] || match[6],
+           :unit => match[3] || match[18],
+           :unit_prefix => match[1] || match[2] || match[16] || match[17],
+           :suffix => match[10] || match[15],
+           :prefix => match[7],
+           :city => match[19],
+           :state => match[20],
+           :postal_code => match[21],
+           :postal_code_ext => match[22]
            )
         )
       end

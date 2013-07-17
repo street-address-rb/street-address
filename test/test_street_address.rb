@@ -12,6 +12,7 @@ class StreetAddressUsTest < Test::Unit::TestCase
     @addr6 = "2730 S Veitch St #207, Arlington, VA 22206"
     @addr7 = "#42 233 S Wacker Dr 60606"
     @addr8 = "Apt. 42, 233 S Wacker Dr 60606"
+    @addr9 = "2730 S Veitch St #207"
 
     @int1 = "Hollywood & Vine, Los Angeles, CA"
     @int2 = "Hollywood Blvd and Vine St, Los Angeles, CA"
@@ -124,7 +125,7 @@ class StreetAddressUsTest < Test::Unit::TestCase
     assert_equal addr.street, "Wacker"
     assert_equal addr.street_type, "Dr"
     assert_equal addr.unit, "42"
-    assert_equal addr.unit_prefix, nil
+    assert_equal addr.unit_prefix, "#"
     assert_equal addr.city, nil
     assert_equal addr.street2, nil
     assert_equal addr.suffix, nil
@@ -141,6 +142,9 @@ class StreetAddressUsTest < Test::Unit::TestCase
     assert_equal addr.city, nil
     assert_equal addr.street2, nil
     assert_equal addr.suffix, nil
+
+    addr = StreetAddress::US.parse(@addr9, :informal => true)
+    assert_equal("207", addr.unit)
 
     addr = StreetAddress::US.parse(@int1)
     assert_equal addr.city, "Los Angeles"
