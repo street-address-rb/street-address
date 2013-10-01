@@ -667,6 +667,7 @@ module StreetAddress
 =end
     class << self
       def parse(location, args = {})
+        location = location.squish  
         if Regexp.new(corner_regexp, Regexp::IGNORECASE).match(location)
           parse_intersection(location)
         elsif args[:informal]
