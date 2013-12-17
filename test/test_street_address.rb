@@ -138,7 +138,7 @@ class StreetAddressUsTest < Test::Unit::TestCase
     assert_equal addr.intersection?, true
     assert_equal addr.street_type, "Blvd"
     assert_equal addr.street_type2, "St"
-    assert_equal addr.line1, nil
+    assert_equal addr.line1, "Hollywood Blvd and Vine St"
 
     addr = StreetAddress::US.parse(@int3)
     assert_equal addr.city, "San Francisco"

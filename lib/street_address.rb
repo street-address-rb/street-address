@@ -851,18 +851,30 @@ module StreetAddress
       end
 
       def line1(s = "")
-        return if intersection?
-        s += number
-        s += " " + prefix unless prefix.nil?
-        s += " " + street unless street.nil?
-        s += " " + street_type unless street_type.nil?
-        if( !unit_prefix.nil? && !unit.nil? )
-          s += " " + unit_prefix 
-          s += " " + unit
-        elsif( unit_prefix.nil? && !unit.nil? )
-          s += " #" + unit
+        if intersection?
+          s += prefix + " " unless prefix.nil?
+          s += street
+          s += " " + street_type unless street_type.nil?
+          s += " " + suffix unless suffix.nil?
+          s += " and"
+          s += " " + prefix2 unless prefix2.nil?
+          s += " " + street2
+          s += " " + street_type2 unless street_type2.nil?
+          s += " " + suffix2 unless suffix2.nil?
+        else
+          s += number
+          s += " " + prefix unless prefix.nil?
+          s += " " + street unless street.nil?
+          s += " " + street_type unless street_type.nil?
+          if( !unit_prefix.nil? && !unit.nil? )
+            s += " " + unit_prefix
+            s += " " + unit
+          elsif( unit_prefix.nil? && !unit.nil? )
+            s += " #" + unit
+          end
+          s += " " + suffix unless suffix.nil?
         end
-        s += " " + suffix unless suffix.nil?
+
         return s
       end
 
