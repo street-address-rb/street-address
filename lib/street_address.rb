@@ -585,7 +585,13 @@ module StreetAddress
         :street_regexp,
         :place_regexp,
         :address_regexp,
-        :informal_address_regexp
+        :informal_address_regexp,
+        
+        # Added these class level properties
+        :complete_address_regexp,
+        :complete_intersection_regexp,
+        :complete_informal_regexp,
+        :complete_corner_regexp
       )
     end
       
@@ -649,6 +655,20 @@ module StreetAddress
         street_regexp + '(?:\W+|\Z)
         (?:' + unit_regexp + '(?:\W+|\Z))?' +
         '(?:' + place_regexp + ')?'
+        
+    # Added at class level so we do not need to instaniate a new
+    # one each time
+    self.complete_address_regexp = Regexp.new(address_regexp, Regexp::IGNORECASE + Regexp::EXTENDED)
+    
+    self.complete_intersection_regexp = Regexp.new('\A\W*' + street_regexp + '\W*?
+      \s+' + corner_regexp + '\s+' +
+      street_regexp + '\W+' +
+      place_regexp + '\W*\Z', Regexp::IGNORECASE + Regexp::EXTENDED
+    )
+    
+    self.complete_informal_regexp = Regexp.new(informal_address_regexp, Regexp::IGNORECASE + Regexp::EXTENDED)
+    
+    self.complete_corner_regexp = Regexp.new(corner_regexp, Regexp::IGNORECASE)
 
 =begin rdoc
 
@@ -667,7 +687,11 @@ module StreetAddress
 =end
     class << self
       def parse(location, args = {})
-        if Regexp.new(corner_regexp, Regexp::IGNORECASE).match(location)
+        
+        # Added to make regular expression matching faster
+        location = force_encoding(location)
+        
+        if complete_corner_regexp.match(location)
           parse_intersection(location)
         elsif args[:informal]
           parse_address(location) || parse_informal_address(location)
@@ -686,14 +710,11 @@ module StreetAddress
     
 =end
       def parse_intersection(inter)
-        regex = Regexp.new(
-          '\A\W*' + street_regexp + '\W*?
-          \s+' + corner_regexp + '\s+' +
-          street_regexp + '\W+' +
-          place_regexp + '\W*\Z', Regexp::IGNORECASE + Regexp::EXTENDED
-        )
         
-        return unless match = regex.match(inter)
+        # Added to make regular expression matching faster
+        inter = force_encoding(inter)
+                
+        return unless match = complete_intersection_regexp.match(inter)
         
         normalize_address(
           StreetAddress::US::Address.new(
@@ -723,9 +744,11 @@ module StreetAddress
 
 =end
       def parse_address(addr)
-         regex = Regexp.new(address_regexp, Regexp::IGNORECASE + Regexp::EXTENDED)
-
-         return unless match = regex.match(addr)
+        
+         # Added to make regular expression matching faster
+         addr = force_encoding(addr)
+        
+         return unless match = complete_address_regexp.match(addr)
 
          normalize_address(
            StreetAddress::US::Address.new(
@@ -745,9 +768,11 @@ module StreetAddress
       end
 
       def parse_informal_address(addr)
-         regex = Regexp.new(informal_address_regexp, Regexp::IGNORECASE + Regexp::EXTENDED)
-
-         return unless match = regex.match(addr)
+        
+         # Added to make regular expression matching faster
+         addr = force_encoding(addr)
+         
+         return unless match = complete_informal_regexp.match(addr)
 
          normalize_address(
            StreetAddress::US::Address.new(
@@ -767,6 +792,14 @@ module StreetAddress
       end
       
       private
+      
+      # This will ensure the addr string is encoded.
+      # Regular Expressions in Ruby will run about 60% faster using this 
+      # encoding scheme.
+      def force_encoding(addr)
+        addr.force_encoding("US-ASCII")
+      end
+      
       def normalize_address(addr)
         addr.state = normalize_state(addr.state) unless addr.state.nil?
         addr.street_type = normalize_street_type(addr.street_type) unless addr.street_type.nil?
