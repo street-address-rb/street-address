@@ -10,11 +10,13 @@ class StreetAddressUsTest < Test::Unit::TestCase
     @addr4 = "1005 Gravenstein Hwy N, Sebastopol CA 95472"
     @addr5 = "PO BOX 450, Chicago IL 60657"
     @addr6 = "2730 S Veitch St #207, Arlington, VA 22206"
+    @addr7 = "#42 233 S Wacker Dr 60606"
+    @addr8 = "Apt. 42, 233 S Wacker Dr 60606"
+    @addr9 = "2730 S Veitch St #207"
 
     @int1 = "Hollywood & Vine, Los Angeles, CA"
     @int2 = "Hollywood Blvd and Vine St, Los Angeles, CA"
     @int3 = "Mission Street at Valencia Street, San Francisco, CA"
-
   end
 
   def test_zip_plus_4_with_dash
@@ -96,8 +98,6 @@ class StreetAddressUsTest < Test::Unit::TestCase
     assert_equal addr.city, "Washington"
     assert_equal addr.street2, nil
 
-
- 
     addr = StreetAddress::US.parse(@addr4)
     assert_equal addr.number, "1005"
     assert_equal addr.postal_code, "95472"
@@ -111,12 +111,39 @@ class StreetAddressUsTest < Test::Unit::TestCase
     assert_equal addr.street2, nil
     assert_equal addr.suffix, "N"
 
-  
     addr = StreetAddress::US.parse(@addr5)
     assert_equal addr, nil
-    
-    
+
     addr = StreetAddress::US.parse(@addr6)
+    assert_equal("207", addr.unit)
+
+    addr = StreetAddress::US.parse(@addr7, :informal => true)
+    assert_equal addr.number, "233"
+    assert_equal addr.postal_code, "60606"
+    assert_equal addr.prefix, "S"
+    assert_equal addr.state, nil
+    assert_equal addr.street, "Wacker"
+    assert_equal addr.street_type, "Dr"
+    assert_equal addr.unit, "42"
+    assert_equal addr.unit_prefix, "#"
+    assert_equal addr.city, nil
+    assert_equal addr.street2, nil
+    assert_equal addr.suffix, nil
+
+    addr = StreetAddress::US.parse(@addr8, :informal => true)
+    assert_equal addr.number, "233"
+    assert_equal addr.postal_code, "60606"
+    assert_equal addr.prefix, "S"
+    assert_equal addr.state, nil
+    assert_equal addr.street, "Wacker"
+    assert_equal addr.street_type, "Dr"
+    assert_equal addr.unit, "42"
+    assert_equal addr.unit_prefix, "Apt"
+    assert_equal addr.city, nil
+    assert_equal addr.street2, nil
+    assert_equal addr.suffix, nil
+
+    addr = StreetAddress::US.parse(@addr9, :informal => true)
     assert_equal("207", addr.unit)
 
     addr = StreetAddress::US.parse(@int1)
@@ -150,8 +177,8 @@ class StreetAddressUsTest < Test::Unit::TestCase
     assert_equal addr.intersection?, true
     assert_equal addr.street_type, "St"
     assert_equal addr.street_type2, "St"
-    
-    parseable = ["1600 Pennsylvania Ave Washington DC 20006", 
+
+    parseable = ["1600 Pennsylvania Ave Washington DC 20006",
           "1600 Pennsylvania Ave #400, Washington, DC, 20006",
           "1600 Pennsylvania Ave Washington, DC",
           "1600 Pennsylvania Ave #400 Washington DC",
@@ -165,7 +192,7 @@ class StreetAddressUsTest < Test::Unit::TestCase
           "Hollywood & Vine, Los Angeles, CA, 90028",
           "Hollywood Blvd and Vine St, Los Angeles, CA, 90028",
           "Mission Street at Valencia Street, San Francisco, CA, 90028"]
-    
+
     parseable.each do |location|
       assert_not_nil(StreetAddress::US.parse(location), location + " was not parse able")
     end
