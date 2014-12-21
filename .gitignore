@@ -1,0 +1,6 @@
+.DS_Store
+.swp
+*.log
+.ruby-version
+.bundle
+Gemfile.lock
