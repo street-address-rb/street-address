@@ -3,11 +3,11 @@
 Parses one line street addresses and returns a normalized address object.
 
 This is a near direct port of the of the perl module 
-Geo::StreetAddress::US originally written by Schuyler D. Erle.  
-For more information see
-http://search.cpan.org/~sderle/Geo-StreetAddress-US-0.99/
+Geo::StreetAddress::US originally written by Schuyler D. Erle. 
 
-Since the original port in 2007 the two code bases have drifted somewhat.  Any help porting updates would be greatly appreciated.
+The port was from http://search.cpan.org/~sderle/Geo-StreetAddress-US-0.99/
+
+Since the original port the two code bases have drifted somewhat. The most recent perl codebase is [here](https://github.com/timbunce/Geo-StreetAddress-US). Any help porting updates would be greatly appreciated.
 
 ## Installation
 
