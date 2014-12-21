@@ -10,12 +10,15 @@ http://search.cpan.org/~sderle/Geo-StreetAddress-US-0.99/
 Since the original port in 2007 the two code bases have drifted somewhat.  Any help porting updates would be greatly appreciated.
 
 ## Installation
+
     gem install StreetAddress
 
-then in your code 
+then in your code
+
     require 'street_address'
 
 or from Gemfile
+
     gem 'StreetAddress', :require => "street_address"
 
 ## Basic Usage
