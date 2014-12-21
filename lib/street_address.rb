@@ -863,7 +863,6 @@ module StreetAddress
           s += " " + street_type2 unless street_type2.nil?
           s += " " + suffix2 unless suffix2.nil?
         else
-          return if intersection?
           s += number
           s += " " + prefix unless prefix.nil?
           s += " " + street unless street.nil?
