@@ -873,9 +873,8 @@ module StreetAddress
           elsif( unit_prefix.nil? && !unit.nil? )
             s += " #" + unit
           end
-
-          return s
         end
+        return s
       end
 
       def to_s(format = :default)
