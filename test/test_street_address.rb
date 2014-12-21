@@ -165,7 +165,6 @@ class StreetAddressUsTest < Test::Unit::TestCase
     assert_equal addr.intersection?, true
     assert_equal addr.street_type, "Blvd"
     assert_equal addr.street_type2, "St"
-    assert_equal addr.line1, "Hollywood Blvd and Vine St"
 
     addr = StreetAddress::US.parse(@int3)
     assert_equal addr.city, "San Francisco"
@@ -178,23 +177,25 @@ class StreetAddressUsTest < Test::Unit::TestCase
     assert_equal addr.street_type, "St"
     assert_equal addr.street_type2, "St"
 
-    parseable = ["1600 Pennsylvania Ave Washington DC 20006",
-          "1600 Pennsylvania Ave #400, Washington, DC, 20006",
-          "1600 Pennsylvania Ave Washington, DC",
-          "1600 Pennsylvania Ave #400 Washington DC",
-          "1600 Pennsylvania Ave, 20006",
-          "1600 Pennsylvania Ave #400, 20006",
-          "1600 Pennsylvania Ave 20006",
-          "1600 Pennsylvania Ave #400 20006",
-          "Hollywood & Vine, Los Angeles, CA",
-          "Hollywood Blvd and Vine St, Los Angeles, CA",
-          "Mission Street at Valencia Street, San Francisco, CA",
-          "Hollywood & Vine, Los Angeles, CA, 90028",
-          "Hollywood Blvd and Vine St, Los Angeles, CA, 90028",
-          "Mission Street at Valencia Street, San Francisco, CA, 90028"]
+    parseable = [ 
+      "1600 Pennsylvania Ave Washington DC 20006",
+      "1600 Pennsylvania Ave #400, Washington, DC, 20006",
+      "1600 Pennsylvania Ave Washington, DC",
+      "1600 Pennsylvania Ave #400 Washington DC",
+      "1600 Pennsylvania Ave, 20006",
+      "1600 Pennsylvania Ave #400, 20006",
+      "1600 Pennsylvania Ave 20006",
+      "1600 Pennsylvania Ave #400 20006",
+      "Hollywood & Vine, Los Angeles, CA",
+      "Hollywood Blvd and Vine St, Los Angeles, CA",
+      "Mission Street at Valencia Street, San Francisco, CA",
+      "Hollywood & Vine, Los Angeles, CA, 90028",
+      "Hollywood Blvd and Vine St, Los Angeles, CA, 90028",
+      "Mission Street at Valencia Street, San Francisco, CA, 90028"
+    ]
 
     parseable.each do |location|
-      assert_not_nil(StreetAddress::US.parse(location), location + " was not parse able")
+      assert_not_nil(StreetAddress::US.parse(location), location + " was not parseable")
     end
 
   end
