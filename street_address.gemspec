@@ -4,6 +4,7 @@ require 'street_address'
 
 Gem::Specification.new do |s|
   s.name = "StreetAddress"
+  s.licenses = ['MIT']
   s.version = StreetAddress::US::VERSION
   s.date = Time.now.strftime('%Y-%m-%d')
   s.summary = "Parse Addresses into substituent parts. This gem includes US only."
