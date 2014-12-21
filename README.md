@@ -1,3 +1,6 @@
+![Gem Version](http://img.shields.io/gem/v/StreetAddress.svg)
+![Build Status](https://circleci.com/gh/derrek/street-address.svg?style=shield)
+
 #DESCRIPTION
   
 Parses one line street addresses and returns a normalized address object.
