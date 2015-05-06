@@ -1,6 +1,7 @@
 require 'test/unit'
 require 'street_address'
-
+require 'pry'
+require 'pry-rescue'
 
 class StreetAddressUsTest < Test::Unit::TestCase
   def setup
@@ -19,6 +20,14 @@ class StreetAddressUsTest < Test::Unit::TestCase
     @int3 = "Mission Street at Valencia Street, San Francisco, CA"
   end
 
+  def test_match_to_hash
+    regexp = /(?<word>[A-Z]+)? ?(?<number>\d+)?/i
+
+    assert_equal({ 'word' => 'foo' }, StreetAddress::US.send(:match_to_hash, regexp.match("foo")))
+    assert_equal({ 'number' => '123' }, StreetAddress::US.send(:match_to_hash, regexp.match("123")))
+    assert_equal({ 'word' => 'foo', 'number' => '123' }, StreetAddress::US.send(:match_to_hash, regexp.match("foo 123")))
+  end
+  
   def test_zip_plus_4_with_dash
     addr = StreetAddress::US.parse("2730 S Veitch St, Arlington, VA 22206-3333")
     assert_equal "3333", addr.postal_code_ext
