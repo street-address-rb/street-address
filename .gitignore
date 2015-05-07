@@ -5,3 +5,7 @@
 .bundle
 Gemfile.lock
 .gem
+*.bak
+*~
+*.old
+*.tar.gz

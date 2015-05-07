@@ -1,0 +1,13 @@
+dependencies:
+  override:
+    - 'rvm-exec 1.9.3-p392 bundle install'
+    - 'rvm-exec 2.0.0-p247 bundle install'
+    - 'rvm-exec 2.1.2 bundle install'
+    - 'rvm-exec 2.2.0 bundle install'
+
+test:
+  override:
+    - 'rvm-exec 1.9.3-p392 bundle exec rake test'
+    - 'rvm-exec 2.0.0-p247 bundle exec rake test'
+    - 'rvm-exec 2.1.2 bundle exec rake test'
+    - 'rvm-exec 2.2.0 bundle exec rake test'
