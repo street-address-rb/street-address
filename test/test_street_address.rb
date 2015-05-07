@@ -2,7 +2,7 @@ require 'minitest/autorun'
 require 'pry-rescue/minitest'
 require 'street_address'
 
-class StreetAddressUsTest < MiniTest::Unit::TestCase
+class StreetAddressUsTest < MiniTest::Test
   ADDRESSES = {
     "1005 Gravenstein Hwy 95472" => {
       :number => '1005',
@@ -136,14 +136,14 @@ class StreetAddressUsTest < MiniTest::Unit::TestCase
       :postal_code => '95472',
       :street_type => 'Rd',
     },
-    # "1005 State Highway 116 Sebastopol CA 95472" => {
-    #   :number => '1005',
-    #   :street => 'State Highway 116',
-    #   :state => 'CA',
-    #   :city => 'Sebastopol',
-    #   :postal_code => '95472',
-    #   :street_type => 'Hwy',
-    # },
+    "1005 State Highway 116 Sebastopol CA 95472" => {
+      :number => '1005',
+      :street => 'State Highway 116',
+      :state => 'CA',
+      :city => 'Sebastopol',
+      :postal_code => '95472',
+      :street_type => 'Hwy',
+    },
     "1600 Pennsylvania Ave. Washington DC" => {
       :number => '1600',
       :street => 'Pennsylvania',
@@ -537,7 +537,7 @@ class StreetAddressUsTest < MiniTest::Unit::TestCase
       :postal_code => '80615',
       :street_type => nil
     }
-    parsed_address = StreetAddress::US.parse(address)
+    parsed_address = StreetAddress::US.parse(address, avoid_redundant_street_type: true)
     compare_expected_to_actual_hash(expected_results, parsed_address.to_h, address)
   end
 
@@ -602,7 +602,7 @@ class StreetAddressUsTest < MiniTest::Unit::TestCase
     ]
 
     parseable.each do |location|
-      assert_not_nil(StreetAddress::US.parse(location), location + " was not parseable")
+      assert(StreetAddress::US.parse(location), location + " was not parseable")
     end
 
   end

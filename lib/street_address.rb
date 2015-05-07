@@ -596,7 +596,6 @@ module StreetAddress
       # fields for intersections.
       #
       # The default is false, for backwards compatibility.
-      attr_accessor :avoid_redundant_street_type
       attr_accessor(
         :street_type_regexp,
         :street_type_matches,
@@ -624,7 +623,7 @@ module StreetAddress
     
     self.street_type_matches = {}
     STREET_TYPES.each_pair { |type,abbrv|
-      self.street_type_matches[abbrv] = /\b (?: #{abbrv}|\Q#{type} ) \b/ix
+      self.street_type_matches[abbrv] = /\b (?: #{abbrv}|#{Regexp.quote(type)} ) \b/ix
     }
     
     self.street_type_regexp = Regexp.new(STREET_TYPES_LIST.keys.join("|"), Regexp::IGNORECASE)
@@ -656,26 +655,26 @@ module StreetAddress
 
     # note that expressions like [^,]+ may scan more than you expect
     self.street_regexp = /
-        (?:
-          # special case for addresses like 100 South Street
-          (?:(?<street>#{direct_regexp})\W+
-             (?<street_type>#{street_type_regexp})\b
-          )
-          |
-          (?:(?<prefix>#{direct_regexp})\W+)?
-          (?:
-            (?<street>[^,]*\d)
-            (?:[^\w,]*(?<suffix>#{direct_regexp})\b)
-           |
-            (?<street>[^,]+)
-            (?:[^\w,]+(?<street_type>#{street_type_regexp})\b)
-            (?:[^\w,]+(?<suffix>#{direct_regexp})\b)?
-           |
-            (?<street>[^,]+?)
-            (?:[^\w,]+(?<street_type>#{street_type_regexp})\b)?
-            (?:[^\w,]+(?<suffix>#{direct_regexp})\b)?
-          )
+      (?:
+        # special case for addresses like 100 South Street
+        (?:(?<street> #{direct_regexp})\W+
+           (?<street_type> #{street_type_regexp})\b
         )
+        |
+        (?:(?<prefix> #{direct_regexp})\W+)?
+        (?:
+          (?<street> [^,]*\d)
+          (?:[^\w,]* (?<suffix> #{direct_regexp})\b)
+          |
+          (?<street> [^,]+)
+          (?:[^\w,]+(?<street_type> #{street_type_regexp})\b)
+          (?:[^\w,]+(?<suffix> #{direct_regexp})\b)?
+          |
+          (?<street> [^,]+?)
+          (?:[^\w,]+(?<street_type> #{street_type_regexp})\b)?
+          (?:[^\w,]+(?<suffix> #{direct_regexp})\b)?
+        )
+      )
     /ix;
 
     # http://pe.usps.com/text/pub28/pub28c2_003.htm
@@ -766,7 +765,7 @@ module StreetAddress
       (?:#{unit_regexp} #{sep_regexp})?
       (?:#{number_regexp})? \W*
       (?:#{fraction_regexp} \W*)?
-         #{street_regexp} #{sep_avoid_unit_regexp}
+      #{street_regexp} #{sep_avoid_unit_regexp}
       (?:#{unit_regexp} #{sep_regexp})?
       (?:#{place_regexp})?
       # don't require match to reach end of string
@@ -803,11 +802,11 @@ module StreetAddress
     class << self
       def parse(location, args={})
         if( corner_regexp.match(location) )
-          return parse_intersection(location)
+          return parse_intersection(location, args)
         elsif args[:informal]
-          return parse_address(location) || parse_informal_address(location)
+          return parse_address(location, args) || parse_informal_address(location, args)
         else
-          return parse_address(location)
+          return parse_address(location, args)
         end
       end
 
@@ -821,16 +820,16 @@ module StreetAddress
     assert !address.intersection?
 
 =end
-      def parse_address(address)
+      def parse_address(address, args)
         return unless match = address_regexp.match(address)
 
-        match_to_address( match )
+        to_address( match_to_hash(match), args )
       end
 
-      def parse_informal_address(address)
+      def parse_informal_address(address, args)
         return unless match = informal_address_regexp.match(address)
 
-        match_to_address( match )
+        to_address( match_to_hash(match), args )
       end
 
 =begin rdoc
@@ -843,7 +842,7 @@ module StreetAddress
     assert address.intersection?
 
 =end      
-      def parse_intersection(intersection)
+      def parse_intersection(intersection, args)
         return unless match = intersection_regexp.match(intersection)
 
         hash = match_to_hash(match)
@@ -862,7 +861,7 @@ module StreetAddress
         hash["street_type"]  = street_types[0] if street_types[0]
         hash["street_type2"] = street_types[1] if street_types[1]
         
-        hash_to_address( hash )
+        to_address( hash, args )
       end
 
       private def match_to_hash(match)
@@ -877,16 +876,17 @@ module StreetAddress
         string
       end
 
-      private def match_to_address(match)
-        hash_to_address( match_to_hash(match) )
-      end
-        
-      private def hash_to_address(input)
+      private def to_address(input, args)
         # strip off some punctuation
         input.values.each { |string|
           string.gsub!(/^\s+|\s+$|[^\w\s\-\#\&]/)
         }
 
+        if( input['street'] && !input['street_type'] )
+          match = street_regexp.match(input['street'])
+          input['street_type'] = match['street_type']
+        end
+        
         NORMALIZE_MAP.each_pair { |key, map|
           next unless input[key]
           mapping = map[input[key].downcase]
@@ -897,13 +897,13 @@ module StreetAddress
           input[k] = titlecase(input[k]) if input[k]
         }
 
-        if( avoid_redundant_street_type )
+        if( args[:avoid_redundant_street_type] )
           ['', '1', '2'].each { |suffix|
             street = input['street'      + suffix];
             type   = input['street_type' + suffix];
             next if !street || !type
 
-            type_regexp = STREET_TYPE_MATCHES[type.downcase] # || fail "No STREET_TYPE_MATCH for #{type}"
+            type_regexp = street_type_matches[type.downcase] # || fail "No STREET_TYPE_MATCH for #{type}"
             input.delete('street_type' + suffix) if type_regexp.match(street)
           }
         end
