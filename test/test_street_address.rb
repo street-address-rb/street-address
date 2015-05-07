@@ -258,16 +258,15 @@ class StreetAddressUsTest < MiniTest::Test
       :street_type => 'Rd',
       :state => 'CO'
     },
-    # "1234 COUNTY HWY 60E, Town, CO 12345" => {
-    #   :city => 'Town',
-    #   :postal_code => '12345',
-    #   :number => '1234',
-    #   :street => 'COUNTY HWY 60',
-    #   :suffix => 'E',
-    #   :street_type => nil,  # ?
-    #   :state => 'CO'
-    # },
-
+    "1234 COUNTY HWY 60E, Town, CO 12345" => {
+      :city => 'Town',
+      :postal_code => '12345',
+      :number => '1234',
+      :street => 'COUNTY HWY 60',
+      :suffix => 'E',
+      :street_type => 'Hwy',
+      :state => 'CO'
+    },
     "'45 Quaker Ave, Ste 105'" => { # RT#73397
       :number => '45',
       :street => 'Quaker',
