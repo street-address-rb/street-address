@@ -803,10 +803,8 @@ module StreetAddress
       def parse(location, args={})
         if( corner_regexp.match(location) )
           return parse_intersection(location, args)
-        elsif args[:informal]
-          return parse_address(location, args) || parse_informal_address(location, args)
         else
-          return parse_address(location, args)
+          return parse_address(location, args) || parse_informal_address(location, args)
         end
       end
 
@@ -822,7 +820,7 @@ module StreetAddress
 =end
       def parse_address(address, args)
         return unless match = address_regexp.match(address)
-
+        
         to_address( match_to_hash(match), args )
       end
 

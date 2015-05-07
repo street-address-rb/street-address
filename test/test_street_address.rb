@@ -522,7 +522,7 @@ class StreetAddressUsTest < MiniTest::Test
   def test_expected_failures
     EXPECTED_FAILURES.each do |address|
       parsed_address = StreetAddress::US.parse(address)
-      assert_nil parsed_address
+      assert !parsed_address || !parsed_address.state
     end
   end
 
