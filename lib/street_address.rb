@@ -592,7 +592,7 @@ module StreetAddress
         :fraction_regexp,
         :state_regexp,
         :city_and_state_regexp,
-        :direct_regexp, 
+        :direct_regexp,
         :zip_regexp,
         :corner_regexp,
         :unit_regexp,
@@ -609,12 +609,12 @@ module StreetAddress
         :intersection_regexp
       )
     end
-    
+
     self.street_type_matches = {}
     STREET_TYPES.each_pair { |type,abbrv|
       self.street_type_matches[abbrv] = /\b (?: #{abbrv}|#{Regexp.quote(type)} ) \b/ix
     }
-    
+
     self.street_type_regexp = Regexp.new(STREET_TYPES_LIST.keys.join("|"), Regexp::IGNORECASE)
     self.fraction_regexp = /\d+\/\d+/
     self.state_regexp = Regexp.new(
@@ -780,7 +780,7 @@ module StreetAddress
     or
     StreetAddress::US.parse("1600 Pennsylvania Ave", :informal => true)
 
-=end    
+=end
     class << self
       def parse(location, args={})
         if( corner_regexp.match(location) )
@@ -802,7 +802,7 @@ module StreetAddress
 =end
       def parse_address(address, args)
         return unless match = address_regexp.match(address)
-        
+
         to_address( match_to_hash(match), args )
       end
 
@@ -821,7 +821,7 @@ module StreetAddress
     address = StreetAddress::US.parse('Hollywood & Vine, Los Angeles, CA')
     assert address.intersection?
 
-=end      
+=end
       def parse_intersection(intersection, args)
         return unless match = intersection_regexp.match(intersection)
 
@@ -839,19 +839,19 @@ module StreetAddress
         hash["street_type"]  = street_types[0] if street_types[0]
         hash["street_type2"] = street_types[1] if street_types[1]
 
-        if( 
+        if(
           hash["street_type"] &&
           (
-            !hash["street_type2"] || 
+            !hash["street_type2"] ||
             (hash["street_type"] == hash["street_type2"])
-          ) 
+          )
         )
           type = hash["street_type"].clone
           if( type.gsub!(/s\W*$/i, '') && /^#{street_type_regexp}$/i =~ type )
             hash["street_type"] = hash["street_type2"] = type
           end
         end
-        
+
         to_address( hash, args )
       end
 
@@ -860,12 +860,6 @@ module StreetAddress
           hash = {}
           match.names.each { |name| hash[name] = match[name] if match[name] }
           return hash
-        end
-
-        def titlecase(string)
-          string = string.downcase
-          string[0] = string[0,1].upcase
-          string
         end
 
         def to_address(input, args)
@@ -879,15 +873,11 @@ module StreetAddress
             match = street_regexp.match(input['street'])
             input['street_type'] = match['street_type']
           end
-        
+
           NORMALIZE_MAP.each_pair { |key, map|
             next unless input[key]
             mapping = map[input[key].downcase]
             input[key] = mapping if mapping
-          }
-
-          %w[street_type street_type1 street_type2].each { |k|
-            input[k] = titlecase(input[k]) if input[k]
           }
 
           if( args[:avoid_redundant_street_type] )
@@ -895,7 +885,7 @@ module StreetAddress
               street = input['street'      + suffix];
               type   = input['street_type' + suffix];
               next if !street || !type
- 
+
               type_regexp = street_type_matches[type.downcase] # || fail "No STREET_TYPE_MATCH for #{type}"
               input.delete('street_type' + suffix) if type_regexp.match(street)
             }
@@ -904,13 +894,17 @@ module StreetAddress
           # attempt to expand directional prefixes on place names
           if( input['city'] )
             input['city'].gsub!(/^(#{dircode_regexp})\s+(?=\S)/) { |match|
-              titlecase(DIRECTION_CODES[match[0].upcase]) + ' '
+              DIRECTION_CODES[match[0].upcase] + ' '
             }
           end
 
           # strip ZIP+4 (which may be missing a hyphen)
           if( input['zip'] )
             input['zip'].gsub!(/^(.{5}).*/, '\1')
+          end
+
+          %w(street street_type street2 street_type2 city unit_prefix).each do |k|
+            input[k] = input[k].split.map(&:capitalize).join(' ') if input[k]
           end
 
           return StreetAddress::US::Address.new( input )
