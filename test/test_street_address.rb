@@ -391,22 +391,22 @@ class StreetAddressUsTest < MiniTest::Test
       :city => 'San Francisco',
       :street2 => 'Valencia'
     },
-    # "Mission & Valencia Sts. San Francisco CA" => {
-    #   :street_type => 'St',
-    #   :street_type2 => 'St',
-    #   :street => 'Mission',
-    #   :state => 'CA',
-    #   :city => 'San Francisco',
-    #   :street2 => 'Valencia'
-    # },
-    # "Mission & Valencia Streets San Francisco CA" => {
-    #   :street_type => 'St',
-    #   :street_type2 => 'St',
-    #   :street => 'Mission',
-    #   :state => 'CA',
-    #   :city => 'San Francisco',
-    #   :street2 => 'Valencia'
-    # },
+    "Mission & Valencia Sts. San Francisco CA" => {
+      :street_type => 'St',
+      :street_type2 => 'St',
+      :street => 'Mission',
+      :state => 'CA',
+      :city => 'San Francisco',
+      :street2 => 'Valencia'
+    },
+    "Mission & Valencia Streets San Francisco CA" => {
+      :street_type => 'St',
+      :street_type2 => 'St',
+      :street => 'Mission',
+      :state => 'CA',
+      :city => 'San Francisco',
+      :street2 => 'Valencia'
+    },
     "Mission Avenue and Valencia Street San Francisco CA" => {
       :street_type => 'Ave',
       :street_type2 => 'St',
@@ -457,28 +457,28 @@ class StreetAddressUsTest < MiniTest::Test
       :state=>nil,
       :postal_code=>nil
     },
-    # "321 S. Washington" => { # RT#82146
-    #   :street_type => nil,
-    #   :prefix => 'S',
-    #   :street => 'Washington',
-    #   :number => '321'
-    # },
-    # "233 S Wacker Dr lobby 60606" => { # unnumbered secondary unit type
-    #   :number => '233',
-    #   :street => 'Wacker',
-    #   :postal_code => '60606',
-    #   :street_type => 'Dr',
-    #   :prefix => 'S',
-    #   :unit_prefix => 'lobby',
-    # },
-    # "(233 S Wacker Dr lobby 60606)" => { # surrounding punctuation
-    #   :number => '233',
-    #   :street => 'Wacker',
-    #   :postal_code => '60606',
-    #   :street_type => 'Dr',
-    #   :prefix => 'S',
-    #   :unit_prefix => 'lobby',
-    # }
+    "321 S. Washington" => { # RT#82146
+      :street_type => nil,
+      :prefix => 'S',
+      :street => 'Washington',
+      :number => '321'
+    },
+    "233 S Wacker Dr lobby 60606" => { # unnumbered secondary unit type
+      :number => '233',
+      :street => 'Wacker',
+      :postal_code => '60606',
+      :street_type => 'Dr',
+      :prefix => 'S',
+      :unit_prefix => 'lobby',
+    },
+    "(233 S Wacker Dr lobby 60606)" => { # surrounding punctuation
+      :number => '233',
+      :street => 'Wacker',
+      :postal_code => '60606',
+      :street_type => 'Dr',
+      :prefix => 'S',
+      :unit_prefix => 'lobby',
+    }
   }
 
 
