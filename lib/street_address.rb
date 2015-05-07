@@ -800,13 +800,13 @@ module StreetAddress
     assert !address.intersection?
 
 =end
-      def parse_address(address, args)
+      def parse_address(address, args={})
         return unless match = address_regexp.match(address)
 
         to_address( match_to_hash(match), args )
       end
 
-      def parse_informal_address(address, args)
+      def parse_informal_address(address, args={})
         return unless match = informal_address_regexp.match(address)
 
         to_address( match_to_hash(match), args )
@@ -934,7 +934,8 @@ module StreetAddress
         :street2,
         :street_type2,
         :suffix2,
-        :prefix2
+        :prefix2,
+        :redundant_street_type
       )
 
       def initialize(args)
@@ -957,59 +958,66 @@ module StreetAddress
       end
 
       def line1(s = "")
+        parts = []
         if intersection?
-          s += prefix + " " unless prefix.nil?
-          s += street
-          s += " " + street_type unless street_type.nil?
-          s += " " + suffix unless suffix.nil?
-          s += " and"
-          s += " " + prefix2 unless prefix2.nil?
-          s += " " + street2
-          s += " " + street_type2 unless street_type2.nil?
-          s += " " + suffix2 unless suffix2.nil?
+          parts << prefix       if prefix
+          parts << street
+          parts << street_type  if street_type
+          parts << suffix       if suffix
+          parts << 'and'
+          parts << prefix2      if prefix2
+          parts << street2
+          parts << street_type2 if street_type2
+          parts << suffix2      if suffix2
         else
-          s += number
-          s += " " + prefix unless prefix.nil?
-          s += " " + street unless street.nil?
-          s += " " + street_type unless street_type.nil?
-          if( !unit_prefix.nil? && !unit.nil? )
-            s += " " + unit_prefix
-            s += " " + unit
-          elsif( unit_prefix.nil? && !unit.nil? )
-            s += " #" + unit
+          parts << number
+          parts << prefix if prefix
+          parts << street if street
+          parts << street_type if street_type && !redundant_street_type
+          parts << suffix if suffix
+          parts << unit_prefix if unit_prefix
+          if unit
+            #follow guidelines: http://pe.usps.gov/cpim/ftp/pubs/Pub28/pub28.pdf pg28
+            parts << (unit_prefix ? unit : "\# #{unit}")
           end
         end
-        return s
+        s + parts.join(' ')
       end
+
+
+      def line2(s = "")
+        parts = []
+        if city
+          parts << city
+        end
+        if state
+          parts << state
+        end
+        s = s + parts.join(', ')
+        if postal_code
+          s << " #{postal_code}"
+          s << "-#{postal_code_ext}" if postal_code_ext
+        end
+        s.strip
+      end
+
 
       def to_s(format = :default)
         s = ""
         case format
         when :line1
-          s += line1(s)
+          s << line1(s)
+        when :line2
+          s << line2(s)
         else
-          if intersection?
-            s += prefix + " " unless prefix.nil?
-            s += street
-            s += " " + street_type unless street_type.nil?
-            s += " " + suffix unless suffix.nil?
-            s += " and"
-            s += " " + prefix2 unless prefix2.nil?
-            s += " " + street2
-            s += " " + street_type2 unless street_type2.nil?
-            s += " " + suffix2 unless suffix2.nil?
-            s += ", " + city unless city.nil?
-            s += ", " + state unless state.nil?
-            s += " " + postal_code unless postal_code.nil?
-          else
-            s += line1(s)
-            s += ", " + city unless city.nil?
-            s += ", " + state unless state.nil?
-            s += " " + postal_code unless postal_code.nil?
-            s += "-" + postal_code_ext unless postal_code_ext.nil?
+          s << line1(s)
+          line2 = line2().strip
+          unless line2.empty?
+            s << ', '
+            s << line2
           end
         end
-        return s
+        s
       end
 
       def to_h
