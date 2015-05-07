@@ -256,9 +256,32 @@ class AddressTest < MiniTest::Test
 
 
   def test_to_s_with_valid_addresses
-    address = "7800 Mill Station Rd Sebastopol CA 95472"
-    addr = StreetAddress::US.parse(address)
-    assert_equal addr.to_s, "7800 Mill Station Rd, Sebastopol, CA 95472"
+    ADDRESSES.each_pair do |address, expected|
+      addr = StreetAddress::US.parse(address)
+      expected_result = expected[:to_s]
+      expected_result ||= [expected[:line1], expected[:line2]].select{|l| !l.empty?}.join(', ')
+      assert_equal addr.to_s, expected_result
+    end
+  end
+
+
+  def test_to_s_with_intersections
+    INTERSECTIONS.each_pair do |address, expected|
+      addr = StreetAddress::US.parse(address)
+      expected_result = expected[:to_s]
+      expected_result ||= [expected[:line1], expected[:line2]].select{|l| !l.empty?}.join(', ')
+      assert_equal addr.to_s, expected_result
+    end
+  end
+
+
+  def test_to_s_with_informal_addresses
+    INFORMAL_ADDRESSES.each_pair do |address, expected|
+      addr = StreetAddress::US.parse(address)
+      expected_result = expected[:to_s]
+      expected_result ||= [expected[:line1], expected[:line2]].select{|l| !l.empty?}.join(', ')
+      assert_equal addr.to_s, expected_result
+    end
   end
 
 

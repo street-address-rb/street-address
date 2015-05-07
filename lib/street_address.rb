@@ -981,7 +981,7 @@ module StreetAddress
             parts << (unit_prefix ? unit : "\# #{unit}")
           end
         end
-        s + parts.join(' ')
+        s + parts.join(' ').strip
       end
 
 
@@ -1010,12 +1010,7 @@ module StreetAddress
         when :line2
           s << line2(s)
         else
-          s << line1(s)
-          line2 = line2().strip
-          unless line2.empty?
-            s << ', '
-            s << line2
-          end
+          s << [line1, line2].select{ |l| !l.empty? }.join(', ')
         end
         s
       end
