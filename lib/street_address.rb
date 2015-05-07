@@ -947,17 +947,27 @@ module StreetAddress
         return
       end
 
+
+      def postal_plus_4
+        return nil unless self.postal_code
+        self.postal_code_ext ? "#{postal_code}-#{postal_code_ext}" : self.postal_code
+      end
+
+
       def state_fips
         StreetAddress::US::FIPS_STATES[state]
       end
+
 
       def state_name
         name = StreetAddress::US::STATE_NAMES[state] and name.capitalize
       end
 
+
       def intersection?
         !street2.nil?
       end
+
 
       def line1(s = "")
         parts = []
@@ -1016,6 +1026,7 @@ module StreetAddress
         end
         s
       end
+
 
       def to_h
         self.instance_variables.each_with_object({}) do |var_name, hash|
