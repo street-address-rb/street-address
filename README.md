@@ -12,6 +12,9 @@ The port was from http://search.cpan.org/~sderle/Geo-StreetAddress-US-0.99/
 
 Since the original port the two code bases have drifted somewhat. The most recent perl codebase is [here](https://github.com/timbunce/Geo-StreetAddress-US). Any help porting updates would be greatly appreciated.
 
+## Ruby Version
+If you need this to work pre ruby 1.9.3 please use gem version 1.0.6 or below.
+
 ## Installation
 
     gem install StreetAddress
@@ -58,4 +61,4 @@ or from Gemfile
 ## License
 The [MIT Licencse](http://opensource.org/licenses/MIT)
 
-Copyright (c) 2007,2008,2009,2010,2011,2012,2013,2014 Derrek Long
+Copyright (c) 2007,2008,2009,2010,2011,2012,2013,2014,2015 Derrek Long

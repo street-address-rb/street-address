@@ -321,7 +321,7 @@ module StreetAddress
       'pky'   => "pkwy",
       'place' => "pl",
       'plain' => "pln",
-      'plaines'     => "plns",
+      'plaines'   => "plns",
       'plains'=> "plns",
       'plaza' => "plz",
       'plza'  => "plz",
