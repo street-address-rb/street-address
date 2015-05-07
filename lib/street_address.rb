@@ -861,65 +861,66 @@ module StreetAddress
         to_address( hash, args )
       end
 
-      private def match_to_hash(match)
-        hash = {}
-        match.names.each { |name| hash[name] = match[name] if match[name] }
-        return hash
-      end
-
-      private def titlecase(string)
-        string = string.downcase
-        string[0] = string[0,1].upcase
-        string
-      end
-
-      private def to_address(input, args)
-        # strip off some punctuation and whitespace
-        input.values.each { |string|
-          string.strip!
-          string.gsub!(/[^\w\s\-\#\&]/, '')
-        }
-
-        if( input['street'] && !input['street_type'] )
-          match = street_regexp.match(input['street'])
-          input['street_type'] = match['street_type']
+      private
+        def match_to_hash(match)
+          hash = {}
+          match.names.each { |name| hash[name] = match[name] if match[name] }
+          return hash
         end
+
+        def titlecase(string)
+          string = string.downcase
+          string[0] = string[0,1].upcase
+          string
+        end
+
+        def to_address(input, args)
+          # strip off some punctuation and whitespace
+          input.values.each { |string|
+            string.strip!
+            string.gsub!(/[^\w\s\-\#\&]/, '')
+          }
+
+          if( input['street'] && !input['street_type'] )
+            match = street_regexp.match(input['street'])
+            input['street_type'] = match['street_type']
+          end
         
-        NORMALIZE_MAP.each_pair { |key, map|
-          next unless input[key]
-          mapping = map[input[key].downcase]
-          input[key] = mapping if mapping
-        }
-
-        %w[street_type street_type1 street_type2].each { |k|
-          input[k] = titlecase(input[k]) if input[k]
-        }
-
-        if( args[:avoid_redundant_street_type] )
-          ['', '1', '2'].each { |suffix|
-            street = input['street'      + suffix];
-            type   = input['street_type' + suffix];
-            next if !street || !type
-
-            type_regexp = street_type_matches[type.downcase] # || fail "No STREET_TYPE_MATCH for #{type}"
-            input.delete('street_type' + suffix) if type_regexp.match(street)
+          NORMALIZE_MAP.each_pair { |key, map|
+            next unless input[key]
+            mapping = map[input[key].downcase]
+            input[key] = mapping if mapping
           }
-        end
 
-        # attempt to expand directional prefixes on place names
-        if( input['city'] )
-          input['city'].gsub!(/^(#{dircode_regexp})\s+(?=\S)/) { |match|
-            titlecase(DIRECTION_CODES[match[0].upcase]) + ' '
+          %w[street_type street_type1 street_type2].each { |k|
+            input[k] = titlecase(input[k]) if input[k]
           }
-        end
 
-        # strip ZIP+4 (which may be missing a hyphen)
-        if( input['zip'] )
-          input['zip'].gsub!(/^(.{5}).*/, '\1')
-        end
+          if( args[:avoid_redundant_street_type] )
+            ['', '1', '2'].each { |suffix|
+              street = input['street'      + suffix];
+              type   = input['street_type' + suffix];
+              next if !street || !type
+ 
+              type_regexp = street_type_matches[type.downcase] # || fail "No STREET_TYPE_MATCH for #{type}"
+              input.delete('street_type' + suffix) if type_regexp.match(street)
+            }
+          end
 
-        return StreetAddress::US::Address.new( input )
-      end
+          # attempt to expand directional prefixes on place names
+          if( input['city'] )
+            input['city'].gsub!(/^(#{dircode_regexp})\s+(?=\S)/) { |match|
+              titlecase(DIRECTION_CODES[match[0].upcase]) + ' '
+            }
+          end
+
+          # strip ZIP+4 (which may be missing a hyphen)
+          if( input['zip'] )
+            input['zip'].gsub!(/^(.{5}).*/, '\1')
+          end
+
+          return StreetAddress::US::Address.new( input )
+        end
     end
 
 =begin rdoc
