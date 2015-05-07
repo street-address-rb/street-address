@@ -503,7 +503,7 @@ class StreetAddressUsTest < MiniTest::Test
 
   def test_informal_address_parsing
     INFORMAL_ADDRESSES.each_pair do |address, expected|
-      addr = StreetAddress::US.parse(address, :informal => true)
+      addr = StreetAddress::US.parse(address, informal: true)
       compare_expected_to_actual_hash(expected, addr.to_h, address)
     end
   end
@@ -552,7 +552,7 @@ class StreetAddressUsTest < MiniTest::Test
   end
 
   def test_informal_parse_normal_address
-    a = StreetAddress::US.parse("2730 S Veitch St, Arlington, VA 222064444", :informal => true)
+    a = StreetAddress::US.parse("2730 S Veitch St, Arlington, VA 222064444", informal: true)
     assert_equal "2730", a.number
     assert_equal "S", a.prefix
     assert_equal "Veitch", a.street
@@ -564,7 +564,7 @@ class StreetAddressUsTest < MiniTest::Test
   end
 
   def test_informal_parse_informal_address
-    a = StreetAddress::US.parse("2730 S Veitch St", :informal => true)
+    a = StreetAddress::US.parse("2730 S Veitch St", informal: true)
     assert_equal "2730", a.number
     assert_equal "S", a.prefix
     assert_equal "Veitch", a.street
@@ -572,7 +572,7 @@ class StreetAddressUsTest < MiniTest::Test
   end
 
   def test_informal_parse_informal_address_trailing_words
-    a = StreetAddress::US.parse("2730 S Veitch St in the south of arlington", :informal => true)
+    a = StreetAddress::US.parse("2730 S Veitch St in the south of arlington", informal: true)
     assert_equal "2730", a.number
     assert_equal "S", a.prefix
     assert_equal "Veitch", a.street

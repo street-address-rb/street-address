@@ -617,7 +617,7 @@ module StreetAddress
         :unit_regexp,
         :sep_regexp,
         :sep_avoid_unit_regexp,
-        :intersection_regexp,
+        :intersection_regexp
       )
     end
     
@@ -850,8 +850,13 @@ module StreetAddress
         hash["street_type"]  = street_types[0] if street_types[0]
         hash["street_type2"] = street_types[1] if street_types[1]
 
-        if( hash["street_type"] &&
-            (!hash["street_type2"] || (hash["street_type"] == hash["street_type2"])) )
+        if( 
+          hash["street_type"] &&
+          (
+            !hash["street_type2"] || 
+            (hash["street_type"] == hash["street_type2"])
+          ) 
+        )
           type = hash["street_type"].clone
           if( type.gsub!(/s\W*$/i, '') && /^#{street_type_regexp}$/i =~ type )
             hash["street_type"] = hash["street_type2"] = type
