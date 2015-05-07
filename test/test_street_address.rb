@@ -158,15 +158,15 @@ class StreetAddressUsTest < MiniTest::Test
       :city => 'Washington',
       :street_type => 'Ave',
     },
-    # "48S 400E, Salt Lake City UT" => {
-    #   :street_type => nil,
-    #   :number => '48',
-    #   :street => '400',
-    #   :state => 'UT',
-    #   :city => 'Salt Lake City',
-    #   :suffix => 'E',
-    #   :prefix => 'S'
-    # },
+    "48S 400E, Salt Lake City UT" => {
+      :street_type => nil,
+      :number => '48',
+      :street => '400',
+      :state => 'UT',
+      :city => 'Salt Lake City',
+      :suffix => 'E',
+      :prefix => 'S'
+    },
     "550 S 400 E #3206, Salt Lake City UT 84111" => {
       :number => '550',
       :street => '400',
@@ -179,18 +179,18 @@ class StreetAddressUsTest < MiniTest::Test
       :unit_prefix => '#',
       :prefix => 'S'
     },
-    # "6641 N 2200 W Apt D304 Park City, UT 84098" => {
-    #   :number => '6641',
-    #   :street => '2200',
-    #   :state => 'UT',
-    #   :unit => 'D304',
-    #   :postal_code => '84098',
-    #   :city => 'Park City',
-    #   :suffix => 'W',
-    #   :street_type => nil,
-    #   :unit_prefix => 'Apt',
-    #   :prefix => 'N'
-    # },
+    "6641 N 2200 W Apt D304 Park City, UT 84098" => {
+      :number => '6641',
+      :street => '2200',
+      :state => 'UT',
+      :unit => 'D304',
+      :postal_code => '84098',
+      :city => 'Park City',
+      :suffix => 'W',
+      :street_type => nil,
+      :unit_prefix => 'Apt',
+      :prefix => 'N'
+    },
     "100 South St, Philadelphia, PA" => {
       :number => '100',
       :street => 'South',
@@ -213,13 +213,13 @@ class StreetAddressUsTest < MiniTest::Test
       :city => 'Los Angeles',
       :street_type => 'Rd',
     },
-    # "1 First St, e San Jose CA" => { # lower case city direction
-    #   :number => '1',
-    #   :street => 'First',
-    #   :state => 'CA',
-    #   :city => 'East San Jose',
-    #   :street_type => 'St',
-    # },
+    "1 First St, e San Jose CA" => { # lower case city direction
+      :number => '1',
+      :street => 'First',
+      :state => 'CA',
+      :city => 'East San Jose',
+      :street_type => 'St',
+    },
     "123 Maple Rochester, New York" => { # space in state name
       :street_type => nil,
       :number => '123',
@@ -250,14 +250,14 @@ class StreetAddressUsTest < MiniTest::Test
     #   :street_type => 'Rd',
     #   :state => 'LA'
     # },
-    # "36401 County Road 43, Eaton, CO 80615" => { # numbered County Road
-    #   :city => 'Eaton',
-    #   :postal_code => '80615',
-    #   :number => '36401',
-    #   :street => 'County Road 43',
-    #   :street_type => 'Rd',
-    #   :state => 'CO'
-    # },
+    "36401 County Road 43, Eaton, CO 80615" => { # numbered County Road
+      :city => 'Eaton',
+      :postal_code => '80615',
+      :number => '36401',
+      :street => 'County Road 43',
+      :street_type => 'Rd',
+      :state => 'CO'
+    },
     # "1234 COUNTY HWY 60E, Town, CO 12345" => {
     #   :city => 'Town',
     #   :postal_code => '12345',
@@ -457,7 +457,7 @@ class StreetAddressUsTest < MiniTest::Test
       :city=>nil,
       :state=>nil,
       :postal_code=>nil
-    }
+    },
     # "321 S. Washington" => { # RT#82146
     #   :street_type => nil,
     #   :prefix => 'S',
