@@ -246,7 +246,7 @@ class StreetAddressUsTest < MiniTest::Test
       :city => 'Some City',
       :number => '99',
       :street => 'Some',
-      :unit_prefix => 'lt',
+      :unit_prefix => 'Lt',
       :street_type => 'Rd',
       :state => 'LA'
     },
@@ -262,7 +262,7 @@ class StreetAddressUsTest < MiniTest::Test
       :city => 'Town',
       :postal_code => '12345',
       :number => '1234',
-      :street => 'COUNTY HWY 60',
+      :street => 'County Hwy 60',
       :suffix => 'E',
       :street_type => 'Hwy',
       :state => 'CO'
@@ -469,7 +469,7 @@ class StreetAddressUsTest < MiniTest::Test
       :postal_code => '60606',
       :street_type => 'Dr',
       :prefix => 'S',
-      :unit_prefix => 'lobby',
+      :unit_prefix => 'Lobby',
     },
     "(233 S Wacker Dr lobby 60606)" => { # surrounding punctuation
       :number => '233',
@@ -477,7 +477,7 @@ class StreetAddressUsTest < MiniTest::Test
       :postal_code => '60606',
       :street_type => 'Dr',
       :prefix => 'S',
-      :unit_prefix => 'lobby',
+      :unit_prefix => 'Lobby',
     }
   }
 
