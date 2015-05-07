@@ -585,17 +585,6 @@ module StreetAddress
     }
 
     class << self
-      # If true then L</normalize_address> will set the C<type> field to undef
-      # if the C<street> field contains a word that corresponds to the C<type> in L<\%Street_Type>.
-      #
-      # For example, given "4321 Country Road 7", C<street> will be "Country Road 7"
-      # and C<type> will be "Rd". With avoid_redundant_street_type set true, C<type>
-      # will be undef because C<street> matches /\b (rd|road) \b/ix;
-      # 
-      # Also applies to C<type1> for C<street1> and C<type2> for C<street2>
-      # fields for intersections.
-      #
-      # The default is false, for backwards compatibility.
       attr_accessor(
         :street_type_regexp,
         :street_type_matches,
