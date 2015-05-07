@@ -198,14 +198,14 @@ class StreetAddressUsTest < MiniTest::Test
       :city => 'Philadelphia',
       :street_type => 'St',
     },
-    # "100 S.E. Washington Ave, Minneapolis, MN" => {
-    #   :number => '100',
-    #   :street => 'Washington',
-    #   :state => 'MN',
-    #   :city => 'Minneapolis',
-    #   :street_type => 'Ave',
-    #   :prefix => 'SE'
-    # },
+    "100 S.E. Washington Ave, Minneapolis, MN" => {
+      :number => '100',
+      :street => 'Washington',
+      :state => 'MN',
+      :city => 'Minneapolis',
+      :street_type => 'Ave',
+      :prefix => 'SE'
+    },
     "3813 1/2 Some Road, Los Angeles, CA" => {
       :number => '3813',
       :street => 'Some',

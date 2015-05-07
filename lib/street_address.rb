@@ -877,9 +877,10 @@ module StreetAddress
       end
 
       private def to_address(input, args)
-        # strip off some punctuation
+        # strip off some punctuation and whitespace
         input.values.each { |string|
-          string.gsub!(/^\s+|\s+$|[^\w\s\-\#\&]/)
+          string.strip!
+          string.gsub!(/[^\w\s\-\#\&]/, '')
         }
 
         if( input['street'] && !input['street_type'] )
