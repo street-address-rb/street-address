@@ -383,14 +383,14 @@ class StreetAddressUsTest < MiniTest::Test
       :city => 'San Francisco',
       :street2 => 'Valencia'
     },
-    # "Mission and Valencia Sts San Francisco CA" => {
-    #   :street_type => 'St',
-    #   :street_type2 => 'St',
-    #   :street => 'Mission',
-    #   :state => 'CA',
-    #   :city => 'San Francisco',
-    #   :street2 => 'Valencia'
-    # },
+    "Mission and Valencia Sts San Francisco CA" => {
+      :street_type => 'St',
+      :street_type2 => 'St',
+      :street => 'Mission',
+      :state => 'CA',
+      :city => 'San Francisco',
+      :street2 => 'Valencia'
+    },
     # "Mission & Valencia Sts. San Francisco CA" => {
     #   :street_type => 'St',
     #   :street_type2 => 'St',

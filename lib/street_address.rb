@@ -837,20 +837,26 @@ module StreetAddress
         return unless match = intersection_regexp.match(intersection)
 
         hash = match_to_hash(match)
-        
+
         streets = intersection_regexp.named_captures["street"].map { |pos|
           match[pos.to_i]
         }.select { |v| v }
-
         hash["street"]  = streets[0] if streets[0]
         hash["street2"] = streets[1] if streets[1]
 
         street_types = intersection_regexp.named_captures["street_type"].map { |pos|
           match[pos.to_i]
         }.select { |v| v }
-
         hash["street_type"]  = street_types[0] if street_types[0]
         hash["street_type2"] = street_types[1] if street_types[1]
+
+        if( hash["street_type"] &&
+            (!hash["street_type2"] || (hash["street_type"] == hash["street_type2"])) )
+          type = hash["street_type"].clone
+          if( type.gsub!(/s\W*$/i, '') && /^#{street_type_regexp}$/i =~ type )
+            hash["street_type"] = hash["street_type2"] = type
+          end
+        end
         
         to_address( hash, args )
       end
