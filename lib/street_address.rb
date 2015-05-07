@@ -449,6 +449,38 @@ module StreetAddress
       STREET_TYPES_LIST[item[1]] = true
     end
 
+    UNIT_ABBREVIATIONS_NUMBERED = {
+      /(?:ap|dep)(?:ar)?t(?:me?nt)?/i => "Apt",
+      /box/i           => 'Box',
+      /bu?i?ldi?n?g/i => "Bldg",
+      /dep(artmen)?t/i => "Dept",
+      /flo*r?/i => "Fl",
+      /ha?nga?r/i => "Hngr",
+      /lo?t/i  => 'Lot',
+      /ro*m/i => "Rm",
+      /pier/i  => 'Pier',
+      /p\W*[om]\W*b(?:ox)?/i => 'PO Box',
+      /slip/i  => 'Slip',
+      /spa?ce?/i => "Spc",
+      /stop/i    => "Stop",
+      /su?i?te/i => "Ste",
+      /tra?i?le?r/i => "Trlr",
+      /uni?t/i => 'Unit'
+    }
+
+    UNIT_ABBREVIATIONS_UNNUMBERED = {
+      /ba?se?me?n?t/i => "Bsmt",
+      /fro?nt/i => "Frnt",
+      /lo?bby/i => "Lbby",
+      /lowe?r/i => "Lowr",
+      /off?i?ce?/i => "Ofc",
+      /pe?n?t?ho?u?s?e?/i => 'PH',
+      /rear/i   => 'Rear',
+      /side/i   => 'Side',
+      /uppe?r/i => "Uppr",
+    }
+
+
     STATE_CODES = {
       "alabama" => "AL",
       "alaska" => "AK",
@@ -667,40 +699,16 @@ module StreetAddress
     /ix;
 
     # http://pe.usps.com/text/pub28/pub28c2_003.htm
-    # TODO add support for those that don't require a number
-    # TODO map to standard names/abbreviations
     self.unit_prefix_numbered_regexp = /
-      (?<unit_prefix>
-        su?i?te
-        |p\W*[om]\W*b(?:ox)?
-        |(?:ap|dep)(?:ar)?t(?:me?nt)?
-        |ro*m
-        |flo*r?
-        |uni?t
-        |bu?i?ldi?n?g
-        |ha?nga?r
-        |lo?t
-        |pier
-        |slip
-        |spa?ce?
-        |stop
-        |tra?i?le?r
-        |box)(?![a-z])
-    /ix;
+    (?<unit_prefix>
+      #{UNIT_ABBREVIATIONS_NUMBERED.keys.join("|")}
+    )(?![a-z])/ix
+
 
     self.unit_prefix_unnumbered_regexp = /
-      (?<unit_prefix>
-        ba?se?me?n?t
-        |fro?nt
-        |lo?bby
-        |lowe?r
-        |off?i?ce?
-        |pe?n?t?ho?u?s?e?
-        |rear
-        |side
-        |uppe?r
-        )\b
-    /ix;
+    (?<unit_prefix>
+      #{UNIT_ABBREVIATIONS_UNNUMBERED.keys.join("|")}
+    )\b/ix
 
     self.unit_regexp = /
       (?:
@@ -873,7 +881,12 @@ module StreetAddress
           if( input['street'] && !input['street_type'] )
             match = street_regexp.match(input['street'])
             input['street_type'] = match['street_type']
-          input['redundant_street_type'] = true
+            input['redundant_street_type'] = true
+          end
+
+          ## abbreviate unit prefixes
+          UNIT_ABBREVIATIONS_NUMBERED.merge(UNIT_ABBREVIATIONS_UNNUMBERED).each_pair do |regex, abbr|
+            regex.match(input['unit_prefix']){|m| input['unit_prefix'] = abbr }
           end
 
           NORMALIZE_MAP.each_pair { |key, map|
