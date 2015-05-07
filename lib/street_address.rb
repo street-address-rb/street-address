@@ -715,21 +715,14 @@ module StreetAddress
 
     self.unit_regexp = /
       (?:
-        (?<unit_prefix> su?i?te|p\W*[om]\W*b(?:ox)?|dept|apt|apartment|ro*m|fl|unit|box)\W+  |
-        (?<unit_prefix> \#)\W*
+          (?: (?:#{unit_prefix_numbered_regexp} \W*)
+              | (?<unit_prefix> \#)\W*
+          )
+          (?<unit> [\w-]+)
       )
-      (?<unit>[\w-]+)
-    /ix
-    # self.unit_regexp = /
-    #   (?:
-    #       (?: (?:#{unit_prefix_numbered_regexp} \W*)
-    #           | (?<unit_prefix> \#)\W*
-    #       )
-    #       (?<unit> [\w-]+)
-    #   )
-    #   |
-    #   #{unit_prefix_unnumbered_regexp}
-    # /ix;
+      |
+      #{unit_prefix_unnumbered_regexp}
+    /ix;
 
     self.city_and_state_regexp = /
       (?:

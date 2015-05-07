@@ -241,15 +241,15 @@ class StreetAddressUsTest < MiniTest::Test
       :street_type => 'Dr',
       :prefix => 'S'
     },
-    # "lt42 99 Some Road, Some City LA" => { # no space before sec_unit_num
-    #   :unit => '42',
-    #   :city => 'Some City',
-    #   :number => '99',
-    #   :street => 'Some',
-    #   :unit_prefix => 'lt',
-    #   :street_type => 'Rd',
-    #   :state => 'LA'
-    # },
+    "lt42 99 Some Road, Some City LA" => { # no space before sec_unit_num
+      :unit => '42',
+      :city => 'Some City',
+      :number => '99',
+      :street => 'Some',
+      :unit_prefix => 'lt',
+      :street_type => 'Rd',
+      :state => 'LA'
+    },
     "36401 County Road 43, Eaton, CO 80615" => { # numbered County Road
       :city => 'Eaton',
       :postal_code => '80615',
