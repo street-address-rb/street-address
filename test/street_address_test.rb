@@ -230,6 +230,7 @@ class StreetAddressUsTest < MiniTest::Test
       :number => '233',
       :street => 'Wacker',
       :postal_code => '60606',
+      :postal_code_ext => '6306',
       :street_type => 'Dr',
       :prefix => 'S'
     },
@@ -237,6 +238,7 @@ class StreetAddressUsTest < MiniTest::Test
       :number => '233',
       :street => 'Wacker',
       :postal_code => '60606',
+      :postal_code_ext => '6306',
       :street_type => 'Dr',
       :prefix => 'S'
     },
