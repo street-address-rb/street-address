@@ -64,7 +64,8 @@
 
 module StreetAddress
   class US
-    VERSION = '1.0.6'
+    VERSION = '1.1.0'
+
     DIRECTIONAL = {
       "north" => "N",
       "northeast" => "NE",
@@ -78,369 +79,368 @@ module StreetAddress
     DIRECTION_CODES = DIRECTIONAL.invert
 
     STREET_TYPES = {
-      "allee" => "aly",
-      "alley" => "aly",
-      "ally" => "aly",
-      "anex" => "anx",
-      "annex" => "anx",
-      "annx" => "anx",
-      "arcade" => "arc",
-      "av" => "ave",
-      "aven" => "ave",
-      "avenu" => "ave",
-      "avenue" => "ave",
-      "avn" => "ave",
-      "avnue" => "ave",
-      "bayoo" => "byu",
-      "bayou" => "byu",
-      "beach" => "bch",
-      "bend" => "bnd",
-      "bluf" => "blf",
-      "bluff" => "blf",
-      "bluffs" => "blfs",
-      "bot" => "btm",
-      "bottm" => "btm",
-      "bottom" => "btm",
-      "boul" => "blvd",
-      "boulevard" => "blvd",
-      "boulv" => "blvd",
-      "branch" => "br",
-      "brdge" => "brg",
-      "bridge" => "brg",
-      "brnch" => "br",
-      "brook" => "brk",
-      "brooks" => "brks",
-      "burg" => "bg",
-      "burgs" => "bgs",
-      "bypa" => "byp",
-      "bypas" => "byp",
-      "bypass" => "byp",
-      "byps" => "byp",
-      "camp" => "cp",
-      "canyn" => "cyn",
-      "canyon" => "cyn",
-      "cape" => "cpe",
-      "causeway" => "cswy",
-      "causway" => "cswy",
-      "cen" => "ctr",
-      "cent" => "ctr",
-      "center" => "ctr",
-      "centers" => "ctrs",
-      "centr" => "ctr",
-      "centre" => "ctr",
-      "circ" => "cir",
-      "circl" => "cir",
-      "circle" => "cir",
-      "circles" => "cirs",
-      "ck" => "crk",
-      "cliff" => "clf",
-      "cliffs" => "clfs",
-      "club" => "clb",
-      "cmp" => "cp",
-      "cnter" => "ctr",
-      "cntr" => "ctr",
-      "cnyn" => "cyn",
-      "common" => "cmn",
-      "corner" => "cor",
-      "corners" => "cors",
-      "course" => "crse",
-      "court" => "ct",
-      "courts" => "cts",
-      "cove" => "cv",
-      "coves" => "cvs",
-      "cr" => "crk",
-      "crcl" => "cir",
-      "crcle" => "cir",
-      "crecent" => "cres",
-      "creek" => "crk",
-      "crescent" => "cres",
-      "cresent" => "cres",
-      "crest" => "crst",
-      "crossing" => "xing",
-      "crossroad" => "xrd",
-      "crscnt" => "cres",
-      "crsent" => "cres",
-      "crsnt" => "cres",
-      "crssing" => "xing",
-      "crssng" => "xing",
-      "crt" => "ct",
-      "curve" => "curv",
-      "cur" => "curv",
-      "dale" => "dl",
-      "dam" => "dm",
-      "div" => "dv",
-      "divide" => "dv",
-      "driv" => "dr",
-      "drive" => "dr",
-      "drives" => "drs",
-      "drv" => "dr",
-      "dvd" => "dv",
-      "estate" => "est",
-      "estates" => "ests",
-      "exp" => "expy",
-      "expr" => "expy",
-      "express" => "expy",
-      "expressway" => "expy",
-      "expw" => "expy",
-      "extension" => "ext",
-      "extensions" => "exts",
-      "extn" => "ext",
-      "extnsn" => "ext",
-      "falls" => "fls",
-      "ferry" => "fry",
-      "field" => "fld",
-      "fields" => "flds",
-      "flat" => "flt",
-      "flats" => "flts",
-      "ford" => "frd",
-      "fords" => "frds",
-      "forest" => "frst",
-      "forests" => "frst",
-      "forg" => "frg",
-      "forge" => "frg",
-      "forges" => "frgs",
-      "fork" => "frk",
-      "forks" => "frks",
-      "fort" => "ft",
-      "freeway" => "fwy",
-      "freewy" => "fwy",
-      "frry" => "fry",
-      "frt" => "ft",
-      "frway" => "fwy",
-      "frwy" => "fwy",
-      "garden" => "gdn",
-      "gardens" => "gdns",
-      "gardn" => "gdn",
-      "gateway" => "gtwy",
-      "gatewy" => "gtwy",
-      "gatway" => "gtwy",
-      "glen" => "gln",
-      "glens" => "glns",
-      "grden" => "gdn",
-      "grdn" => "gdn",
-      "grdns" => "gdns",
-      "green" => "grn",
-      "greens" => "grns",
-      "grov" => "grv",
-      "grove" => "grv",
-      "groves" => "grvs",
-      "gtway" => "gtwy",
-      "harb" => "hbr",
-      "harbor" => "hbr",
-      "harbors" => "hbrs",
-      "harbr" => "hbr",
-      "haven" => "hvn",
-      "havn" => "hvn",
-      "height" => "hts",
-      "heights" => "hts",
-      "hgts" => "hts",
-      "highway" => "hwy",
-      "highwy" => "hwy",
-      "hill" => "hl",
-      "hills" => "hls",
-      "hiway" => "hwy",
-      "hiwy" => "hwy",
-      "hllw" => "holw",
-      "hollow" => "holw",
-      "hollows" => "holw",
-      "holws" => "holw",
-      "hrbor" => "hbr",
-      "ht" => "hts",
-      "hway" => "hwy",
-      "inlet" => "inlt",
-      "island" => "is",
-      "islands" => "iss",
-      "isles" => "isle",
-      "islnd" => "is",
-      "islnds" => "iss",
-      "jction" => "jct",
-      "jctn" => "jct",
-      "jctns" => "jcts",
-      "junction" => "jct",
-      "junctions" => "jcts",
-      "junctn" => "jct",
-      "juncton" => "jct",
-      "key" => "ky",
-      "keys" => "kys",
-      "knol" => "knl",
-      "knoll" => "knl",
-      "knolls" => "knls",
-      "la" => "ln",
-      "lake" => "lk",
-      "lakes" => "lks",
-      "landing" => "lndg",
-      "lane" => "ln",
-      "lanes" => "ln",
-      "ldge" => "ldg",
-      "light" => "lgt",
-      "lights" => "lgts",
-      "lndng" => "lndg",
-      "loaf" => "lf",
-      "lock" => "lck",
-      "locks" => "lcks",
-      "lodg" => "ldg",
-      "lodge" => "ldg",
-      "loops" => "loop",
-      "manor" => "mnr",
-      "manors" => "mnrs",
-      "meadow" => "mdw",
-      "meadows" => "mdws",
-      "medows" => "mdws",
-      "mill" => "ml",
-      "mills" => "mls",
-      "mission" => "msn",
-      "missn" => "msn",
-      "mnt" => "mt",
-      "mntain" => "mtn",
-      "mntn" => "mtn",
-      "mntns" => "mtns",
-      "motorway" => "mtwy",
-      "mount" => "mt",
-      "mountain" => "mtn",
-      "mountains" => "mtns",
-      "mountin" => "mtn",
-      "mssn" => "msn",
-      "mtin" => "mtn",
-      "neck" => "nck",
-      "orchard" => "orch",
-      "orchrd" => "orch",
-      "overpass" => "opas",
-      "ovl" => "oval",
-      "parks" => "park",
-      "parkway" => "pkwy",
-      "parkways" => "pkwy",
-      "parkwy" => "pkwy",
-      "passage" => "psge",
-      "paths" => "path",
-      "pikes" => "pike",
-      "pine" => "pne",
-      "pines" => "pnes",
-      "pk" => "park",
-      "pkway" => "pkwy",
-      "pkwys" => "pkwy",
-      "pky" => "pkwy",
-      "place" => "pl",
-      "plain" => "pln",
-      "plaines" => "plns",
-      "plains" => "plns",
-      "plaza" => "plz",
-      "plza" => "plz",
-      "point" => "pt",
-      "points" => "pts",
-      "port" => "prt",
-      "ports" => "prts",
-      "prairie" => "pr",
-      "prarie" => "pr",
-      "prk" => "park",
-      "prr" => "pr",
-      "rad" => "radl",
-      "radial" => "radl",
-      "radiel" => "radl",
-      "ranch" => "rnch",
-      "ranches" => "rnch",
-      "rapid" => "rpd",
-      "rapids" => "rpds",
-      "rdge" => "rdg",
-      "rest" => "rst",
-      "ridge" => "rdg",
-      "ridges" => "rdgs",
-      "river" => "riv",
-      "rivr" => "riv",
-      "rnchs" => "rnch",
-      "road" => "rd",
-      "roads" => "rds",
-      "route" => "rte",
-      "rvr" => "riv",
-      "shoal" => "shl",
-      "shoals" => "shls",
-      "shoar" => "shr",
-      "shoars" => "shrs",
-      "shore" => "shr",
-      "shores" => "shrs",
-      "skyway" => "skwy",
-      "spng" => "spg",
-      "spngs" => "spgs",
-      "spring" => "spg",
-      "springs" => "spgs",
-      "sprng" => "spg",
-      "sprngs" => "spgs",
-      "spurs" => "spur",
-      "sqr" => "sq",
-      "sqre" => "sq",
-      "sqrs" => "sqs",
-      "squ" => "sq",
-      "square" => "sq",
-      "squares" => "sqs",
-      "station" => "sta",
-      "statn" => "sta",
-      "stn" => "sta",
-      "str" => "st",
-      "strav" => "stra",
-      "strave" => "stra",
-      "straven" => "stra",
-      "stravenue" => "stra",
-      "stravn" => "stra",
-      "stream" => "strm",
-      "street" => "st",
-      "streets" => "sts",
-      "streme" => "strm",
-      "strt" => "st",
-      "strvn" => "stra",
-      "strvnue" => "stra",
-      "sumit" => "smt",
-      "sumitt" => "smt",
-      "summit" => "smt",
-      "terr" => "ter",
-      "terrace" => "ter",
-      "throughway" => "trwy",
-      "tpk" => "tpke",
-      "tr" => "trl",
-      "trace" => "trce",
-      "traces" => "trce",
-      "track" => "trak",
-      "tracks" => "trak",
-      "trafficway" => "trfy",
-      "trail" => "trl",
-      "trails" => "trl",
-      "trk" => "trak",
-      "trks" => "trak",
-      "trls" => "trl",
-      "trnpk" => "tpke",
-      "trpk" => "tpke",
-      "tunel" => "tunl",
-      "tunls" => "tunl",
-      "tunnel" => "tunl",
-      "tunnels" => "tunl",
-      "tunnl" => "tunl",
-      "turnpike" => "tpke",
-      "turnpk" => "tpke",
-      "underpass" => "upas",
-      "union" => "un",
-      "unions" => "uns",
-      "valley" => "vly",
-      "valleys" => "vlys",
-      "vally" => "vly",
-      "vdct" => "via",
-      "viadct" => "via",
-      "viaduct" => "via",
-      "view" => "vw",
-      "views" => "vws",
-      "vill" => "vlg",
-      "villag" => "vlg",
-      "village" => "vlg",
-      "villages" => "vlgs",
-      "ville" => "vl",
-      "villg" => "vlg",
-      "villiage" => "vlg",
-      "vist" => "vis",
-      "vista" => "vis",
-      "vlly" => "vly",
-      "vst" => "vis",
-      "vsta" => "vis",
-      "walks" => "walk",
-      "well" => "wl",
-      "wells" => "wls",
-      "wy" => "way"
+      'allee' => "aly",
+      'alley' => "aly",
+      'ally'  => "aly",
+      'anex'  => "anx",
+      'annex' => "anx",
+      'annx'  => "anx",
+      'arcade'=> "arc",
+      'av'    => "ave",
+      'aven'  => "ave",
+      'avenu' => "ave",
+      'avenue'=> "ave",
+      'avn'   => "ave",
+      'avnue' => "ave",
+      'bayoo' => "byu",
+      'bayou' => "byu",
+      'beach' => "bch",
+      'bend'  => "bnd",
+      'bluf'  => "blf",
+      'bluff' => "blf",
+      'bluffs'=> "blfs",
+      'bot'   => "btm",
+      'bottm' => "btm",
+      'bottom'=> "btm",
+      'boul'  => "blvd",
+      'boulevard'   => "blvd",
+      'boulv' => "blvd",
+      'branch'=> "br",
+      'brdge' => "brg",
+      'bridge'=> "brg",
+      'brnch' => "br",
+      'brook' => "brk",
+      'brooks'=> "brks",
+      'burg'  => "bg",
+      'burgs' => "bgs",
+      'bypa'  => "byp",
+      'bypas' => "byp",
+      'bypass'=> "byp",
+      'byps'  => "byp",
+      'camp'  => "cp",
+      'canyn' => "cyn",
+      'canyon'=> "cyn",
+      'cape'  => "cpe",
+      'causeway'    => "cswy",
+      'causway'     => "cswy",
+      'cen'   => "ctr",
+      'cent'  => "ctr",
+      'center'=> "ctr",
+      'centers'     => "ctrs",
+      'centr' => "ctr",
+      'centre'=> "ctr",
+      'circ'  => "cir",
+      'circl' => "cir",
+      'circle'=> "cir",
+      'circles'     => "cirs",
+      'ck'    => "crk",
+      'cliff' => "clf",
+      'cliffs'=> "clfs",
+      'club'  => "clb",
+      'cmp'   => "cp",
+      'cnter' => "ctr",
+      'cntr'  => "ctr",
+      'cnyn'  => "cyn",
+      'common'=> "cmn",
+      'corner'=> "cor",
+      'corners'     => "cors",
+      'course'=> "crse",
+      'court' => "ct",
+      'courts'=> "cts",
+      'cove'  => "cv",
+      'coves' => "cvs",
+      'cr'    => "crk",
+      'crcl'  => "cir",
+      'crcle' => "cir",
+      'crecent'     => "cres",
+      'creek' => "crk",
+      'crescent'    => "cres",
+      'cresent'     => "cres",
+      'crest' => "crst",
+      'crossing'    => "xing",
+      'crossroad'   => "xrd",
+      'crscnt'=> "cres",
+      'crsent'=> "cres",
+      'crsnt' => "cres",
+      'crssing'     => "xing",
+      'crssng'=> "xing",
+      'crt'   => "ct",
+      'curve' => "curv",
+      'dale'  => "dl",
+      'dam'   => "dm",
+      'div'   => "dv",
+      'divide'=> "dv",
+      'driv'  => "dr",
+      'drive' => "dr",
+      'drives'=> "drs",
+      'drv'   => "dr",
+      'dvd'   => "dv",
+      'estate'=> "est",
+      'estates'     => "ests",
+      'exp'   => "expy",
+      'expr'  => "expy",
+      'express'     => "expy",
+      'expressway'  => "expy",
+      'expw'  => "expy",
+      'extension'   => "ext",
+      'extensions'  => "exts",
+      'extn'  => "ext",
+      'extnsn'=> "ext",
+      'falls' => "fls",
+      'ferry' => "fry",
+      'field' => "fld",
+      'fields'=> "flds",
+      'flat'  => "flt",
+      'flats' => "flts",
+      'ford'  => "frd",
+      'fords' => "frds",
+      'forest'=> "frst",
+      'forests'     => "frst",
+      'forg'  => "frg",
+      'forge' => "frg",
+      'forges'=> "frgs",
+      'fork'  => "frk",
+      'forks' => "frks",
+      'fort'  => "ft",
+      'freeway'     => "fwy",
+      'freewy'=> "fwy",
+      'frry'  => "fry",
+      'frt'   => "ft",
+      'frway' => "fwy",
+      'frwy'  => "fwy",
+      'garden'=> "gdn",
+      'gardens'     => "gdns",
+      'gardn' => "gdn",
+      'gateway'     => "gtwy",
+      'gatewy'=> "gtwy",
+      'gatway'=> "gtwy",
+      'glen'  => "gln",
+      'glens' => "glns",
+      'grden' => "gdn",
+      'grdn'  => "gdn",
+      'grdns' => "gdns",
+      'green' => "grn",
+      'greens'=> "grns",
+      'grov'  => "grv",
+      'grove' => "grv",
+      'groves'=> "grvs",
+      'gtway' => "gtwy",
+      'harb'  => "hbr",
+      'harbor'=> "hbr",
+      'harbors'     => "hbrs",
+      'harbr' => "hbr",
+      'haven' => "hvn",
+      'havn'  => "hvn",
+      'height'=> "hts",
+      'heights'     => "hts",
+      'hgts'  => "hts",
+      'highway'     => "hwy",
+      'highwy'=> "hwy",
+      'hill'  => "hl",
+      'hills' => "hls",
+      'hiway' => "hwy",
+      'hiwy'  => "hwy",
+      'hllw'  => "holw",
+      'hollow'=> "holw",
+      'hollows'     => "holw",
+      'holws' => "holw",
+      'hrbor' => "hbr",
+      'ht'    => "hts",
+      'hway'  => "hwy",
+      'inlet' => "inlt",
+      'island'=> "is",
+      'islands'     => "iss",
+      'isles' => "isle",
+      'islnd' => "is",
+      'islnds'=> "iss",
+      'jction'=> "jct",
+      'jctn'  => "jct",
+      'jctns' => "jcts",
+      'junction'    => "jct",
+      'junctions'   => "jcts",
+      'junctn'=> "jct",
+      'juncton'     => "jct",
+      'key'   => "ky",
+      'keys'  => "kys",
+      'knol'  => "knl",
+      'knoll' => "knl",
+      'knolls'=> "knls",
+      'la'    => "ln",
+      'lake'  => "lk",
+      'lakes' => "lks",
+      'landing'     => "lndg",
+      'lane'  => "ln",
+      'lanes' => "ln",
+      'ldge'  => "ldg",
+      'light' => "lgt",
+      'lights'=> "lgts",
+      'lndng' => "lndg",
+      'loaf'  => "lf",
+      'lock'  => "lck",
+      'locks' => "lcks",
+      'lodg'  => "ldg",
+      'lodge' => "ldg",
+      'loops' => "loop",
+      'manor' => "mnr",
+      'manors'=> "mnrs",
+      'meadow'=> "mdw",
+      'meadows'     => "mdws",
+      'medows'=> "mdws",
+      'mill'  => "ml",
+      'mills' => "mls",
+      'mission'     => "msn",
+      'missn' => "msn",
+      'mnt'   => "mt",
+      'mntain'=> "mtn",
+      'mntn'  => "mtn",
+      'mntns' => "mtns",
+      'motorway'    => "mtwy",
+      'mount' => "mt",
+      'mountain'    => "mtn",
+      'mountains'   => "mtns",
+      'mountin'     => "mtn",
+      'mssn'  => "msn",
+      'mtin'  => "mtn",
+      'neck'  => "nck",
+      'orchard'     => "orch",
+      'orchrd'=> "orch",
+      'overpass'    => "opas",
+      'ovl'   => "oval",
+      'parks' => "park",
+      'parkway'     => "pkwy",
+      'parkways'    => "pkwy",
+      'parkwy'=> "pkwy",
+      'passage'     => "psge",
+      'paths' => "path",
+      'pikes' => "pike",
+      'pine'  => "pne",
+      'pines' => "pnes",
+      'pk'    => "park",
+      'pkway' => "pkwy",
+      'pkwys' => "pkwy",
+      'pky'   => "pkwy",
+      'place' => "pl",
+      'plain' => "pln",
+      'plaines'     => "plns",
+      'plains'=> "plns",
+      'plaza' => "plz",
+      'plza'  => "plz",
+      'point' => "pt",
+      'points'=> "pts",
+      'port'  => "prt",
+      'ports' => "prts",
+      'prairie'     => "pr",
+      'prarie'=> "pr",
+      'prk'   => "park",
+      'prr'   => "pr",
+      'rad'   => "radl",
+      'radial'=> "radl",
+      'radiel'=> "radl",
+      'ranch' => "rnch",
+      'ranches'     => "rnch",
+      'rapid' => "rpd",
+      'rapids'=> "rpds",
+      'rdge'  => "rdg",
+      'rest'  => "rst",
+      'ridge' => "rdg",
+      'ridges'=> "rdgs",
+      'river' => "riv",
+      'rivr'  => "riv",
+      'rnchs' => "rnch",
+      'road'  => "rd",
+      'roads' => "rds",
+      'route' => "rte",
+      'rvr'   => "riv",
+      'shoal' => "shl",
+      'shoals'=> "shls",
+      'shoar' => "shr",
+      'shoars'=> "shrs",
+      'shore' => "shr",
+      'shores'=> "shrs",
+      'skyway'=> "skwy",
+      'spng'  => "spg",
+      'spngs' => "spgs",
+      'spring'=> "spg",
+      'springs'     => "spgs",
+      'sprng' => "spg",
+      'sprngs'=> "spgs",
+      'spurs' => "spur",
+      'sqr'   => "sq",
+      'sqre'  => "sq",
+      'sqrs'  => "sqs",
+      'squ'   => "sq",
+      'square'=> "sq",
+      'squares'     => "sqs",
+      'station'     => "sta",
+      'statn' => "sta",
+      'stn'   => "sta",
+      'str'   => "st",
+      'strav' => "stra",
+      'strave'=> "stra",
+      'straven'     => "stra",
+      'stravenue'   => "stra",
+      'stravn'=> "stra",
+      'stream'=> "strm",
+      'street'=> "st",
+      'streets'     => "sts",
+      'streme'=> "strm",
+      'strt'  => "st",
+      'strvn' => "stra",
+      'strvnue'     => "stra",
+      'sumit' => "smt",
+      'sumitt'=> "smt",
+      'summit'=> "smt",
+      'terr'  => "ter",
+      'terrace'     => "ter",
+      'throughway'  => "trwy",
+      'tpk'   => "tpke",
+      'tr'    => "trl",
+      'trace' => "trce",
+      'traces'=> "trce",
+      'track' => "trak",
+      'tracks'=> "trak",
+      'trafficway'  => "trfy",
+      'trail' => "trl",
+      'trails'=> "trl",
+      'trk'   => "trak",
+      'trks'  => "trak",
+      'trls'  => "trl",
+      'trnpk' => "tpke",
+      'trpk'  => "tpke",
+      'tunel' => "tunl",
+      'tunls' => "tunl",
+      'tunnel'=> "tunl",
+      'tunnels'     => "tunl",
+      'tunnl' => "tunl",
+      'turnpike'    => "tpke",
+      'turnpk'=> "tpke",
+      'underpass'   => "upas",
+      'union' => "un",
+      'unions'=> "uns",
+      'valley'=> "vly",
+      'valleys'     => "vlys",
+      'vally' => "vly",
+      'vdct'  => "via",
+      'viadct'=> "via",
+      'viaduct'     => "via",
+      'view'  => "vw",
+      'views' => "vws",
+      'vill'  => "vlg",
+      'villag'=> "vlg",
+      'village'     => "vlg",
+      'villages'    => "vlgs",
+      'ville' => "vl",
+      'villg' => "vlg",
+      'villiage'    => "vlg",
+      'vist'  => "vis",
+      'vista' => "vis",
+      'vlly'  => "vly",
+      'vst'   => "vis",
+      'vsta'  => "vis",
+      'walks' => "walk",
+      'well'  => "wl",
+      'wells' => "wls",
+      'wy'    => "way",
     }
 
     STREET_TYPES_LIST = {}
@@ -571,9 +571,34 @@ module StreetAddress
 
     FIPS_STATES = STATE_FIPS.invert
 
+    NORMALIZE_MAP = {
+      'prefix'  => DIRECTIONAL,
+      'prefix1' => DIRECTIONAL,
+      'prefix2' => DIRECTIONAL,
+      'suffix'  => DIRECTIONAL,
+      'suffix1' => DIRECTIONAL,
+      'suffix2' => DIRECTIONAL,
+      'street_type'  => STREET_TYPES,
+      'street_type1' => STREET_TYPES,
+      'street_type2' => STREET_TYPES,
+      'state'   => STATE_CODES,
+    }
+
     class << self
+      # If true then L</normalize_address> will set the C<type> field to undef
+      # if the C<street> field contains a word that corresponds to the C<type> in L<\%Street_Type>.
+      #
+      # For example, given "4321 Country Road 7", C<street> will be "Country Road 7"
+      # and C<type> will be "Rd". With avoid_redundant_street_type set true, C<type>
+      # will be undef because C<street> matches /\b (rd|road) \b/ix;
+      # 
+      # Also applies to C<type1> for C<street1> and C<type2> for C<street2>
+      # fields for intersections.
+      #
+      # The default is false, for backwards compatibility.
       attr_accessor(
         :street_type_regexp,
+        :street_type_matches,
         :number_regexp,
         :fraction_regexp,
         :state_regexp,
@@ -585,71 +610,172 @@ module StreetAddress
         :street_regexp,
         :place_regexp,
         :address_regexp,
-        :informal_address_regexp
+        :informal_address_regexp,
+        :dircode_regexp,
+        :unit_prefix_numbered_regexp,
+        :unit_prefix_unnumbered_regexp,
+        :unit_regexp,
+        :sep_regexp,
+        :sep_avoid_unit_regexp,
+        :intersection_regexp,
       )
     end
+    
+    self.street_type_matches = {}
+    STREET_TYPES.each_pair { |type,abbrv|
+      self.street_type_matches[abbrv] = /\b (?: #{abbrv}|#{Regexp.quote(type)} ) \b/ix
+    }
+    
+    self.street_type_regexp = Regexp.new(STREET_TYPES_LIST.keys.join("|"), Regexp::IGNORECASE)
+    self.fraction_regexp = /\d+\/\d+/
+    self.state_regexp = Regexp.new(
+      '\b' + STATE_CODES.flatten.map{ |code| Regexp.quote(code) }.join("|") + '\b',
+      Regexp::IGNORECASE
+    )
+    self.direct_regexp = Regexp.new(
+      (DIRECTIONAL.keys +
+       DIRECTIONAL.values.sort { |a,b|
+         b.length <=> a.length
+       }.map { |c|
+         f = c.gsub(/(\w)/, '\1.')
+         [Regexp::quote(f), Regexp::quote(c)]
+       }
+      ).join("|"),
+      Regexp::IGNORECASE
+    )
+    self.dircode_regexp = Regexp.new(DIRECTION_CODES.keys.join("|"), Regexp::IGNORECASE)
+    self.zip_regexp     = /(?:(?<postal_code>\d{5})(?:-?(?<postal_code_ext>\d{4}))?)/
+    self.corner_regexp  = /(?:\band\b|\bat\b|&|\@)/i
 
-    self.street_type_regexp = STREET_TYPES_LIST.keys.join("|")
-    self.number_regexp = '\d+-?\d*'
-    self.fraction_regexp = '\d+\/\d+'
-    self.state_regexp = STATE_CODES.to_a.join("|").gsub(/ /, "\\s")
-    self.city_and_state_regexp = '
+    # we don't include letters in the number regex because we want to
+    # treat "42S" as "42 S" (42 South). For example,
+    # Utah and Wisconsin have a more elaborate system of block numbering
+    # http://en.wikipedia.org/wiki/House_number#Block_numbers
+    self.number_regexp = /(?<number>\d+-?\d*)(?=\D)/ix
+
+    # note that expressions like [^,]+ may scan more than you expect
+    self.street_regexp = /
       (?:
-        ([^\d,]+?)\W+
-        (' + state_regexp + ')
-      )'
-
-    self.direct_regexp = DIRECTIONAL.keys.join("|") +
-      "|" +
-      DIRECTIONAL.values.sort{ |a,b|
-        b.length <=> a.length
-      }.map{ |x|
-        f = x.gsub(/(\w)/, '\1.')
-        [Regexp::quote(f), Regexp::quote(x)]
-      }.join("|")
-    self.zip_regexp = '(\d{5})(?:-?(\d{4})?)'
-    self.corner_regexp = '(?:\band\b|\bat\b|&|\@)'
-    self.unit_regexp = '(?:(su?i?te|p\W*[om]\W*b(?:ox)?|dept|apt|apartment|ro*m|fl|unit|box)\W+|(\#)\W*)([\w-]+)'
-    self.street_regexp =
-      '(?:
-          (?:(' + direct_regexp + ')\W+
-          (' + street_type_regexp + ')\b)
+        # special case for addresses like 100 South Street
+        (?:(?<street> #{direct_regexp})\W+
+           (?<street_type> #{street_type_regexp})\b
+        )
+        |
+        (?:(?<prefix> #{direct_regexp})\W+)?
+        (?:
+          (?<street> [^,]*\d)
+          (?:[^\w,]* (?<suffix> #{direct_regexp})\b)
           |
-          (?:(' + direct_regexp + ')\W+)?
-          (?:
-            ([^,]+)
-            (?:[^\w,]+(' + street_type_regexp + ')\b)
-            (?:[^\w,]+(' + direct_regexp + ')\b)?
-           |
-            ([^,]*\d)
-            (' + direct_regexp + ')\b
-           |
-            ([^,]+?)
-            (?:[^\w,]+(' + street_type_regexp + ')\b)?
-            (?:[^\w,]+(' + direct_regexp + ')\b)?
+          (?<street> [^,]+)
+          (?:[^\w,]+(?<street_type> #{street_type_regexp})\b)
+          (?:[^\w,]+(?<suffix> #{direct_regexp})\b)?
+          |
+          (?<street> [^,]+?)
+          (?:[^\w,]+(?<street_type> #{street_type_regexp})\b)?
+          (?:[^\w,]+(?<suffix> #{direct_regexp})\b)?
+        )
+      )
+    /ix;
+
+    # http://pe.usps.com/text/pub28/pub28c2_003.htm
+    # TODO add support for those that don't require a number
+    # TODO map to standard names/abbreviations
+    self.unit_prefix_numbered_regexp = /
+      (?<unit_prefix>
+        su?i?te
+        |p\W*[om]\W*b(?:ox)?
+        |(?:ap|dep)(?:ar)?t(?:me?nt)?
+        |ro*m
+        |flo*r?
+        |uni?t
+        |bu?i?ldi?n?g
+        |ha?nga?r
+        |lo?t
+        |pier
+        |slip
+        |spa?ce?
+        |stop
+        |tra?i?le?r
+        |box)(?![a-z])
+    /ix;
+
+    self.unit_prefix_unnumbered_regexp = /
+      (?<unit_prefix>
+        ba?se?me?n?t
+        |fro?nt
+        |lo?bby
+        |lowe?r
+        |off?i?ce?
+        |pe?n?t?ho?u?s?e?
+        |rear
+        |side
+        |uppe?r
+        )\b
+    /ix;
+
+    self.unit_regexp = /
+      (?:
+          (?: (?:#{unit_prefix_numbered_regexp} \W*)
+              | (?<unit_prefix> \#)\W*
           )
-        )'
-    self.place_regexp =
-      '(?:' + city_and_state_regexp + '\W*)?
-       (?:' + zip_regexp + ')?'
+          (?<unit> [\w-]+)
+      )
+      |
+      #{unit_prefix_unnumbered_regexp}
+    /ix;
 
-    self.address_regexp =
-      '\A[^\w\#]*
-        (' + number_regexp + ')\W*
-        (?:' + fraction_regexp + '\W*)?' +
-        street_regexp + '\W+
-        (?:' + unit_regexp + '\W+)?' +
-        place_regexp +
-      '\W*\Z'
+    self.city_and_state_regexp = /
+      (?:
+          (?<city> [^\d,]+?)\W+
+          (?<state> #{state_regexp})
+      )
+    /ix;
 
-    self.informal_address_regexp =
-      '\A\s*
-        (?:' + unit_regexp + '(?:\W+|\Z))?
-        (' + number_regexp + ')\W*
-        (?:' + fraction_regexp + '\W*)?' +
-        street_regexp + '(?:[^\#\w]+|\Z)
-        (?:' + unit_regexp + '(?:\W+|\Z))?' +
-        '(?:' + place_regexp + ')?'
+    self.place_regexp = /
+      (?:#{city_and_state_regexp}\W*)? (?:#{zip_regexp})?
+    /ix;
+
+    # the \x23 below is an alias for '#' to avoid a bug in perl 5.18.1
+    # https://rt.cpan.org/Ticket/Display.html?id=91420
+    self.address_regexp = /
+      ^
+      [^\w\x23]*    # skip non-word chars except # (eg unit)
+      #{number_regexp} \W*
+      (?:#{fraction_regexp}\W*)?
+      #{street_regexp}\W+
+      (?:#{unit_regexp}\W+)?
+      #{place_regexp}
+      \W*         # require on non-word chars at end
+      $           # right up to end of string
+    /ix;
+
+    self.sep_regexp = /(?:\W+|\Z)/;
+    self.sep_avoid_unit_regexp = /(?:[^\#\w]+|\Z)/;
+
+    self.informal_address_regexp = /
+      ^
+      \s*         # skip leading whitespace
+      (?:#{unit_regexp} #{sep_regexp})?
+      (?:#{number_regexp})? \W*
+      (?:#{fraction_regexp} \W*)?
+      #{street_regexp} #{sep_avoid_unit_regexp}
+      (?:#{unit_regexp} #{sep_regexp})?
+      (?:#{place_regexp})?
+      # don't require match to reach end of string
+    /ix;
+
+    self.intersection_regexp = /^\W*
+      #{street_regexp}\W*?
+
+      \s+#{corner_regexp}\s+
+
+#          (?{ exists $_{$_} and $_{$_.1} = delete $_{$_} for (qw{prefix street type suffix})})
+      #{street_regexp}\W+
+#          (?{ exists $_{$_} and $_{$_.2} = delete $_{$_} for (qw{prefix street type suffix})})
+
+      #{place_regexp}
+      \W*$
+    /ix;
 
 =begin rdoc
 
@@ -665,52 +791,14 @@ module StreetAddress
     or
     StreetAddress::US.parse("1600 Pennsylvania Ave", :informal => true)
 
-=end
+=end    
     class << self
-      def parse(location, args = {})
-        if Regexp.new(corner_regexp, Regexp::IGNORECASE).match(location)
-          parse_intersection(location)
-        elsif args[:informal]
-          parse_address(location) || parse_informal_address(location)
+      def parse(location, args={})
+        if( corner_regexp.match(location) )
+          return parse_intersection(location, args)
         else
-          parse_address(location);
+          return parse_address(location, args) || parse_informal_address(location, args)
         end
-      end
-=begin rdoc
-
-    parses only an intersection and returns an instance of
-    StreetAddress::US::Address or nil if the intersection cannot be parsed
-
-====example
-    address = StreetAddress::US.parse('Hollywood & Vine, Los Angeles, CA')
-    assert address.intersection?
-
-=end
-      def parse_intersection(inter)
-        regex = Regexp.new(
-          '\A\W*' + street_regexp + '\W*?
-          \s+' + corner_regexp + '\s+' +
-          street_regexp + '\W+' +
-          place_regexp + '\W*\Z', Regexp::IGNORECASE + Regexp::EXTENDED
-        )
-
-        return unless match = regex.match(inter)
-
-        normalize_address(
-          StreetAddress::US::Address.new(
-            :street => match[4] || match[9],
-            :street_type => match[5],
-            :suffix => match[6],
-            :prefix => match[3],
-            :street2 => match[15] || match[20],
-            :street_type2 => match[16],
-            :suffix2 => match[17],
-            :prefix2 => match[14],
-            :city => match[23],
-            :state => match[24],
-            :postal_code => match[25]
-          )
-        )
       end
 
 =begin rdoc
@@ -723,86 +811,114 @@ module StreetAddress
     assert !address.intersection?
 
 =end
-      def parse_address(addr)
-         regex = Regexp.new(address_regexp, Regexp::IGNORECASE + Regexp::EXTENDED)
-
-         return unless match = regex.match(addr)
-
-         normalize_address(
-           StreetAddress::US::Address.new(
-           :number => match[1],
-           :street => match[5] || match[10] || match[2],
-           :street_type => match[6] || match[3],
-           :unit => match[15],
-           :unit_prefix => match[13] || match[14],
-           :suffix => match[7] || match[12],
-           :prefix => match[4],
-           :city => match[16],
-           :state => match[17],
-           :postal_code => match[18],
-           :postal_code_ext => match[19]
-           )
-        )
+      def parse_address(address, args)
+        return unless match = address_regexp.match(address)
+        
+        to_address( match_to_hash(match), args )
       end
 
-      def parse_informal_address(addr)
-         regex = Regexp.new(informal_address_regexp, Regexp::IGNORECASE + Regexp::EXTENDED)
+      def parse_informal_address(address, args)
+        return unless match = informal_address_regexp.match(address)
 
-         return unless match = regex.match(addr)
-
-         normalize_address(
-           StreetAddress::US::Address.new(
-           :number => match[4],
-           :street => match[8] || match[13] || match[5],
-           :street_type => match[9] || match[6],
-           :unit => match[18] || match[3],
-           :unit_prefix => match[16] || match[17] || match[1] || match[2],
-           :suffix => match[10] || match[15],
-           :prefix => match[7],
-           :city => match[19],
-           :state => match[20],
-           :postal_code => match[21],
-           :postal_code_ext => match[22]
-           )
-        )
+        to_address( match_to_hash(match), args )
       end
 
-      private
-      def normalize_address(addr)
-        addr.state = normalize_state(addr.state) unless addr.state.nil?
-        addr.street_type = normalize_street_type(addr.street_type) unless addr.street_type.nil?
-        addr.prefix = normalize_directional(addr.prefix) unless addr.prefix.nil?
-        addr.suffix = normalize_directional(addr.suffix) unless addr.suffix.nil?
-        addr.street.gsub!(/\b([a-z])/) {|wd| wd.capitalize} unless addr.street.nil?
-        addr.street_type2 = normalize_street_type(addr.street_type2) unless addr.street_type2.nil?
-        addr.prefix2 = normalize_directional(addr.prefix2) unless addr.prefix2.nil?
-        addr.suffix2 = normalize_directional(addr.suffix2) unless addr.suffix2.nil?
-        addr.street2.gsub!(/\b([a-z])/) {|wd| wd.capitalize} unless addr.street2.nil?
-        addr.city.gsub!(/\b([a-z])/) {|wd| wd.capitalize} unless addr.city.nil?
-        addr.unit_prefix.capitalize! unless addr.unit_prefix.nil?
-        return addr
-      end
+=begin rdoc
 
-      def normalize_state(state)
-        if state.length < 3
-          state.upcase
-        else
-          STATE_CODES[state.downcase]
+    parses only an intersection and returns an instance of
+    StreetAddress::US::Address or nil if the intersection cannot be parsed
+
+====example
+    address = StreetAddress::US.parse('Hollywood & Vine, Los Angeles, CA')
+    assert address.intersection?
+
+=end      
+      def parse_intersection(intersection, args)
+        return unless match = intersection_regexp.match(intersection)
+
+        hash = match_to_hash(match)
+
+        streets = intersection_regexp.named_captures["street"].map { |pos|
+          match[pos.to_i]
+        }.select { |v| v }
+        hash["street"]  = streets[0] if streets[0]
+        hash["street2"] = streets[1] if streets[1]
+
+        street_types = intersection_regexp.named_captures["street_type"].map { |pos|
+          match[pos.to_i]
+        }.select { |v| v }
+        hash["street_type"]  = street_types[0] if street_types[0]
+        hash["street_type2"] = street_types[1] if street_types[1]
+
+        if( hash["street_type"] &&
+            (!hash["street_type2"] || (hash["street_type"] == hash["street_type2"])) )
+          type = hash["street_type"].clone
+          if( type.gsub!(/s\W*$/i, '') && /^#{street_type_regexp}$/i =~ type )
+            hash["street_type"] = hash["street_type2"] = type
+          end
         end
+        
+        to_address( hash, args )
       end
 
-      def normalize_street_type(s_type)
-        s_type.downcase!
-        s_type = STREET_TYPES[s_type] || s_type if STREET_TYPES_LIST[s_type]
-        s_type.capitalize
+      private def match_to_hash(match)
+        hash = {}
+        match.names.each { |name| hash[name] = match[name] if match[name] }
+        return hash
       end
 
-      def normalize_directional(dir)
-        if dir.length < 3
-          dir.upcase
-        else
-          DIRECTIONAL[dir.downcase]
+      private def titlecase(string)
+        string = string.downcase
+        string[0] = string[0,1].upcase
+        string
+      end
+
+      private def to_address(input, args)
+        # strip off some punctuation and whitespace
+        input.values.each { |string|
+          string.strip!
+          string.gsub!(/[^\w\s\-\#\&]/, '')
+        }
+
+        if( input['street'] && !input['street_type'] )
+          match = street_regexp.match(input['street'])
+          input['street_type'] = match['street_type']
         end
+        
+        NORMALIZE_MAP.each_pair { |key, map|
+          next unless input[key]
+          mapping = map[input[key].downcase]
+          input[key] = mapping if mapping
+        }
+
+        %w[street_type street_type1 street_type2].each { |k|
+          input[k] = titlecase(input[k]) if input[k]
+        }
+
+        if( args[:avoid_redundant_street_type] )
+          ['', '1', '2'].each { |suffix|
+            street = input['street'      + suffix];
+            type   = input['street_type' + suffix];
+            next if !street || !type
+
+            type_regexp = street_type_matches[type.downcase] # || fail "No STREET_TYPE_MATCH for #{type}"
+            input.delete('street_type' + suffix) if type_regexp.match(street)
+          }
+        end
+
+        # attempt to expand directional prefixes on place names
+        if( input['city'] )
+          input['city'].gsub!(/^(#{dircode_regexp})\s+(?=\S)/) { |match|
+            titlecase(DIRECTION_CODES[match[0].upcase]) + ' '
+          }
+        end
+
+        # strip ZIP+4 (which may be missing a hyphen)
+        if( input['zip'] )
+          input['zip'].gsub!(/^(.{5}).*/, '\1')
+        end
+
+        return StreetAddress::US::Address.new( input )
       end
     end
 
@@ -905,6 +1021,14 @@ module StreetAddress
           end
         end
         return s
+      end
+
+      def to_h
+        self.instance_variables.each_with_object({}) do |var_name, hash|
+          var_value = self.instance_variable_get(var_name)
+          hash_name = var_name[1..-1].to_sym
+          hash[hash_name] = var_value
+        end
       end
     end
   end
