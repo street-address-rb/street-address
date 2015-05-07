@@ -496,8 +496,8 @@ class StreetAddressUsTest < MiniTest::Test
   def test_address_parsing
     ADDRESSES.each_pair do |address, expected|
       addr = StreetAddress::US.parse(address)
-      assert_equal addr.intersection?, false
       compare_expected_to_actual_hash(expected, addr.to_h, address)
+      assert_equal false, addr.intersection?
     end
   end
 
@@ -512,8 +512,8 @@ class StreetAddressUsTest < MiniTest::Test
   def test_intersection_address_parsing
     INTERSECTIONS.each_pair do |address, expected|
       addr = StreetAddress::US.parse(address)
-      assert_equal addr.intersection?, true
       compare_expected_to_actual_hash(expected, addr.to_h, address)
+      assert_equal true, addr.intersection?
     end
   end
 
@@ -580,8 +580,8 @@ class StreetAddressUsTest < MiniTest::Test
   end
 
   def test_parse
-    assert_equal StreetAddress::US.parse("&"), nil
-    assert_equal StreetAddress::US.parse(" and "), nil
+    assert_nil StreetAddress::US.parse("&")
+    assert_nil StreetAddress::US.parse(" and ")
 
     parseable = [
       "1600 Pennsylvania Ave Washington DC 20006",
@@ -609,7 +609,7 @@ class StreetAddressUsTest < MiniTest::Test
 
   def compare_expected_to_actual_hash(expected, actual, address)
     expected.each_pair do |expected_key, expected_value|
-      assert_equal actual[expected_key], expected_value, "For address '#{address}',  #{actual[expected_key]} != #{expected_value}"
+      assert_equal expected_value, actual[expected_key], "For address '#{address}',  #{actual[expected_key]} != #{expected_value}"
     end
   end
 
