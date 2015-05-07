@@ -630,7 +630,8 @@ module StreetAddress
     self.street_type_regexp = Regexp.new(STREET_TYPES_LIST.keys.join("|"), Regexp::IGNORECASE)
     self.fraction_regexp = /\d+\/\d+/
     self.state_regexp = Regexp.new(
-      '\b' + STATE_CODES.flatten.map{ |code| Regexp.quote(code) }.join("|").gsub(/ /, "\\s") + '\b'
+      '\b' + STATE_CODES.flatten.map{ |code| Regexp.quote(code) }.join("|") + '\b',
+      Regexp::IGNORECASE
     )
     self.direct_regexp = Regexp.new(
       (DIRECTIONAL.keys +
@@ -640,9 +641,10 @@ module StreetAddress
          f = c.gsub(/(\w)/, '\1.')
          [Regexp::quote(f), Regexp::quote(c)]
        }
-      ).join("|")
+      ).join("|"),
+      Regexp::IGNORECASE
     )
-    self.dircode_regexp = Regexp.new(DIRECTION_CODES.keys.join("|"))
+    self.dircode_regexp = Regexp.new(DIRECTION_CODES.keys.join("|"), Regexp::IGNORECASE)
     self.zip_regexp     = /(?:(?<postal_code>\d{5})(?:-?(?<postal_code_ext>\d{4}))?)/
     self.corner_regexp  = /(?:\band\b|\bat\b|&|\@)/i
 
@@ -746,11 +748,11 @@ module StreetAddress
     self.address_regexp = /
       ^
       [^\w\x23]*    # skip non-word chars except # (eg unit)
-      ( #{number_regexp} )\W*
+      #{number_regexp} \W*
       (?:#{fraction_regexp}\W*)?
-         #{street_regexp}\W+
+      #{street_regexp}\W+
       (?:#{unit_regexp}\W+)?
-         #{place_regexp}
+      #{place_regexp}
       \W*         # require on non-word chars at end
       $           # right up to end of string
     /ix;
@@ -908,14 +910,14 @@ module StreetAddress
 
         # attempt to expand directional prefixes on place names
         if( input['city'] )
-          input['city'].gsub(/^(#{dircode_regexp})\s+(?=\S)/) { |dir|
-            titlecase(DIRECTION_CODES[dir.upcase])
+          input['city'].gsub!(/^(#{dircode_regexp})\s+(?=\S)/) { |match|
+            titlecase(DIRECTION_CODES[match[0].upcase]) + ' '
           }
         end
 
         # strip ZIP+4 (which may be missing a hyphen)
         if( input['zip'] )
-          input['zip'].gsub(/^(.{5}).*/, '\1')
+          input['zip'].gsub!(/^(.{5}).*/, '\1')
         end
 
         return StreetAddress::US::Address.new( input )
@@ -1021,6 +1023,14 @@ module StreetAddress
           end
         end
         return s
+      end
+
+      def to_h
+        self.instance_variables.each_with_object({}) do |var_name, hash|
+          var_value = self.instance_variable_get(var_name)
+          hash_name = var_name[1..-1].to_sym
+          hash[hash_name] = var_value
+        end
       end
     end
   end
