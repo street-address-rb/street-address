@@ -109,7 +109,7 @@ class AddressTest < MiniTest::Test
       :line2 => "East San Jose, CA"
     },
     "lt42 99 Some Road, Some City LA" => {
-      :line1 => "99 Some Rd lt 42",
+      :line1 => "99 Some Rd Lt 42",
       :line2 => "Some City, LA"
     },
     "36401 County Road 43, Eaton, CO 80615" => {
@@ -117,7 +117,7 @@ class AddressTest < MiniTest::Test
       :line2 => "Eaton, CO 80615"
     },
     "1234 COUNTY HWY 60E, Town, CO 12345" => {
-      :line1 => "1234 COUNTY HWY 60 E",
+      :line1 => "1234 County Hwy 60 E",
       :line2 => "Town, CO 12345"
     },
     "'45 Quaker Ave, Ste 105'" => {
@@ -197,12 +197,12 @@ class AddressTest < MiniTest::Test
       :line2 => ""
     },
     "233 S Wacker Dr lobby 60606" => {
-      :line1 => "233 S Wacker Dr lobby",
+      :line1 => "233 S Wacker Dr Lobby",
       :line2 => "60606"
     }
     #FIXME
     # "(233 S Wacker Dr lobby 60606)" => {
-    # :line1 => "233 S Wacker Dr lobby",
+    # :line1 => "233 S Wacker Dr Lobby",
       # :line2 => ""}
   }
 
