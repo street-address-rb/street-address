@@ -1,5 +1,4 @@
 require 'minitest/autorun'
-require 'pry-rescue/minitest'
 require 'street_address'
 
 class AddressTest < MiniTest::Test
