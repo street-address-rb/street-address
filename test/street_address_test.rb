@@ -502,7 +502,7 @@ class StreetAddressUsTest < MiniTest::Test
 
   def test_informal_address_parsing
     INFORMAL_ADDRESSES.each_pair do |address, expected|
-      addr = StreetAddress::US.parse(address, informal: true)
+      addr = StreetAddress::US.parse_informal_address(address)
       compare_expected_to_actual_hash(expected, addr.to_h, address)
     end
   end
