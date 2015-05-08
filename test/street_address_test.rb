@@ -45,7 +45,7 @@ class StreetAddressUsTest < MiniTest::Test
       :city => 'Sebastopol',
       :street_type => 'Hwy',
       :prefix => 'N',
-      :unit_prefix => 'Suite',
+      :unit_prefix => 'Ste',
       :unit => '500',
     },
     "1005 N Gravenstein Hwy Suite 500 Sebastopol, CA" => {
@@ -55,7 +55,7 @@ class StreetAddressUsTest < MiniTest::Test
       :city => 'Sebastopol',
       :street_type => 'Hwy',
       :prefix => 'N',
-      :unit_prefix => 'Suite',
+      :unit_prefix => 'Ste',
       :unit => '500',
     },
     "1005 N Gravenstein Highway, Sebastopol, CA, 95472" => {
@@ -215,7 +215,14 @@ class StreetAddressUsTest < MiniTest::Test
     },
     "1 First St, e San Jose CA" => { # lower case city direction
       :number => '1',
-      :street => 'First',
+      :street => '1st',
+      :state => 'CA',
+      :city => 'East San Jose',
+      :street_type => 'St',
+    },
+    "1 1st St, E. San Jose CA" => {
+      :number => '1',
+      :street => '1st',
       :state => 'CA',
       :city => 'East San Jose',
       :street_type => 'St',
@@ -246,7 +253,7 @@ class StreetAddressUsTest < MiniTest::Test
       :city => 'Some City',
       :number => '99',
       :street => 'Some',
-      :unit_prefix => 'Lt',
+      :unit_prefix => 'Lot',
       :street_type => 'Rd',
       :state => 'LA'
     },
@@ -296,7 +303,7 @@ class StreetAddressUsTest < MiniTest::Test
       :street => "Canal Center",
       :street_type => "Plz",
       :unit => "500",
-      :unit_prefix => "Suite",
+      :unit_prefix => "Ste",
       :city => "Alexandria",
       :street2 => nil
     },
@@ -469,7 +476,7 @@ class StreetAddressUsTest < MiniTest::Test
       :postal_code => '60606',
       :street_type => 'Dr',
       :prefix => 'S',
-      :unit_prefix => 'Lobby',
+      :unit_prefix => 'Lbby',
     },
     "(233 S Wacker Dr lobby 60606)" => { # surrounding punctuation
       :number => '233',
@@ -477,7 +484,7 @@ class StreetAddressUsTest < MiniTest::Test
       :postal_code => '60606',
       :street_type => 'Dr',
       :prefix => 'S',
-      :unit_prefix => 'Lobby',
+      :unit_prefix => 'Lbby',
     }
   }
 
@@ -496,8 +503,8 @@ class StreetAddressUsTest < MiniTest::Test
   def test_address_parsing
     ADDRESSES.each_pair do |address, expected|
       addr = StreetAddress::US.parse(address)
-      assert_equal addr.intersection?, false
       compare_expected_to_actual_hash(expected, addr.to_h, address)
+      assert_equal false, addr.intersection?
     end
   end
 
@@ -512,8 +519,8 @@ class StreetAddressUsTest < MiniTest::Test
   def test_intersection_address_parsing
     INTERSECTIONS.each_pair do |address, expected|
       addr = StreetAddress::US.parse(address)
-      assert_equal addr.intersection?, true
       compare_expected_to_actual_hash(expected, addr.to_h, address)
+      assert_equal true, addr.intersection?
     end
   end
 
@@ -580,8 +587,8 @@ class StreetAddressUsTest < MiniTest::Test
   end
 
   def test_parse
-    assert_equal StreetAddress::US.parse("&"), nil
-    assert_equal StreetAddress::US.parse(" and "), nil
+    assert_nil StreetAddress::US.parse("&")
+    assert_nil StreetAddress::US.parse(" and ")
 
     parseable = [
       "1600 Pennsylvania Ave Washington DC 20006",
@@ -609,7 +616,7 @@ class StreetAddressUsTest < MiniTest::Test
 
   def compare_expected_to_actual_hash(expected, actual, address)
     expected.each_pair do |expected_key, expected_value|
-      assert_equal actual[expected_key], expected_value, "For address '#{address}',  #{actual[expected_key]} != #{expected_value}"
+      assert_equal expected_value, actual[expected_key], "For address '#{address}',  #{actual[expected_key]} != #{expected_value}"
     end
   end
 

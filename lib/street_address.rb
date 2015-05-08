@@ -449,6 +449,54 @@ module StreetAddress
       STREET_TYPES_LIST[item[1]] = true
     end
 
+    #http://pe.usps.gov/cpim/ftp/pubs/Pub28/pub28.pdf
+    #appendix 6: business abbreviations
+    STREET_NAME_ABBREVIATIONS = {
+      /first/i   => '1st',
+      /second/i  => '2nd',
+      /third/i   => '3rd',
+      /fourth/i  => '4th',
+      /fifth/i   => '5th',
+      /sixth/i   => '6th',
+      /seventh/i => '7th',
+      /eight/i   => '8th',
+      /ninth/i   => '9th',
+    }
+
+
+    UNIT_ABBREVIATIONS_NUMBERED = {
+      /(?:ap|dep)(?:ar)?t(?:me?nt)?/i => 'Apt',
+      /box/i                 => 'Box',
+      /bu?i?ldi?n?g/i        => 'Bldg',
+      /dep(artmen)?t/i       => 'Dept',
+      /flo*r?/i              => 'Fl',
+      /Flr/i                 => 'Fl',
+      /ha?nga?r/i            => 'Hngr',
+      /lo?t/i                => 'Lot',
+      /ro*m/i                => 'Rm',
+      /pier/i                => 'Pier',
+      /p\W*[om]\W*b(?:ox)?/i => 'PO Box',
+      /slip/i       => 'Slip',
+      /spa?ce?/i    => 'Spc',
+      /stop/i       => 'Stop',
+      /su?i?te/i    => 'Ste',
+      /tra?i?le?r/i => 'Trlr',
+      /uni?t/i      => 'Unit'
+    }
+
+    UNIT_ABBREVIATIONS_UNNUMBERED = {
+      /ba?se?me?n?t/i     => 'Bsmt',
+      /fro?nt/i => 'Frnt',
+      /lo?bby/i => 'Lbby',
+      /lowe?r/i => 'Lowr',
+      /off?i?ce?/i        => 'Ofc',
+      /pe?n?t?ho?u?s?e?/i => 'PH',
+      /rear/i   => 'Rear',
+      /side/i   => 'Side',
+      /uppe?r/i => 'Uppr',
+    }
+
+
     STATE_CODES = {
       "alabama" => "AL",
       "alaska" => "AK",
@@ -667,40 +715,16 @@ module StreetAddress
     /ix;
 
     # http://pe.usps.com/text/pub28/pub28c2_003.htm
-    # TODO add support for those that don't require a number
-    # TODO map to standard names/abbreviations
     self.unit_prefix_numbered_regexp = /
-      (?<unit_prefix>
-        su?i?te
-        |p\W*[om]\W*b(?:ox)?
-        |(?:ap|dep)(?:ar)?t(?:me?nt)?
-        |ro*m
-        |flo*r?
-        |uni?t
-        |bu?i?ldi?n?g
-        |ha?nga?r
-        |lo?t
-        |pier
-        |slip
-        |spa?ce?
-        |stop
-        |tra?i?le?r
-        |box)(?![a-z])
-    /ix;
+    (?<unit_prefix>
+      #{UNIT_ABBREVIATIONS_NUMBERED.keys.join("|")}
+    )(?![a-z])/ix
+
 
     self.unit_prefix_unnumbered_regexp = /
-      (?<unit_prefix>
-        ba?se?me?n?t
-        |fro?nt
-        |lo?bby
-        |lowe?r
-        |off?i?ce?
-        |pe?n?t?ho?u?s?e?
-        |rear
-        |side
-        |uppe?r
-        )\b
-    /ix;
+    (?<unit_prefix>
+      #{UNIT_ABBREVIATIONS_UNNUMBERED.keys.join("|")}
+    )\b/ix
 
     self.unit_regexp = /
       (?:
@@ -800,13 +824,13 @@ module StreetAddress
     assert !address.intersection?
 
 =end
-      def parse_address(address, args)
+      def parse_address(address, args={})
         return unless match = address_regexp.match(address)
 
         to_address( match_to_hash(match), args )
       end
 
-      def parse_informal_address(address, args)
+      def parse_informal_address(address, args={})
         return unless match = informal_address_regexp.match(address)
 
         to_address( match_to_hash(match), args )
@@ -869,9 +893,20 @@ module StreetAddress
             string.gsub!(/[^\w\s\-\#\&]/, '')
           }
 
+          input['redundant_street_type'] = false
           if( input['street'] && !input['street_type'] )
             match = street_regexp.match(input['street'])
             input['street_type'] = match['street_type']
+            input['redundant_street_type'] = true
+          end
+
+          ## abbreviate unit prefixes
+          UNIT_ABBREVIATIONS_NUMBERED.merge(UNIT_ABBREVIATIONS_UNNUMBERED).each_pair do |regex, abbr|
+            regex.match(input['unit_prefix']){|m| input['unit_prefix'] = abbr }
+          end
+
+          STREET_NAME_ABBREVIATIONS.each_pair do |regex, abbr|
+            input['street'].sub!(regex, abbr)
           end
 
           NORMALIZE_MAP.each_pair { |key, map|
@@ -934,7 +969,8 @@ module StreetAddress
         :street2,
         :street_type2,
         :suffix2,
-        :prefix2
+        :prefix2,
+        :redundant_street_type
       )
 
       def initialize(args)
@@ -944,73 +980,86 @@ module StreetAddress
         return
       end
 
+
+      def postal_plus_4
+        return nil unless self.postal_code
+        self.postal_code_ext ? "#{postal_code}-#{postal_code_ext}" : self.postal_code
+      end
+
+
       def state_fips
         StreetAddress::US::FIPS_STATES[state]
       end
+
 
       def state_name
         name = StreetAddress::US::STATE_NAMES[state] and name.capitalize
       end
 
+
       def intersection?
         !street2.nil?
       end
 
+
       def line1(s = "")
+        parts = []
         if intersection?
-          s += prefix + " " unless prefix.nil?
-          s += street
-          s += " " + street_type unless street_type.nil?
-          s += " " + suffix unless suffix.nil?
-          s += " and"
-          s += " " + prefix2 unless prefix2.nil?
-          s += " " + street2
-          s += " " + street_type2 unless street_type2.nil?
-          s += " " + suffix2 unless suffix2.nil?
+          parts << prefix       if prefix
+          parts << street
+          parts << street_type  if street_type
+          parts << suffix       if suffix
+          parts << 'and'
+          parts << prefix2      if prefix2
+          parts << street2
+          parts << street_type2 if street_type2
+          parts << suffix2      if suffix2
         else
-          s += number
-          s += " " + prefix unless prefix.nil?
-          s += " " + street unless street.nil?
-          s += " " + street_type unless street_type.nil?
-          if( !unit_prefix.nil? && !unit.nil? )
-            s += " " + unit_prefix
-            s += " " + unit
-          elsif( unit_prefix.nil? && !unit.nil? )
-            s += " #" + unit
+          parts << number
+          parts << prefix if prefix
+          parts << street if street
+          parts << street_type if street_type && !redundant_street_type
+          parts << suffix if suffix
+          parts << unit_prefix if unit_prefix
+          if unit
+            #follow guidelines: http://pe.usps.gov/cpim/ftp/pubs/Pub28/pub28.pdf pg28
+            parts << (unit_prefix ? unit : "\# #{unit}")
           end
         end
-        return s
+        s + parts.join(' ').strip
       end
+
+
+      def line2(s = "")
+        parts = []
+        if city
+          parts << city
+        end
+        if state
+          parts << state
+        end
+        s = s + parts.join(', ')
+        if postal_code
+          s << " #{postal_code}"
+          s << "-#{postal_code_ext}" if postal_code_ext
+        end
+        s.strip
+      end
+
 
       def to_s(format = :default)
         s = ""
         case format
         when :line1
-          s += line1(s)
+          s << line1(s)
+        when :line2
+          s << line2(s)
         else
-          if intersection?
-            s += prefix + " " unless prefix.nil?
-            s += street
-            s += " " + street_type unless street_type.nil?
-            s += " " + suffix unless suffix.nil?
-            s += " and"
-            s += " " + prefix2 unless prefix2.nil?
-            s += " " + street2
-            s += " " + street_type2 unless street_type2.nil?
-            s += " " + suffix2 unless suffix2.nil?
-            s += ", " + city unless city.nil?
-            s += ", " + state unless state.nil?
-            s += " " + postal_code unless postal_code.nil?
-          else
-            s += line1(s)
-            s += ", " + city unless city.nil?
-            s += ", " + state unless state.nil?
-            s += " " + postal_code unless postal_code.nil?
-            s += "-" + postal_code_ext unless postal_code_ext.nil?
-          end
+          s << [line1, line2].select{ |l| !l.empty? }.join(', ')
         end
-        return s
+        s
       end
+
 
       def to_h
         self.instance_variables.each_with_object({}) do |var_name, hash|
