@@ -65,6 +65,9 @@ or from Gemfile
     # same results as above
 ```
 
+## Differences From Pre Version 2
+The method "parse" now defaults to parsing informal addresses.  The parameter :informal has gone away replaced by the method "parse_informal_address".  To get stricter parsing as in version 1's "parse" call you should now use the method "parse_address".
+
 ## License
 The [MIT Licencse](http://opensource.org/licenses/MIT)
 
