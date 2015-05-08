@@ -215,7 +215,14 @@ class StreetAddressUsTest < MiniTest::Test
     },
     "1 First St, e San Jose CA" => { # lower case city direction
       :number => '1',
-      :street => 'First',
+      :street => '1st',
+      :state => 'CA',
+      :city => 'East San Jose',
+      :street_type => 'St',
+    },
+    "1 1st St, E. San Jose CA" => {
+      :number => '1',
+      :street => '1st',
       :state => 'CA',
       :city => 'East San Jose',
       :street_type => 'St',

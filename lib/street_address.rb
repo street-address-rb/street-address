@@ -449,35 +449,51 @@ module StreetAddress
       STREET_TYPES_LIST[item[1]] = true
     end
 
+    #http://pe.usps.gov/cpim/ftp/pubs/Pub28/pub28.pdf
+    #appendix 6: business abbreviations
+    STREET_NAME_ABBREVIATIONS = {
+      /first/i   => '1st',
+      /second/i  => '2nd',
+      /third/i   => '3rd',
+      /fourth/i  => '4th',
+      /fifth/i   => '5th',
+      /sixth/i   => '6th',
+      /seventh/i => '7th',
+      /eight/i   => '8th',
+      /ninth/i   => '9th',
+    }
+
+
     UNIT_ABBREVIATIONS_NUMBERED = {
-      /(?:ap|dep)(?:ar)?t(?:me?nt)?/i => "Apt",
-      /box/i           => 'Box',
-      /bu?i?ldi?n?g/i => "Bldg",
-      /dep(artmen)?t/i => "Dept",
-      /flo*r?/i => "Fl",
-      /ha?nga?r/i => "Hngr",
-      /lo?t/i  => 'Lot',
-      /ro*m/i => "Rm",
-      /pier/i  => 'Pier',
+      /(?:ap|dep)(?:ar)?t(?:me?nt)?/i => 'Apt',
+      /box/i                 => 'Box',
+      /bu?i?ldi?n?g/i        => 'Bldg',
+      /dep(artmen)?t/i       => 'Dept',
+      /flo*r?/i              => 'Fl',
+      /Flr/i                 => 'Fl',
+      /ha?nga?r/i            => 'Hngr',
+      /lo?t/i                => 'Lot',
+      /ro*m/i                => 'Rm',
+      /pier/i                => 'Pier',
       /p\W*[om]\W*b(?:ox)?/i => 'PO Box',
-      /slip/i  => 'Slip',
-      /spa?ce?/i => "Spc",
-      /stop/i    => "Stop",
-      /su?i?te/i => "Ste",
-      /tra?i?le?r/i => "Trlr",
-      /uni?t/i => 'Unit'
+      /slip/i       => 'Slip',
+      /spa?ce?/i    => 'Spc',
+      /stop/i       => 'Stop',
+      /su?i?te/i    => 'Ste',
+      /tra?i?le?r/i => 'Trlr',
+      /uni?t/i      => 'Unit'
     }
 
     UNIT_ABBREVIATIONS_UNNUMBERED = {
-      /ba?se?me?n?t/i => "Bsmt",
-      /fro?nt/i => "Frnt",
-      /lo?bby/i => "Lbby",
-      /lowe?r/i => "Lowr",
-      /off?i?ce?/i => "Ofc",
+      /ba?se?me?n?t/i     => 'Bsmt',
+      /fro?nt/i => 'Frnt',
+      /lo?bby/i => 'Lbby',
+      /lowe?r/i => 'Lowr',
+      /off?i?ce?/i        => 'Ofc',
       /pe?n?t?ho?u?s?e?/i => 'PH',
       /rear/i   => 'Rear',
       /side/i   => 'Side',
-      /uppe?r/i => "Uppr",
+      /uppe?r/i => 'Uppr',
     }
 
 
@@ -887,6 +903,10 @@ module StreetAddress
           ## abbreviate unit prefixes
           UNIT_ABBREVIATIONS_NUMBERED.merge(UNIT_ABBREVIATIONS_UNNUMBERED).each_pair do |regex, abbr|
             regex.match(input['unit_prefix']){|m| input['unit_prefix'] = abbr }
+          end
+
+          STREET_NAME_ABBREVIATIONS.each_pair do |regex, abbr|
+            input['street'].sub!(regex, abbr)
           end
 
           NORMALIZE_MAP.each_pair { |key, map|
