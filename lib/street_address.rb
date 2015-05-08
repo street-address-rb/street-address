@@ -1,67 +1,3 @@
-=begin rdoc
-
-=== Usage:
-    StreetAddress::US.parse("1600 Pennsylvania Ave, washington, dc")
-
-=== Valid Address Formats
-
-    1600 Pennsylvania Ave Washington DC 20006
-    1600 Pennsylvania Ave #400, Washington, DC, 20006
-    1600 Pennsylvania Ave Washington, DC
-    1600 Pennsylvania Ave #400 Washington DC
-    1600 Pennsylvania Ave, 20006
-    1600 Pennsylvania Ave #400, 20006
-    1600 Pennsylvania Ave 20006
-    1600 Pennsylvania Ave #400 20006
-
-=== Valid Intersection Formats
-
-    Hollywood & Vine, Los Angeles, CA
-    Hollywood Blvd and Vine St, Los Angeles, CA
-    Mission Street at Valencia Street, San Francisco, CA
-    Hollywood & Vine, Los Angeles, CA, 90028
-    Hollywood Blvd and Vine St, Los Angeles, CA, 90028
-    Mission Street at Valencia Street, San Francisco, CA, 90028
-
-==== License
-
-    Copyright (c) 2007 Riderway (Derrek Long, Nicholas Schlueter)
-
-    Permission is hereby granted, free of charge, to any person obtaining
-    a copy of this software and associated documentation files (the
-    "Software"), to deal in the Software without restriction, including
-    without limitation the rights to use, copy, modify, merge, publish,
-    distribute, sublicense, and/or sell copies of the Software, and to
-    permit persons to whom the Software is furnished to do so, subject to
-    the following conditions:
-
-    The above copyright notice and this permission notice shall be
-    included in all copies or substantial portions of the Software.
-
-    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-    EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-    MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-    NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-    LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-    OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-    WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-==== Notes
-    If parts of the address are omitted from the original string
-    the accessor will be nil in StreetAddress::US::Address.
-
-    Example:
-    address = StreetAddress::US.parse("1600 Pennsylvania Ave, washington, dc")
-    assert address.postal_code.nil?
-
-==== Acknowledgements
-
-    This gem is a near direct port of the perl module Geo::StreetAddress::US
-    originally written by Schuyler D. Erle.  For more information see
-    http://search.cpan.org/~sderle/Geo-StreetAddress-US-0.99/
-
-=end
-
 module StreetAddress
   class US
     VERSION = '2.0.0'
@@ -724,10 +660,8 @@ module StreetAddress
       (?:#{city_and_state_regexp}\W*)? (?:#{zip_regexp})?
     /ix;
 
-    # the \x23 below is an alias for '#' to avoid a bug in perl 5.18.1
-    # https://rt.cpan.org/Ticket/Display.html?id=91420
     self.address_regexp = /
-      ^
+      \A
       [^\w\x23]*    # skip non-word chars except # (eg unit)
       #{number_regexp} \W*
       (?:#{fraction_regexp}\W*)?
@@ -735,14 +669,14 @@ module StreetAddress
       (?:#{unit_regexp}\W+)?
       #{place_regexp}
       \W*         # require on non-word chars at end
-      $           # right up to end of string
+      \z           # right up to end of string
     /ix;
 
     self.sep_regexp = /(?:\W+|\Z)/;
     self.sep_avoid_unit_regexp = /(?:[^\#\w]+|\Z)/;
 
     self.informal_address_regexp = /
-      ^
+      \A
       \s*         # skip leading whitespace
       (?:#{unit_regexp} #{sep_regexp})?
       (?:#{number_regexp})? \W*
@@ -753,7 +687,7 @@ module StreetAddress
       # don't require match to reach end of string
     /ix;
 
-    self.intersection_regexp = /^\W*
+    self.intersection_regexp = /\A\W*
       #{street_regexp}\W*?
 
       \s+#{corner_regexp}\s+
@@ -763,24 +697,9 @@ module StreetAddress
 #          (?{ exists $_{$_} and $_{$_.2} = delete $_{$_} for (qw{prefix street type suffix})})
 
       #{place_regexp}
-      \W*$
+      \W*\z
     /ix;
 
-=begin rdoc
-
-    parses either an address or intersection and returns an instance of
-    StreetAddress::US::Address or nil if the location cannot be parsed
-
-    pass the arguement, :informal => true, to make parsing more lenient
-
-====example
-    StreetAddress::US.parse('1600 Pennsylvania Ave Washington, DC 20006')
-    or:
-    StreetAddress::US.parse('Hollywood & Vine, Los Angeles, CA')
-    or
-    StreetAddress::US.parse("1600 Pennsylvania Ave", :informal => true)
-
-=end
     class << self
       def parse(location, args={})
         if( corner_regexp.match(location) )
@@ -790,38 +709,18 @@ module StreetAddress
         end
       end
 
-=begin rdoc
-
-    parses only an address and returns an instance of
-    StreetAddress::US::Address or nil if the address cannot be parsed
-
-====example
-    address = StreetAddress::US.parse('1600 Pennsylvania Ave Washington, DC 20006')
-    assert !address.intersection?
-
-=end
-      def parse_address(address, args)
+      def parse_address(address, args={})
         return unless match = address_regexp.match(address)
 
         to_address( match_to_hash(match), args )
       end
 
-      def parse_informal_address(address, args)
+      def parse_informal_address(address, args={})
         return unless match = informal_address_regexp.match(address)
 
         to_address( match_to_hash(match), args )
       end
 
-=begin rdoc
-
-    parses only an intersection and returns an instance of
-    StreetAddress::US::Address or nil if the intersection cannot be parsed
-
-====example
-    address = StreetAddress::US.parse('Hollywood & Vine, Los Angeles, CA')
-    assert address.intersection?
-
-=end
       def parse_intersection(intersection, args)
         return unless match = intersection_regexp.match(intersection)
 
@@ -847,7 +746,7 @@ module StreetAddress
           )
         )
           type = hash["street_type"].clone
-          if( type.gsub!(/s\W*$/i, '') && /^#{street_type_regexp}$/i =~ type )
+          if( type.gsub!(/s\W*$/i, '') && /\A#{street_type_regexp}\z/i =~ type )
             hash["street_type"] = hash["street_type2"] = type
           end
         end
@@ -869,9 +768,11 @@ module StreetAddress
             string.gsub!(/[^\w\s\-\#\&]/, '')
           }
 
+          input['redundant_street_type'] = false
           if( input['street'] && !input['street_type'] )
             match = street_regexp.match(input['street'])
             input['street_type'] = match['street_type']
+          input['redundant_street_type'] = true
           end
 
           NORMALIZE_MAP.each_pair { |key, map|
@@ -911,13 +812,6 @@ module StreetAddress
         end
     end
 
-=begin rdoc
-
-    This is class returned by StreetAddress::US::parse, StreetAddress::US::parse_address
-    and StreetAddress::US::parse_intersection.  If an instance represents an intersection
-    the attribute street2 will be populated.
-
-=end
     class Address
       attr_accessor(
         :number,
@@ -934,7 +828,8 @@ module StreetAddress
         :street2,
         :street_type2,
         :suffix2,
-        :prefix2
+        :prefix2,
+        :redundant_street_type
       )
 
       def initialize(args)
@@ -957,60 +852,57 @@ module StreetAddress
       end
 
       def line1(s = "")
+        parts = []
         if intersection?
-          s += prefix + " " unless prefix.nil?
-          s += street
-          s += " " + street_type unless street_type.nil?
-          s += " " + suffix unless suffix.nil?
-          s += " and"
-          s += " " + prefix2 unless prefix2.nil?
-          s += " " + street2
-          s += " " + street_type2 unless street_type2.nil?
-          s += " " + suffix2 unless suffix2.nil?
+          parts << prefix       if prefix
+          parts << street
+          parts << street_type  if street_type
+          parts << suffix       if suffix
+          parts << 'and'
+          parts << prefix2      if prefix2
+          parts << street2
+          parts << street_type2 if street_type2
+          parts << suffix2      if suffix2
         else
-          s += number
-          s += " " + prefix unless prefix.nil?
-          s += " " + street unless street.nil?
-          s += " " + street_type unless street_type.nil?
-          if( !unit_prefix.nil? && !unit.nil? )
-            s += " " + unit_prefix
-            s += " " + unit
-          elsif( unit_prefix.nil? && !unit.nil? )
-            s += " #" + unit
-          end
+          parts << number
+          parts << prefix if prefix
+          parts << street if street
+          parts << street_type if street_type && !redundant_street_type
+          parts << suffix if suffix
+          parts << unit_prefix if unit_prefix
+          #follow guidelines: http://pe.usps.gov/cpim/ftp/pubs/Pub28/pub28.pdf pg28
+          parts << (unit_prefix ? unit : "\# #{unit}") if unit
         end
-        return s
+        s + parts.join(' ').strip
       end
+
+
+      def line2(s = "")
+        parts = []
+        parts << city  if city
+        parts << state if state
+        s = s + parts.join(', ')
+        if postal_code
+          s << " #{postal_code}"
+          s << "-#{postal_code_ext}" if postal_code_ext
+        end
+        s.strip
+      end
+
 
       def to_s(format = :default)
         s = ""
         case format
         when :line1
-          s += line1(s)
+          s << line1(s)
+        when :line2
+          s << line2(s)
         else
-          if intersection?
-            s += prefix + " " unless prefix.nil?
-            s += street
-            s += " " + street_type unless street_type.nil?
-            s += " " + suffix unless suffix.nil?
-            s += " and"
-            s += " " + prefix2 unless prefix2.nil?
-            s += " " + street2
-            s += " " + street_type2 unless street_type2.nil?
-            s += " " + suffix2 unless suffix2.nil?
-            s += ", " + city unless city.nil?
-            s += ", " + state unless state.nil?
-            s += " " + postal_code unless postal_code.nil?
-          else
-            s += line1(s)
-            s += ", " + city unless city.nil?
-            s += ", " + state unless state.nil?
-            s += " " + postal_code unless postal_code.nil?
-            s += "-" + postal_code_ext unless postal_code_ext.nil?
-          end
+          s << [line1, line2].select{ |l| !l.empty? }.join(', ')
         end
-        return s
+        s
       end
+
 
       def to_h
         self.instance_variables.each_with_object({}) do |var_name, hash|
