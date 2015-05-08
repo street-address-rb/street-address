@@ -978,10 +978,8 @@ module StreetAddress
           parts << street_type if street_type && !redundant_street_type
           parts << suffix if suffix
           parts << unit_prefix if unit_prefix
-          if unit
-            #follow guidelines: http://pe.usps.gov/cpim/ftp/pubs/Pub28/pub28.pdf pg28
-            parts << (unit_prefix ? unit : "\# #{unit}")
-          end
+          #follow guidelines: http://pe.usps.gov/cpim/ftp/pubs/Pub28/pub28.pdf pg28
+          parts << (unit_prefix ? unit : "\# #{unit}") if unit
         end
         s + parts.join(' ').strip
       end
@@ -989,12 +987,8 @@ module StreetAddress
 
       def line2(s = "")
         parts = []
-        if city
-          parts << city
-        end
-        if state
-          parts << state
-        end
+        parts << city  if city
+        parts << state if state
         s = s + parts.join(', ')
         if postal_code
           s << " #{postal_code}"
@@ -1016,6 +1010,7 @@ module StreetAddress
         end
         s
       end
+
 
       def to_h
         self.instance_variables.each_with_object({}) do |var_name, hash|
