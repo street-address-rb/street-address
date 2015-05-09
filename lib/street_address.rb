@@ -799,11 +799,6 @@ module StreetAddress
             }
           end
 
-          # strip ZIP+4 (which may be missing a hyphen)
-          if( input['zip'] )
-            input['zip'].gsub!(/^(.{5}).*/, '\1')
-          end
-
           %w(street street_type street2 street_type2 city unit_prefix).each do |k|
             input[k] = input[k].split.map(&:capitalize).join(' ') if input[k]
           end
@@ -839,17 +834,27 @@ module StreetAddress
         return
       end
 
+
+      def full_postal_code
+        return nil unless self.postal_code
+        self.postal_code_ext ? "#{postal_code}-#{postal_code_ext}" : self.postal_code
+      end
+
+
       def state_fips
         StreetAddress::US::FIPS_STATES[state]
       end
+
 
       def state_name
         name = StreetAddress::US::STATE_NAMES[state] and name.capitalize
       end
 
+
       def intersection?
         !street2.nil?
       end
+
 
       def line1(s = "")
         parts = []
