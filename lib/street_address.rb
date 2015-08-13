@@ -769,10 +769,9 @@ module StreetAddress
           }
 
           input['redundant_street_type'] = false
-          if( input['street'] && !input['street_type'] )
-            match = street_regexp.match(input['street'])
+          if( input['street'] && !input['street_type'] && match = street_regexp.match(input['street']))
             input['street_type'] = match['street_type']
-          input['redundant_street_type'] = true
+            input['redundant_street_type'] = true
           end
 
           NORMALIZE_MAP.each_pair { |key, map|
