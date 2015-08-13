@@ -828,10 +828,9 @@ module StreetAddress
       )
 
       def initialize(args)
-        args.keys.each do |attrib|
-          self.send("#{attrib}=", args[attrib])
+        args.each do |attr, val|
+          public_send("#{attr}=", val)
         end
-        return
       end
 
 
@@ -915,6 +914,10 @@ module StreetAddress
           hash_name = var_name[1..-1].to_sym
           hash[hash_name] = var_value
         end
+      end
+
+      def ==(other)
+        to_s == other.to_s
       end
     end
   end

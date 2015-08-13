@@ -607,6 +607,13 @@ class StreetAddressUsTest < MiniTest::Test
 
   end
 
+  def test_comparison
+    addr = StreetAddress::US.parse(ADDRESSES.first[0])
+    assert_equal addr, "1005 Gravenstein Hwy, 95472"
+    assert_equal addr, StreetAddress::US.parse(ADDRESSES.first[0])
+    refute_equal addr, StreetAddress::US.parse(EXPECTED_FAILURES.first)
+    refute_equal addr, nil
+  end
 
   def compare_expected_to_actual_hash(expected, actual, address)
     expected.each_pair do |expected_key, expected_value|
