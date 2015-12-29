@@ -581,6 +581,14 @@ module StreetAddress
     # note that expressions like [^,]+ may scan more than you expect
     self.street_regexp = /
       (?:
+        # special case for addresses like 14168 W River Rd and 3301 N Park
+        # Blvd, where the street name matches one of the street types
+        (?:
+           (?<prefix> #{direct_regexp})\W+
+           (?<street> [^\d]+)\W+
+           (?<street_type> #{street_type_regexp})\b
+        )
+        |
         # special case for addresses like 100 South Street
         (?:(?<street> #{direct_regexp})\W+
            (?<street_type> #{street_type_regexp})\b

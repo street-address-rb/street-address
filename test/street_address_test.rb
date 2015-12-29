@@ -259,6 +259,36 @@ class StreetAddressUsTest < MiniTest::Test
       :street_type => 'Rd',
       :state => 'CO'
     },
+    "14168 W RIVER RD   \nCOLUMBIA STATION, OH 44028-9430" => {  # overlapping street type and road name
+      :city => 'Columbia Station',
+      :postal_code => '44028',
+      :postal_code_ext => '9430',
+      :number => '14168',
+      :street => 'River',
+      :street_type => 'Rd',
+      :state => 'OH',
+      :prefix => 'W'
+    },
+    "555 E LAKE AVE    \nBELLEFONTAINE, OH 43311-2509" => {
+      :city => 'Bellefontaine',
+      :postal_code => '43311',
+      :postal_code_ext => '2509',
+      :number => '555',
+      :street => 'Lake',
+      :street_type => 'Ave',
+      :state => 'OH',
+      :prefix => 'E'
+    },
+    "19600 N PARK BLVD    \nSHAKER HEIGHTS, OH 44122-1825" => {
+      :city => 'Shaker Heights',
+      :postal_code => '44122',
+      :postal_code_ext => '1825',
+      :number => '19600',
+      :street => 'Park',
+      :street_type => 'Blvd',
+      :state => 'OH',
+      :prefix => 'N'
+    },
     "1234 COUNTY HWY 60E, Town, CO 12345" => {
       :city => 'Town',
       :postal_code => '12345',
