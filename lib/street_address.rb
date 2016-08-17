@@ -901,12 +901,35 @@ module StreetAddress
           s << line1(s)
         when :line2
           s << line2(s)
+        when :street_address_1
+          s << street_address_1
+        when :street_address_2
+          s << street_address_2
+        when :city_state_zip
+          s << line2(s)
         else
           s << [line1, line2].select{ |l| !l.empty? }.join(', ')
         end
         s
       end
 
+      def street_address_1
+        s = number
+        s += " " + prefix unless prefix.nil?
+        s += " " + street unless street.nil?
+        s += " " + street_type unless street_type.nil?
+        s
+      end
+
+      def street_address_2
+        s = ""
+        if( !unit_prefix.nil? && !unit.nil? )
+          s += unit_prefix + " " + unit
+        elsif( unit_prefix.nil? && !unit.nil? )
+          s += "#" + unit
+        end
+        s
+      end
 
       def to_h
         self.instance_variables.each_with_object({}) do |var_name, hash|

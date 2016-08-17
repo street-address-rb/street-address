@@ -311,6 +311,23 @@ class AddressTest < MiniTest::Test
     assert_equal addr.to_s(:line2), addr.line2
   end
 
+  def test_to_s_for_street_address_1
+    address = "7800 Mill Station Rd, Apt. 7B, Sebastopol CA 95472-1234"
+    addr = StreetAddress::US.parse(address)
+    assert_equal addr.to_s(:street_address_1), "7800 Mill Station Rd"
+  end
+
+  def test_to_s_for_street_address_2
+    address = "7800 Mill Station Rd, Apt. 7B, Sebastopol CA 95472-1234"
+    addr = StreetAddress::US.parse(address)
+    assert_equal addr.to_s(:street_address_2), "Apt 7B"
+  end
+
+  def test_to_s_for_city_state_zip
+    address = "7800 Mill Station Rd Sebastopol CA 95472-1234"
+    addr = StreetAddress::US.parse(address)
+    assert_equal addr.to_s(:line2), addr.line2
+  end
 
   def test_full_postal_code
     address = "7800 Mill Station Rd Sebastopol CA 95472-1234"
