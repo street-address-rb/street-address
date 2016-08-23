@@ -5,7 +5,7 @@
   
 Parses a string returning a normalized Address object. When the string is not an US address it returns nil.
 
-This is a port of the of the perl module [Geo::StreetAddress::US](https://github.com/timbunce/Geo-StreetAddress-US) originally written by Schuyler D. Erle. 
+This is a port of the perl module [Geo::StreetAddress::US](https://github.com/timbunce/Geo-StreetAddress-US) originally written by Schuyler D. Erle. 
 
 ## Ruby Version
 StreetAddress::US version 2+ is designed to work with ruby 2+.  It may work with ruby 1.9.3, but will not work with ruby 1.8.x. If you need this to work pre ruby 2.0 please use gem version 1.0.6 or below.
