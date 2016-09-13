@@ -520,6 +520,8 @@ module StreetAddress
       'state'   => STATE_CODES,
     }
 
+    STREET_NUMBER_WORDS = %{one two three four five six seven eight nine ten}
+
     class << self
       attr_accessor(
         :street_type_regexp,
@@ -533,8 +535,10 @@ module StreetAddress
         :corner_regexp,
         :unit_regexp,
         :street_regexp,
+        :po_street_regexp,
         :place_regexp,
         :address_regexp,
+        :po_address_regexp,
         :informal_address_regexp,
         :dircode_regexp,
         :unit_prefix_numbered_regexp,
@@ -601,6 +605,8 @@ module StreetAddress
         )
       )
     /ix;
+
+    self.po_street_regexp = /^(?<street>p\.?o\.?\s?(?:box|\#)?\s\d\d*[-a-z]*)/ix;
 
     # http://pe.usps.com/text/pub28/pub28c2_003.htm
     # TODO add support for those that don't require a number
@@ -672,6 +678,14 @@ module StreetAddress
       \z           # right up to end of string
     /ix;
 
+    self.po_address_regexp = /
+      \A
+      #{po_street_regexp} \W*
+      #{place_regexp}
+      \W*         # require on non-word chars at end
+      \z           # right up to end of string
+    /ix;
+
     self.sep_regexp = /(?:\W+|\Z)/;
     self.sep_avoid_unit_regexp = /(?:[^\#\w]+|\Z)/;
 
@@ -705,7 +719,7 @@ module StreetAddress
         if( corner_regexp.match(location) )
           return parse_intersection(location, args)
         else
-          return parse_address(location, args) || parse_informal_address(location, args)
+          return parse_po_address(location, args) || parse_address(location, args) || parse_informal_address(location, args)
         end
       end
 
@@ -713,6 +727,12 @@ module StreetAddress
         return unless match = address_regexp.match(address)
 
         to_address( match_to_hash(match), args )
+      end
+
+      def parse_po_address(address, args={})
+        return unless match = po_address_regexp.match(address)
+
+        to_address(match_to_hash(match), args)
       end
 
       def parse_informal_address(address, args={})
@@ -914,11 +934,12 @@ module StreetAddress
       end
 
       def street_address_1
-        s = number
-        s += " " + prefix unless prefix.nil?
-        s += " " + street unless street.nil?
-        s += " " + street_type unless street_type.nil?
-        s
+        s = ""
+        s = number + " " unless number.nil?
+        s += prefix + " " unless prefix.nil?
+        s += street + " " unless street.nil?
+        s += street_type unless street_type.nil?
+        s.strip
       end
 
       def street_address_2

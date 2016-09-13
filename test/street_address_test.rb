@@ -489,8 +489,6 @@ class StreetAddressUsTest < MiniTest::Test
     "Gravenstein Hwy 95472",
     "E1005 Gravenstein Hwy 95472",
     # "1005E Gravenstein Hwy 95472"
-    ## adding from original ruby test suite
-    "PO BOX 450, Chicago IL 60657"
   ]
 
 
