@@ -1,10 +1,6 @@
 ![Gem Version](http://img.shields.io/gem/v/StreetAddress.svg)
 ![Build Status](https://circleci.com/gh/derrek/street-address.svg?style=shield)
 
-# SEEKING NEW MAINTAINER
-
-Though I've had this gem for almost 10 years now, I haven't had time in the last 18 months to update the code and ensure the updates will not completely wreak havok on the world.  If you'd like to volunteer to maintain this repo and the associated gem let me know via github messaging or by leaving a message [on this issue](https://github.com/derrek/street-address/issues/32)
-
 # DESCRIPTION
   
 Parses a string returning a normalized Address object. When the string is not an US address it returns nil.
