@@ -9,3 +9,10 @@ Gemfile.lock
 *~
 *.old
 *.tar.gz
+
+# Ignore vi stuff
+*~
+*.swp
+*.swo
+
+
