@@ -799,6 +799,17 @@ module StreetAddress
             }
           end
 
+          # Fix cases with a dirty ordinal indicator:
+          # Sometimes parcel data will have addresses like
+          # "1 1ST ST"
+          # as
+          # "1 1 ST ST"
+          if( input['street'] )
+            input['street'].gsub!(/\A(\d+\s+st|\d+\s+nd|\d+\s+rd|\d+\s+th)\z/i) { |match|
+              input['street'].gsub(/\s+/, "")
+            }
+          end
+
           %w(street street_type street2 street_type2 city unit_prefix).each do |k|
             input[k] = input[k].split.map(&:capitalize).join(' ') if input[k]
           end
