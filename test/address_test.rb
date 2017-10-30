@@ -152,17 +152,17 @@ class AddressTest < MiniTest::Test
       :street_address_2 => "Suite 10"
     },
     "P.O. Box 280568 Queens Village, New York 11428" => {
-      :line1 => "Po Box 280568",
+      :line1 => "PO BOX 280568",
       :line2 => "Queens Village, NY 11428"
     },
     "PO Box 280568 Queens Village, New York 11428" => {
-      :line1 => "Po Box 280568",
+      :line1 => "PO BOX 280568",
       :line2 => "Queens Village, NY 11428",
-      :street_address_1 => "Po Box 280568",
+      :street_address_1 => "PO BOX 280568",
       :street_address_2 => ""
     },
     "PO 280568 Queens Village, New York 11428" => {
-      :line1 => "Po 280568",
+      :line1 => "PO 280568",
       :line2 => "Queens Village, NY 11428"
     },
     "Two Pennsylvania Plaza New York, NY 10121-0091" => {
@@ -374,7 +374,7 @@ class AddressTest < MiniTest::Test
   def test_to_s_for_PO_box
     address = "PO 7800 Sebastopol CA 95472-1234"
     addr = StreetAddress::US.parse(address)
-    assert_equal "Po 7800", addr.to_s(:line1)
+    assert_equal "PO 7800", addr.to_s(:line1)
   end
 
   def test_full_postal_code

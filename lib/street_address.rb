@@ -820,7 +820,8 @@ module StreetAddress
           end
 
           %w(street street_type street2 street_type2 city unit_prefix).each do |k|
-            input[k] = input[k].split.map(&:capitalize).join(' ') if input[k]
+            input[k] = input[k].split.map(&:capitalize).join(' ') if input[k] && !input[k].match(po_street_regexp)
+            input[k] = input[k].split.map(&:upcase).join(' ') if input[k] && input[k].match(po_street_regexp)
           end
 
           return StreetAddress::US::Address.new( input )
