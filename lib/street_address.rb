@@ -819,12 +819,16 @@ module StreetAddress
             }
           end
 
-          %w(street street_type street2 street_type2 city unit_prefix).each do |k|
-            input[k] = input[k].split.map(&:capitalize).join(' ') if input[k] && !input[k].match(po_street_regexp)
-            input[k] = input[k].split.map(&:upcase).join(' ') if input[k] && input[k].match(po_street_regexp)
+          %w(street street_type street2 street_type2 city unit_prefix postal_code).each do |k|
+            input[k] = input[k].split.map { |elem| upcase_or_capitalize(elem) }.join(' ') if input[k]
           end
 
           return StreetAddress::US::Address.new( input )
+        end
+
+        def upcase_or_capitalize(elem)
+          return elem.upcase if  elem.downcase.match(/^(po|ne|nw|sw|se)$/)
+          elem.capitalize
         end
     end
 

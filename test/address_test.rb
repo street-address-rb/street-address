@@ -152,13 +152,13 @@ class AddressTest < MiniTest::Test
       :street_address_2 => "Suite 10"
     },
     "P.O. Box 280568 Queens Village, New York 11428" => {
-      :line1 => "PO BOX 280568",
+      :line1 => "PO Box 280568",
       :line2 => "Queens Village, NY 11428"
     },
-    "PO Box 280568 Queens Village, New York 11428" => {
-      :line1 => "PO BOX 280568",
+    "PO BOX 280568 Queens Village, New York 11428" => {
+      :line1 => "PO Box 280568",
       :line2 => "Queens Village, NY 11428",
-      :street_address_1 => "PO BOX 280568",
+      :street_address_1 => "PO Box 280568",
       :street_address_2 => ""
     },
     "PO 280568 Queens Village, New York 11428" => {
@@ -168,6 +168,10 @@ class AddressTest < MiniTest::Test
     "Two Pennsylvania Plaza New York, NY 10121-0091" => {
       :line1 => "Two Pennsylvania Plz",
       :line2 => "New York, NY 10121-0091"
+    },
+    "1400 CONNECTICUT AVE NW, WASHINGTON, DC 20036" => {
+      :line1 => "1400 Connecticut Ave NW",
+      :line2 => "Washington, DC 20036"
     }
   }
 
@@ -233,26 +237,25 @@ class AddressTest < MiniTest::Test
       :line1 => "233 S Wacker Dr Lobby",
       :line2 => "60606"
     }
-    #FIXME
+    # FIXME
     # "(233 S Wacker Dr lobby 60606)" => {
     # :line1 => "233 S Wacker Dr Lobby",
-      # :line2 => ""}
+    #   :line2 => ""}
   }
 
 
   def test_line1_with_valid_addresses
     ADDRESSES.each_pair do |address, expected|
       addr = StreetAddress::US.parse(address)
-      assert_equal addr.line1, expected[:line1]
+      assert_equal expected[:line1], addr.line1
     end
   end
 
   def test_street_address_1_with_valid_addresses
     ADDRESSES.select { |k,v| !v[:street_address_1].nil? }.each_pair do |address, expected|
       addr = StreetAddress::US.parse(address)
-      assert_equal addr.street_address_1, expected[:street_address_1]
-      assert_equal addr.street_address_2, expected[:street_address_2]
-
+      assert_equal expected[:street_address_1], addr.street_address_1
+      assert_equal expected[:street_address_2], addr.street_address_2
     end
   end
 
@@ -301,7 +304,7 @@ class AddressTest < MiniTest::Test
       addr = StreetAddress::US.parse(address)
       expected_result = expected[:to_s]
       expected_result ||= [expected[:line1], expected[:line2]].select{|l| !l.empty?}.join(', ')
-      assert_equal addr.to_s, expected_result
+      assert_equal expected_result, addr.to_s
     end
   end
 
