@@ -576,7 +576,10 @@ module StreetAddress
     # treat "42S" as "42 S" (42 South). For example,
     # Utah and Wisconsin have a more elaborate system of block numbering
     # http://en.wikipedia.org/wiki/House_number#Block_numbers
-    self.number_regexp = /(?<number>\d+-?\d*)(?=\D)/ix
+    # self.number_regexp = /(?<number>\d+-?\d*)(?=\D)/ix
+
+    # hack: 37A Bedford St is not "A Bedford"
+    self.number_regexp = /(?<number>\d+-?\w*)(?=\W)/ix
 
     # note that expressions like [^,]+ may scan more than you expect
     self.street_regexp = /

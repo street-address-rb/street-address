@@ -159,12 +159,11 @@ class StreetAddressUsTest < MiniTest::Test
     },
     "48S 400E, Salt Lake City UT" => {
       :street_type => nil,
-      :number => '48',
+      :number => '48S',
       :street => '400',
       :state => 'UT',
       :city => 'Salt Lake City',
       :suffix => 'E',
-      :prefix => 'S'
     },
     "550 S 400 E #3206, Salt Lake City UT 84111" => {
       :number => '550',
@@ -177,6 +176,14 @@ class StreetAddressUsTest < MiniTest::Test
       :street_type => nil,
       :unit_prefix => '#',
       :prefix => 'S'
+    },
+    "37A Bedford Street, Salt Lake City UT 84111" => {
+      :number => '37A',
+      :street => 'Bedford',
+      :state => 'UT',
+      :postal_code => '84111',
+      :city => 'Salt Lake City',
+      :street_type => "St",
     },
     "6641 N 2200 W Apt D304 Park City, UT 84098" => {
       :number => '6641',
