@@ -134,6 +134,10 @@ class AddressTest < MiniTest::Test
     "44 Canal Center Plaza Suite 500, Alexandria, VA 22314" => {
       :line1 => "44 Canal Center Plz Suite 500",
       :line2 => "Alexandria, VA 22314"
+    },
+    "11081 N State Highway 27/77, Hayward, WI 54843" => {
+      :line1 => "11081 N State Highway 27/77",
+      :line2 => "Hayward, WI 54843"
     }
   }
 
