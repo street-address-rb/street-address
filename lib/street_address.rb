@@ -763,9 +763,14 @@ module StreetAddress
 
         def to_address(input, args)
           # strip off some punctuation and whitespace
-          input.values.each { |string|
-            string.strip!
-            string.gsub!(/[^\w\s\-\#\&]/, '')
+          input.each_key { |k|
+            input[k].strip!
+
+            if k != "street"
+              input[k].gsub!(/[^\w\s\-\#\&]/, '')
+            else
+              input[k].gsub!(/[^\w\s\-\#\&\/]/, '')
+            end
           }
 
           input['redundant_street_type'] = false
