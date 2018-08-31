@@ -537,7 +537,6 @@ module StreetAddress
         :dircode_regexp,
         :unit_prefix_numbered_regexp,
         :unit_prefix_unnumbered_regexp,
-        :unit_regexp,
         :sep_regexp,
         :sep_avoid_unit_regexp,
         :intersection_regexp
