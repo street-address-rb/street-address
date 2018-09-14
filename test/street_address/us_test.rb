@@ -150,14 +150,14 @@ class StreetAddressUsTest < MiniTest::Test
       :city => 'Washington',
       :street_type => 'Ave',
     },
-    "1600 Pennsylvania Avenue Washington DC" => {
+    "1600 Pennsylvania Avenue Washington DC United States" => {
       :number => '1600',
       :street => 'Pennsylvania',
       :state => 'DC',
       :city => 'Washington',
       :street_type => 'Ave',
     },
-    "48S 400E, Salt Lake City UT" => {
+    "48S 400E, Salt Lake City UT, U.S." => {
       :street_type => nil,
       :number => '48',
       :street => '400',
@@ -166,7 +166,7 @@ class StreetAddressUsTest < MiniTest::Test
       :suffix => 'E',
       :prefix => 'S'
     },
-    "550 S 400 E #3206, Salt Lake City UT 84111" => {
+    "550 S 400 E #3206, Salt Lake City UT 84111 USA" => {
       :number => '550',
       :street => '400',
       :state => 'UT',
@@ -176,9 +176,10 @@ class StreetAddressUsTest < MiniTest::Test
       :suffix => 'E',
       :street_type => nil,
       :unit_prefix => '#',
-      :prefix => 'S'
+      :prefix => 'S',
+      :country => 'USA'
     },
-    "6641 N 2200 W Apt D304 Park City, UT 84098" => {
+    "6641 N 2200 W Apt D304 Park City, UT 84098, U.S.A." => {
       :number => '6641',
       :street => '2200',
       :state => 'UT',

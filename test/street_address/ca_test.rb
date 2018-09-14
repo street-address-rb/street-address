@@ -9,12 +9,6 @@ class StreetAddressCaTest < MiniTest::Test
       :street_type => 'Rd',
       :postal_code => 'V2S 1K5'
     },
-    "33112 Marshall Rd, V2S 1K5" => {
-      :number => '33112',
-      :street => 'Marshall',
-      :street_type => 'Rd',
-      :postal_code => 'V2S 1K5'
-    },
     "33112 Marshall Rd N, V2S 1K5" => {
       :number => '33112',
       :street => 'Marshall',
@@ -149,7 +143,8 @@ class StreetAddressCaTest < MiniTest::Test
       :suffix => 'NW',
       :city => 'Edmonton',
       :state => 'AB',
-      :postal_code => 'T6M'
+      :postal_code => 'T6M',
+      :country => 'Canada'
     },
     "21265 93 Ave, Langley, BC V1M 1K3, Canada" => {
       :number => '21265',
@@ -157,7 +152,8 @@ class StreetAddressCaTest < MiniTest::Test
       :street_type => 'Ave',
       :city => 'Langley',
       :state => 'BC',
-      :postal_code => 'V1M 1K3'
+      :postal_code => 'V1M 1K3',
+      :country => 'Canada'
     },
     "245 Chapalina Mews SW, Calgary, Alberta T0L, Canada" => {
       :number => '245',
@@ -166,7 +162,8 @@ class StreetAddressCaTest < MiniTest::Test
       :suffix => 'SW',
       :city => 'Calgary',
       :state => 'AB',
-      :postal_code => 'T0L'
+      :postal_code => 'T0L',
+      :country => 'Canada'
     },
     "23 Elgin Terrace, Calgary, AB T2Z 0B7, Canada" => {
       :number => '23',
@@ -174,7 +171,8 @@ class StreetAddressCaTest < MiniTest::Test
       :street_type => 'Terr',
       :city => 'Calgary',
       :state => 'AB',
-      :postal_code => 'T2Z 0B7'
+      :postal_code => 'T2Z 0B7',
+      :country => 'Canada'
     },
     "34909 Old Yale Rd, Abbotsford, British Columbia V3G 2E7, Canada" => {
       :number => '34909',
@@ -182,7 +180,8 @@ class StreetAddressCaTest < MiniTest::Test
       :street_type => 'Rd',
       :city => 'Abbotsford',
       :state => 'BC',
-      :postal_code => 'V3G 2E7'
+      :postal_code => 'V3G 2E7',
+      :country => 'Canada'
     },
     # TODO
     # "1-9229 University Crescent, Burnaby, BC, Canada" => {
@@ -199,7 +198,8 @@ class StreetAddressCaTest < MiniTest::Test
       :street_type => 'Ave',
       :city => 'North Vancouver',
       :state => 'BC',
-      :postal_code => 'V7L 4A4'
+      :postal_code => 'V7L 4A4',
+      :country => 'Canada'
     },
     "5724 90 Avenue Northwest, Edmonton, AB, Canada" => {
       :number => '5724',
@@ -208,6 +208,7 @@ class StreetAddressCaTest < MiniTest::Test
       :suffix => 'NW',
       :city => 'Edmonton',
       :state => 'AB',
+      :country => 'Canada'
     },
     # TODO
     # "22 Ave, Surrey, BC V4A, Canada" => {
@@ -225,7 +226,8 @@ class StreetAddressCaTest < MiniTest::Test
       :suffix => 'NW',
       :city => 'Edmonton',
       :state => 'AB',
-      :postal_code => 'T6R'
+      :postal_code => 'T6R',
+      :country => 'Canada'
     },
     "16739 77 Ave, Surrey, BC V4N 0L3, Canada" => {
       :number => '16739',
@@ -233,7 +235,8 @@ class StreetAddressCaTest < MiniTest::Test
       :street_type => 'Ave',
       :city => 'Surrey',
       :state => 'BC',
-      :postal_code => 'V4N 0L3'
+      :postal_code => 'V4N 0L3',
+      :country => 'Canada'
     },
     "17719 86 Ave NE, Edmonton, AB T5T, Canada" => {
       :number => '17719',
@@ -242,7 +245,8 @@ class StreetAddressCaTest < MiniTest::Test
       :suffix => 'NE',
       :city => 'Edmonton',
       :state => 'AB',
-      :postal_code => 'T5T'
+      :postal_code => 'T5T',
+      :country => 'Canada'
     },
     "5606 Pierre Court, Beaumont, AB, Canada" => {
       :number => '5606',
@@ -250,7 +254,8 @@ class StreetAddressCaTest < MiniTest::Test
       :street_type => 'Crt',
       :city => 'Beaumont',
       :state => 'AB',
-      :postal_code => nil
+      :postal_code => nil,
+      :country => 'Canada'
     },
     "3203 42A Avenue Northwest, Edmonton, AB, Canada" => {
       :number => '3203',
@@ -259,7 +264,8 @@ class StreetAddressCaTest < MiniTest::Test
       :suffix => 'NW',
       :city => 'Edmonton',
       :state => 'AB',
-      :postal_code => nil
+      :postal_code => nil,
+      :country => 'Canada'
     },
     "11769 Summit Crescent, Delta, BC V4E 2Z3, Canada" => {
       :number => '11769',
@@ -267,7 +273,8 @@ class StreetAddressCaTest < MiniTest::Test
       :street_type => 'Cres',
       :city => 'Delta',
       :state => 'BC',
-      :postal_code => 'V4E 2Z3'
+      :postal_code => 'V4E 2Z3',
+      :country => 'Canada'
     },
     "5104 106A St NW, Edmonton, AB T6H, Canada" => {
       :number => '5104',
@@ -276,7 +283,8 @@ class StreetAddressCaTest < MiniTest::Test
       :suffix => 'NW',
       :city => 'Edmonton',
       :state => 'AB',
-      :postal_code => 'T6H'
+      :postal_code => 'T6H',
+      :country => 'Canada'
     },
     "6908 166th Avenue Northwest, Edmonton, AB, Canada" => {
       :number => '6908',
@@ -285,7 +293,8 @@ class StreetAddressCaTest < MiniTest::Test
       :suffix => 'NW',
       :city => 'Edmonton',
       :state => 'AB',
-      :postal_code => nil
+      :postal_code => nil,
+      :country => 'Canada'
     },
     "17422 0 A Ave, Surrey, BC V3S 9P3, Canada" => {
       :number => '17422',
@@ -293,7 +302,8 @@ class StreetAddressCaTest < MiniTest::Test
       :street_type => 'Ave',
       :city => 'Surrey',
       :state => 'BC',
-      :postal_code => 'V3S 9P3'
+      :postal_code => 'V3S 9P3',
+      :country => 'Canada'
     },
     "99 Spruce Place Southwest, Calgary, AB T3C 3X7, Canada" => {
       :number => '99',
@@ -302,6 +312,7 @@ class StreetAddressCaTest < MiniTest::Test
       :city => 'Calgary',
       :state => 'AB',
       :postal_code => 'T3C 3X7',
+      :country => 'Canada'
     },
   }
 

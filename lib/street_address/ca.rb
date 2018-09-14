@@ -343,7 +343,7 @@ module StreetAddress
     /ix;
 
     self.country_regexp = /
-      (?:Cana?d?a?)
+      (?<country> Cana?d?a?)
     /ix;
 
     self.place_regexp = /

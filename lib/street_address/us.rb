@@ -526,6 +526,7 @@ module StreetAddress
         :fraction_regexp,
         :state_regexp,
         :city_and_state_regexp,
+        :country_regexp,
         :direct_regexp,
         :zip_regexp,
         :corner_regexp,
@@ -653,8 +654,13 @@ module StreetAddress
       )
     /ix;
 
+    self.country_regexp = /
+      (?<country> U\.?S\.?A?\.?|United States)
+    /ix;
+
     self.place_regexp = /
-      (?:#{city_and_state_regexp}\W*)? (?:#{zip_regexp})?
+      (?:#{city_and_state_regexp}\W*)? (?:#{zip_regexp}\W*)?
+      (?:#{country_regexp})?
     /ix;
 
     self.address_regexp = /
