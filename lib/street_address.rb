@@ -520,6 +520,8 @@ module StreetAddress
       'state'   => STATE_CODES,
     }
 
+    STREET_NUMBER_WORDS = %{one two three four five six seven eight nine ten}
+
     class << self
       attr_accessor(
         :street_type_regexp,
@@ -533,8 +535,10 @@ module StreetAddress
         :corner_regexp,
         :unit_regexp,
         :street_regexp,
+        :po_street_regexp,
         :place_regexp,
         :address_regexp,
+        :po_address_regexp,
         :informal_address_regexp,
         :dircode_regexp,
         :unit_prefix_numbered_regexp,
@@ -554,7 +558,7 @@ module StreetAddress
     self.street_type_regexp = Regexp.new(STREET_TYPES_LIST.keys.join("|"), Regexp::IGNORECASE)
     self.fraction_regexp = /\d+\/\d+/
     self.state_regexp = Regexp.new(
-      '\b' + STATE_CODES.flatten.map{ |code| Regexp.quote(code) }.join("|") + '\b',
+      '\W(\b' + STATE_CODES.flatten.map{ |code| Regexp.quote(code) }.join("|") + '\b)\W',
       Regexp::IGNORECASE
     )
     self.direct_regexp = Regexp.new(
@@ -583,13 +587,17 @@ module StreetAddress
       (?:
         # special case for addresses like 100 South Street
         (?:(?<street> #{direct_regexp})\W+
-           (?<street_type> #{street_type_regexp})\b
+           (?<street_type>)\b
         )
         |
         (?:(?<prefix> #{direct_regexp})\W+)?
         (?:
+          \d+,\s
           (?<street> [^,]*\d)
           (?:[^\w,]* (?<suffix> #{direct_regexp})\b)
+          |
+          (?<street> [^,]+)
+          (?:[^\w,]+(?<suffix> #{direct_regexp})\b)?
           |
           (?<street> [^,]+)
           (?:[^\w,]+(?<street_type> #{street_type_regexp})\b)
@@ -601,6 +609,8 @@ module StreetAddress
         )
       )
     /ix;
+
+    self.po_street_regexp = /^(?<street>p\.?o\.?\s?(?:box|\#)?\s\d\d*[-a-z]*)/ix;
 
     # http://pe.usps.com/text/pub28/pub28c2_003.htm
     # TODO add support for those that don't require a number
@@ -672,6 +682,14 @@ module StreetAddress
       \z           # right up to end of string
     /ix;
 
+    self.po_address_regexp = /
+      \A
+      #{po_street_regexp} \W*
+      #{place_regexp}
+      \W*         # require on non-word chars at end
+      \z           # right up to end of string
+    /ix;
+
     self.sep_regexp = /(?:\W+|\Z)/;
     self.sep_avoid_unit_regexp = /(?:[^\#\w]+|\Z)/;
 
@@ -705,7 +723,7 @@ module StreetAddress
         if( corner_regexp.match(location) )
           return parse_intersection(location, args)
         else
-          return parse_address(location, args) || parse_informal_address(location, args)
+          return parse_po_address(location, args) || parse_address(location, args) || parse_informal_address(location, args)
         end
       end
 
@@ -713,6 +731,12 @@ module StreetAddress
         return unless match = address_regexp.match(address)
 
         to_address( match_to_hash(match), args )
+      end
+
+      def parse_po_address(address, args={})
+        return unless match = po_address_regexp.match(address)
+
+        to_address(match_to_hash(match), args)
       end
 
       def parse_informal_address(address, args={})
@@ -799,11 +823,16 @@ module StreetAddress
             }
           end
 
-          %w(street street_type street2 street_type2 city unit_prefix).each do |k|
-            input[k] = input[k].split.map(&:capitalize).join(' ') if input[k]
+          %w(street street_type street2 street_type2 city unit_prefix postal_code).each do |k|
+            input[k] = input[k].split.map { |elem| upcase_or_capitalize(elem) }.join(' ') if input[k]
           end
 
           return StreetAddress::US::Address.new( input )
+        end
+
+        def upcase_or_capitalize(elem)
+          return elem.upcase if  elem.downcase.match(/^(po|ne|nw|sw|se)$/)
+          elem.capitalize
         end
     end
 
@@ -901,12 +930,36 @@ module StreetAddress
           s << line1(s)
         when :line2
           s << line2(s)
+        when :street_address_1
+          s << street_address_1
+        when :street_address_2
+          s << street_address_2
+        when :city_state_zip
+          s << line2(s)
         else
           s << [line1, line2].select{ |l| !l.empty? }.join(', ')
         end
         s
       end
 
+      def street_address_1
+        s = ""
+        s = number + " " unless number.nil?
+        s += prefix + " " unless prefix.nil?
+        s += street + " " unless street.nil?
+        s += street_type unless street_type.nil?
+        s.strip
+      end
+
+      def street_address_2
+        s = ""
+        if( !unit_prefix.nil? && !unit.nil? )
+          s += unit_prefix + " " + unit
+        elsif( unit_prefix.nil? && !unit.nil? )
+          s += "#" + unit
+        end
+        s
+      end
 
       def to_h
         self.instance_variables.each_with_object({}) do |var_name, hash|
