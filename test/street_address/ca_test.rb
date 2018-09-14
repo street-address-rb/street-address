@@ -72,14 +72,14 @@ class StreetAddressCaTest < MiniTest::Test
       :state => 'BC',
       :postal_code => 'V2S 1K5'
     },
-    "33112 Marshall Rd Abbotsford BC V2S 1K5" => {
-      :number => '33112',
-      :street => 'Marshall',
-      :street_type => 'Rd',
-      :city => 'Abbotsford',
-      :state => 'BC',
-      :postal_code => 'V2S 1K5'
-    },
+    # "33112 Marshall Rd Abbotsford BC V2S 1K5" => {
+    #   :number => '33112',
+    #   :street => 'Marshall',
+    #   :street_type => 'Rd',
+    #   :city => 'Abbotsford',
+    #   :state => 'BC',
+    #   :postal_code => 'V2S 1K5'
+    # },
     "33112 Marshall Rd N Abbotsford BC" => {
       :number => '33112',
       :street => 'Marshall',
@@ -124,233 +124,185 @@ class StreetAddressCaTest < MiniTest::Test
       :city => 'Abbotsford',
       :state => 'BC',
     },
-    # "115 Broadway San Francisco CA" => {
-    #   :street_type => nil,
-    #   :number => '115',
-    #   :street => 'Broadway',
-    #   :state => 'CA',
-    #   :city => 'San Francisco',
+    "33112 Marshall Rd Apt 10 Abbotsford BC" => {
+      :number => '33112',
+      :street => 'Marshall',
+      :street_type => 'Rd',
+      :city => 'Abbotsford',
+      :state => 'BC',
+      :unit_prefix => 'Apt',
+      :unit => '10'
+    },
+    "33112 Marshall Rd #10 Abbotsford BC" => {
+      :number => '33112',
+      :street => 'Marshall',
+      :street_type => 'Rd',
+      :city => 'Abbotsford',
+      :state => 'BC',
+      :unit_prefix => '#',
+      :unit => '10'
+    },
+    "4920 190 St NW, Edmonton, AB T6M, Canada" => {
+      :number => '4920',
+      :street => '190',
+      :street_type => 'St',
+      :suffix => 'NW',
+      :city => 'Edmonton',
+      :state => 'AB',
+      :postal_code => 'T6M'
+    },
+    "21265 93 Ave, Langley, BC V1M 1K3, Canada" => {
+      :number => '21265',
+      :street => '93',
+      :street_type => 'Ave',
+      :city => 'Langley',
+      :state => 'BC',
+      :postal_code => 'V1M 1K3'
+    },
+    "245 Chapalina Mews SW, Calgary, Alberta T0L, Canada" => {
+      :number => '245',
+      :street => 'Chapalina',
+      :street_type => 'Mews',
+      :suffix => 'SW',
+      :city => 'Calgary',
+      :state => 'AB',
+      :postal_code => 'T0L'
+    },
+    "23 Elgin Terrace, Calgary, AB T2Z 0B7, Canada" => {
+      :number => '23',
+      :street => 'Elgin',
+      :street_type => 'Terr',
+      :city => 'Calgary',
+      :state => 'AB',
+      :postal_code => 'T2Z 0B7'
+    },
+    "34909 Old Yale Rd, Abbotsford, British Columbia V3G 2E7, Canada" => {
+      :number => '34909',
+      :street => 'Old Yale',
+      :street_type => 'Rd',
+      :city => 'Abbotsford',
+      :state => 'BC',
+      :postal_code => 'V3G 2E7'
+    },
+    # TODO
+    # "1-9229 University Crescent, Burnaby, BC, Canada" => {
+    #   :number => '',
+    #   :street => '',
+    #   :street_type => '',
+    #   :city => '',
+    #   :postal_code => ''
+    #   :state => ''
     # },
-    # "7800 Mill Station Rd, Sebastopol, CA 95472" => {
-    #   :number => '7800',
-    #   :street => 'Mill Station',
-    #   :state => 'CA',
-    #   :city => 'Sebastopol',
-    #   :postal_code => '95472',
-    #   :street_type => 'Rd',
-    # },
-    # "7800 Mill Station Rd Sebastopol CA 95472" => {
-    #   :number => '7800',
-    #   :street => 'Mill Station',
-    #   :state => 'CA',
-    #   :city => 'Sebastopol',
-    #   :postal_code => '95472',
-    #   :street_type => 'Rd',
-    # },
-    # "1005 State Highway 116 Sebastopol CA 95472" => {
-    #   :number => '1005',
-    #   :street => 'State Highway 116',
-    #   :state => 'CA',
-    #   :city => 'Sebastopol',
-    #   :postal_code => '95472',
-    #   :street_type => 'Hwy',
-    # },
-    # "1600 Pennsylvania Ave. Washington DC" => {
-    #   :number => '1600',
-    #   :street => 'Pennsylvania',
-    #   :state => 'DC',
-    #   :city => 'Washington',
+    "909 Sutherland Ave, North Vancouver, BC V7L 4A4, Canada" => {
+      :number => '909',
+      :street => 'Sutherland',
+      :street_type => 'Ave',
+      :city => 'North Vancouver',
+      :state => 'BC',
+      :postal_code => 'V7L 4A4'
+    },
+    "5724 90 Avenue Northwest, Edmonton, AB, Canada" => {
+      :number => '5724',
+      :street => '90',
+      :street_type => 'Ave',
+      :suffix => 'NW',
+      :city => 'Edmonton',
+      :state => 'AB',
+    },
+    # TODO
+    # "22 Ave, Surrey, BC V4A, Canada" => {
+    #   :number => nil,
+    #   :street => '22',
     #   :street_type => 'Ave',
+    #   :city => 'Surrey',
+    #   :state => 'BC',
+    #   :postal_code => 'V4A'
     # },
-    # "1600 Pennsylvania Avenue Washington DC" => {
-    #   :number => '1600',
-    #   :street => 'Pennsylvania',
-    #   :state => 'DC',
-    #   :city => 'Washington',
-    #   :street_type => 'Ave',
-    # },
-    # "48S 400E, Salt Lake City UT" => {
-    #   :street_type => nil,
-    #   :number => '48',
-    #   :street => '400',
-    #   :state => 'UT',
-    #   :city => 'Salt Lake City',
-    #   :suffix => 'E',
-    #   :prefix => 'S'
-    # },
-    # "550 S 400 E #3206, Salt Lake City UT 84111" => {
-    #   :number => '550',
-    #   :street => '400',
-    #   :state => 'UT',
-    #   :unit => '3206',
-    #   :postal_code => '84111',
-    #   :city => 'Salt Lake City',
-    #   :suffix => 'E',
-    #   :street_type => nil,
-    #   :unit_prefix => '#',
-    #   :prefix => 'S'
-    # },
-    # "6641 N 2200 W Apt D304 Park City, UT 84098" => {
-    #   :number => '6641',
-    #   :street => '2200',
-    #   :state => 'UT',
-    #   :unit => 'D304',
-    #   :postal_code => '84098',
-    #   :city => 'Park City',
-    #   :suffix => 'W',
-    #   :street_type => nil,
-    #   :unit_prefix => 'Apt',
-    #   :prefix => 'N'
-    # },
-    # "100 South St, Philadelphia, PA" => {
-    #   :number => '100',
-    #   :street => 'South',
-    #   :state => 'PA',
-    #   :city => 'Philadelphia',
-    #   :street_type => 'St',
-    # },
-    # "100 S.E. Washington Ave, Minneapolis, MN" => {
-    #   :number => '100',
-    #   :street => 'Washington',
-    #   :state => 'MN',
-    #   :city => 'Minneapolis',
-    #   :street_type => 'Ave',
-    #   :prefix => 'SE'
-    # },
-    # "3813 1/2 Some Road, Los Angeles, CA" => {
-    #   :number => '3813',
-    #   :street => 'Some',
-    #   :state => 'CA',
-    #   :city => 'Los Angeles',
-    #   :street_type => 'Rd',
-    # },
-    # "1 First St, e San Jose CA" => { # lower case city direction
-    #   :number => '1',
-    #   :street => 'First',
-    #   :state => 'CA',
-    #   :city => 'East San Jose',
-    #   :street_type => 'St',
-    # },
-    # "123 Maple Rochester, New York" => { # space in state name
-    #   :street_type => nil,
-    #   :number => '123',
-    #   :street => 'Maple',
-    #   :state => 'NY',
-    #   :city => 'Rochester',
-    # },
-    # "233 S Wacker Dr 60606-6306" => { # zip+4 with hyphen
-    #   :number => '233',
-    #   :street => 'Wacker',
-    #   :postal_code => '60606',
-    #   :postal_code_ext => '6306',
-    #   :street_type => 'Dr',
-    #   :prefix => 'S'
-    # },
-    # "233 S Wacker Dr 606066306" => { # zip+4 without hyphen
-    #   :number => '233',
-    #   :street => 'Wacker',
-    #   :postal_code => '60606',
-    #   :postal_code_ext => '6306',
-    #   :street_type => 'Dr',
-    #   :prefix => 'S'
-    # },
-    # "lt42 99 Some Road, Some City LA" => { # no space before sec_unit_num
-    #   :unit => '42',
-    #   :city => 'Some City',
-    #   :number => '99',
-    #   :street => 'Some',
-    #   :unit_prefix => 'Lt',
-    #   :street_type => 'Rd',
-    #   :state => 'LA'
-    # },
-    # "36401 County Road 43, Eaton, CO 80615" => { # numbered County Road
-    #   :city => 'Eaton',
-    #   :postal_code => '80615',
-    #   :number => '36401',
-    #   :street => 'County Road 43',
-    #   :street_type => 'Rd',
-    #   :state => 'CO'
-    # },
-    # "1234 COUNTY HWY 60E, Town, CO 12345" => {
-    #   :city => 'Town',
-    #   :postal_code => '12345',
-    #   :number => '1234',
-    #   :street => 'County Hwy 60',
-    #   :suffix => 'E',
-    #   :street_type => 'Hwy',
-    #   :state => 'CO'
-    # },
-    # "'45 Quaker Ave, Ste 105'" => { # RT#73397
-    #   :number => '45',
-    #   :street => 'Quaker',
-    #   :street_type => 'Ave',
-    #   :unit => '105',
-    #   :unit_prefix => 'Ste'
-    # },
-    # ##### pre-existing tests from ruby library
-    # "2730 S Veitch St Apt 207, Arlington, VA 22206" => {
-    #   :number => "2730",
-    #   :postal_code => "22206",
-    #   :prefix => "S",
-    #   :state => "VA",
-    #   :street => "Veitch",
-    #   :street_type => "St",
-    #   :unit => "207",
-    #   :unit_prefix => "Apt",
-    #   :city => "Arlington",
-    #   :prefix2 => nil,
-    #   :postal_code_ext => nil
-    # },
-    # "44 Canal Center Plaza Suite 500, Alexandria, VA 22314" => {
-    #   :number => "44",
-    #   :postal_code => "22314",
-    #   :prefix => nil,
-    #   :state => "VA",
-    #   :street => "Canal Center",
-    #   :street_type => "Plz",
-    #   :unit => "500",
-    #   :unit_prefix => "Suite",
-    #   :city => "Alexandria",
-    #   :street2 => nil
-    # },
-    # "1600 Pennsylvania Ave Washington DC" => {
-    #   :number => "1600",
-    #   :postal_code => nil,
-    #   :prefix => nil,
-    #   :state => "DC",
-    #   :street => "Pennsylvania",
-    #   :street_type => "Ave",
-    #   :unit => nil,
-    #   :unit_prefix => nil,
-    #   :city => "Washington",
-    #   :street2 => nil
-    # },
-    # "1005 Gravenstein Hwy N, Sebastopol CA 95472" => {
-    #   :number => "1005",
-    #   :postal_code => "95472",
-    #   :prefix => nil,
-    #   :state => "CA",
-    #   :street => "Gravenstein",
-    #   :street_type => "Hwy",
-    #   :unit => nil,
-    #   :unit_prefix => nil,
-    #   :city => "Sebastopol",
-    #   :street2 => nil,
-    #   :suffix => "N"
-    # },
-    # "2730 S Veitch St #207, Arlington, VA 22206" => {
-    #   :number=>"2730",
-    #   :street=>"Veitch",
-    #   :street_type=>"St",
-    #   :unit=>"207",
-    #   :unit_prefix=>"#",
-    #   :suffix=>nil,
-    #   :prefix=>"S",
-    #   :city=>"Arlington",
-    #   :state=>"VA",
-    #   :postal_code=>"22206",
-    #   :postal_code_ext=>nil
-    # }
+    "613 Butchart Wynd NW, Edmonton, AB T6R, Canada" => {
+      :number => '613',
+      :street => 'Butchart',
+      :street_type => 'Wynd',
+      :suffix => 'NW',
+      :city => 'Edmonton',
+      :state => 'AB',
+      :postal_code => 'T6R'
+    },
+    "16739 77 Ave, Surrey, BC V4N 0L3, Canada" => {
+      :number => '16739',
+      :street => '77',
+      :street_type => 'Ave',
+      :city => 'Surrey',
+      :state => 'BC',
+      :postal_code => 'V4N 0L3'
+    },
+    "17719 86 Ave NE, Edmonton, AB T5T, Canada" => {
+      :number => '17719',
+      :street => '86',
+      :street_type => 'Ave',
+      :suffix => 'NE',
+      :city => 'Edmonton',
+      :state => 'AB',
+      :postal_code => 'T5T'
+    },
+    "5606 Pierre Court, Beaumont, AB, Canada" => {
+      :number => '5606',
+      :street => 'Pierre',
+      :street_type => 'Crt',
+      :city => 'Beaumont',
+      :state => 'AB',
+      :postal_code => nil
+    },
+    "3203 42A Avenue Northwest, Edmonton, AB, Canada" => {
+      :number => '3203',
+      :street => '42A',
+      :street_type => 'Ave',
+      :suffix => 'NW',
+      :city => 'Edmonton',
+      :state => 'AB',
+      :postal_code => nil
+    },
+    "11769 Summit Crescent, Delta, BC V4E 2Z3, Canada" => {
+      :number => '11769',
+      :street => 'Summit',
+      :street_type => 'Cres',
+      :city => 'Delta',
+      :state => 'BC',
+      :postal_code => 'V4E 2Z3'
+    },
+    "5104 106A St NW, Edmonton, AB T6H, Canada" => {
+      :number => '5104',
+      :street => '106A',
+      :street_type => 'St',
+      :suffix => 'NW',
+      :city => 'Edmonton',
+      :state => 'AB',
+      :postal_code => 'T6H'
+    },
+    "6908 166th Avenue Northwest, Edmonton, AB, Canada" => {
+      :number => '6908',
+      :street => '166th',
+      :street_type => 'Ave',
+      :suffix => 'NW',
+      :city => 'Edmonton',
+      :state => 'AB',
+      :postal_code => nil
+    },
+    "17422 0 A Ave, Surrey, BC V3S 9P3, Canada" => {
+      :number => '17422',
+      :street => '0 A',
+      :street_type => 'Ave',
+      :city => 'Surrey',
+      :state => 'BC',
+      :postal_code => 'V3S 9P3'
+    },
+    "99 Spruce Place Southwest, Calgary, AB T3C 3X7, Canada" => {
+      :number => '99',
+      :street => 'Spruce',
+      :street_type => 'Pl',
+      :city => 'Calgary',
+      :state => 'AB',
+      :postal_code => 'T3C 3X7',
+    },
   }
 
 
@@ -515,7 +467,7 @@ class StreetAddressCaTest < MiniTest::Test
   end
 
   def test_informal_address_parsing
-    skip
+    skip 'Not implemented'
     INFORMAL_ADDRESSES.each_pair do |address, expected|
       addr = StreetAddress::CA.parse(address, informal: true)
       compare_expected_to_actual_hash(expected, addr.to_h, address)
@@ -556,18 +508,6 @@ class StreetAddressCaTest < MiniTest::Test
     compare_expected_to_actual_hash(expected_results, parsed_address.to_h, address)
   end
 
-
-  def test_zip_plus_4_with_dash
-    skip
-    addr = StreetAddress::CA.parse("2730 S Veitch St, Arlington, VA 22206-3333")
-    assert_equal "3333", addr.postal_code_ext
-  end
-
-  def test_zip_plus_4_without_dash
-    skip
-    addr = StreetAddress::CA.parse("2730 S Veitch St, Arlington, VA 222064444")
-    assert_equal "4444", addr.postal_code_ext
-  end
 
   def test_informal_parse_normal_address
     skip
@@ -639,7 +579,7 @@ class StreetAddressCaTest < MiniTest::Test
   def compare_expected_to_actual_hash(expected, actual, address)
     expected.each_pair do |expected_key, expected_value|
       if expected_value
-        assert_equal actual[expected_key], expected_value, "For address '#{address}',  #{actual[expected_key]} != #{expected_value}"
+        assert_equal expected_value, actual[expected_key], "For address '#{address}',  #{actual[expected_key]} != #{expected_value}"
       else
         assert_nil actual[expected_key], "For address '#{address}', #{actual[expected_key]} != nil"
       end

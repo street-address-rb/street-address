@@ -1,6 +1,6 @@
 module StreetAddress
   # @see https://www.canadapost.ca/tools/pg/manual/PGaddress-e.asp
-  class CA < US
+  class CA
     DIRECTIONAL = {
       "north"      => "N",
       "northeast"  => "NE",
@@ -10,14 +10,6 @@ module StreetAddress
       "southwest"  => "SW",
       "west"       => "W",
       "northwest"  => "NW",
-      'est'        => 'E',
-      'nord'       => 'N',
-      'nord-est'   => 'NE',
-      'nord-ouest' => 'NO',
-      'sud'        => 'S',
-      'sud-est'    => 'SE',
-      'sud-ouest'  => 'SO',
-      'ouest'      => 'O'
     }
     DIRECTION_CODES = DIRECTIONAL.invert
 
@@ -199,6 +191,45 @@ module StreetAddress
 
     STATE_NAMES = STATE_CODES.invert
 
+    NORMALIZE_MAP = {
+      'prefix'  => DIRECTIONAL,
+      'prefix1' => DIRECTIONAL,
+      'prefix2' => DIRECTIONAL,
+      'suffix'  => DIRECTIONAL,
+      'suffix1' => DIRECTIONAL,
+      'suffix2' => DIRECTIONAL,
+      'street_type'  => STREET_TYPES,
+      'street_type1' => STREET_TYPES,
+      'street_type2' => STREET_TYPES,
+      'state'   => STATE_CODES,
+    }
+
+    class << self
+      attr_accessor(
+        :street_type_regexp,
+        :street_type_matches,
+        :number_regexp,
+        :fraction_regexp,
+        :state_regexp,
+        :city_and_state_regexp,
+        :country_regexp,
+        :direct_regexp,
+        :zip_regexp,
+        :corner_regexp,
+        :unit_regexp,
+        :street_regexp,
+        :place_regexp,
+        :address_regexp,
+        :informal_address_regexp,
+        :dircode_regexp,
+        :unit_prefix_numbered_regexp,
+        :unit_prefix_unnumbered_regexp,
+        :sep_regexp,
+        :sep_avoid_unit_regexp,
+        :intersection_regexp
+      )
+    end
+
     self.street_type_matches = {}
     STREET_TYPES.each_pair { |type,abbrv|
       self.street_type_matches[abbrv] = /\b (?: #{abbrv}|#{Regexp.quote(type)} ) \b/ix
@@ -222,7 +253,7 @@ module StreetAddress
       Regexp::IGNORECASE
     )
     self.dircode_regexp = Regexp.new(DIRECTION_CODES.keys.join("|"), Regexp::IGNORECASE)
-    self.zip_regexp = /(?:(?<postal_code>\w{3}\s\w{3})?)/
+    self.zip_regexp = /(?:(?<postal_code>\w{3}(?:\s\w{3})?)?)/
 
     self.corner_regexp  = /(?:\band\b|\bat\b|&|\@)/i
 
@@ -265,8 +296,9 @@ module StreetAddress
         |p\W*[om]\W*b(?:ox)?
         |(?:ap|dep)(?:ar)?t(?:me?nt)?
         |ro*m
+        |bureau
         |flo*r?
-        |uni?t
+        |uni?té?
         |bu?i?ldi?n?g
         |ha?nga?r
         |lo?t
@@ -310,8 +342,13 @@ module StreetAddress
       )
     /ix;
 
+    self.country_regexp = /
+      (?:Cana?d?a?)
+    /ix;
+
     self.place_regexp = /
-      (?:#{city_and_state_regexp}\W*)? (?:#{zip_regexp})?
+      (?:#{city_and_state_regexp}\W*)? (?:#{zip_regexp}\W*)?
+      (?:#{country_regexp})?
     /ix;
 
     self.address_regexp = /
@@ -353,8 +390,115 @@ module StreetAddress
       #{place_regexp}
       \W*\z
     /ix;
-    def initialize
-      super
+
+    class << self
+      def parse(location, args={})
+        if( corner_regexp.match(location) )
+          return parse_intersection(location, args)
+        else
+          return parse_address(location, args) || parse_informal_address(location, args)
+        end
+      end
+
+      def parse_address(address, args={})
+        return unless match = address_regexp.match(address)
+
+        to_address( match_to_hash(match), args )
+      end
+
+      def parse_informal_address(address, args={})
+        return unless match = informal_address_regexp.match(address)
+
+        to_address( match_to_hash(match), args )
+      end
+
+      def parse_intersection(intersection, args)
+        return unless match = intersection_regexp.match(intersection)
+
+        hash = match_to_hash(match)
+
+        streets = intersection_regexp.named_captures["street"].map { |pos|
+          match[pos.to_i]
+        }.select { |v| v }
+        hash["street"]  = streets[0] if streets[0]
+        hash["street2"] = streets[1] if streets[1]
+
+        street_types = intersection_regexp.named_captures["street_type"].map { |pos|
+          match[pos.to_i]
+        }.select { |v| v }
+        hash["street_type"]  = street_types[0] if street_types[0]
+        hash["street_type2"] = street_types[1] if street_types[1]
+
+        if(
+          hash["street_type"] &&
+          (
+            !hash["street_type2"] ||
+            (hash["street_type"] == hash["street_type2"])
+          )
+        )
+          type = hash["street_type"].clone
+          if( type.gsub!(/s\W*$/i, '') && /\A#{street_type_regexp}\z/i =~ type )
+            hash["street_type"] = hash["street_type2"] = type
+          end
+        end
+
+        to_address( hash, args )
+      end
+
+      private
+        def match_to_hash(match)
+          hash = {}
+          match.names.each { |name| hash[name] = match[name] if match[name] }
+          return hash
+        end
+
+        def to_address(input, args)
+          # strip off some punctuation and whitespace
+          input.values.each { |string|
+            string.strip!
+            string.gsub!(/[^\w\s\-\#\&]/, '')
+          }
+
+          input['redundant_street_type'] = false
+          if( input['street'] && !input['street_type'] )
+            match = street_regexp.match(input['street'])
+            input['street_type'] = match['street_type']
+          input['redundant_street_type'] = true
+          end
+
+          NORMALIZE_MAP.each_pair { |key, map|
+            next unless input[key]
+            mapping = map[input[key].downcase]
+            input[key] = mapping if mapping
+          }
+
+          if( args[:avoid_redundant_street_type] )
+            ['', '1', '2'].each { |suffix|
+              street = input['street'      + suffix];
+              type   = input['street_type' + suffix];
+              next if !street || !type
+
+              type_regexp = street_type_matches[type.downcase] # || fail "No STREET_TYPE_MATCH for #{type}"
+              input.delete('street_type' + suffix) if type_regexp.match(street)
+            }
+          end
+
+          # attempt to expand directional prefixes on place names
+          if( input['city'] )
+            input['city'].gsub!(/^(#{dircode_regexp})\s+(?=\S)/) { |match|
+              DIRECTION_CODES[match[0].upcase] + ' '
+            }
+          end
+
+          %w(street street_type street2 street_type2 city unit_prefix).each do |k|
+            input[k] = input[k].split.map do |s|
+              # properly handle street names like '42A'
+              s =~ /^\d+\w$/ ? s : s.capitalize
+            end.join(' ') if input[k]
+          end
+
+          return StreetAddress::Address.new( input )
+        end
     end
   end
 end
