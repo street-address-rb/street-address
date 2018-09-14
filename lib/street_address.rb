@@ -4,7 +4,7 @@ require 'street_address/us'
 require 'street_address/ca'
 
 module StreetAddress
-  def self.parse
-    # TODO implement
+  def self.parse(location, args={})
+    return US.parse(location, args) || CA.parse(location, args)
   end
 end
