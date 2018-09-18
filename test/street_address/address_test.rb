@@ -103,9 +103,10 @@ class AddressTest < MiniTest::Test
       :line1 => "3813 Some Rd",
       :line2 => "Los Angeles, CA"
     },
-    "1 First St, e San Jose CA" => {
+    "1 First St, e San Jose CA USA" => {
       :line1 => "1 First St",
-      :line2 => "East San Jose, CA"
+      :line2 => "East San Jose, CA",
+      :line3 => "USA"
     },
     "lt42 99 Some Road, Some City LA" => {
       :line1 => "99 Some Rd Lt 42",
@@ -258,7 +259,11 @@ class AddressTest < MiniTest::Test
     ADDRESSES.each_pair do |address, expected|
       addr = StreetAddress::US.parse(address)
       expected_result = expected[:to_s]
-      expected_result ||= [expected[:line1], expected[:line2]].select{|l| !l.empty?}.join(', ')
+      expected_result ||= [
+        expected[:line1],
+        expected[:line2],
+        expected[:line3],
+      ].reject {|s| s.nil? || s.empty?}.join(', ')
       assert_equal addr.to_s, expected_result
     end
   end
@@ -268,7 +273,11 @@ class AddressTest < MiniTest::Test
     INTERSECTIONS.each_pair do |address, expected|
       addr = StreetAddress::US.parse(address)
       expected_result = expected[:to_s]
-      expected_result ||= [expected[:line1], expected[:line2]].select{|l| !l.empty?}.join(', ')
+      expected_result ||= [
+        expected[:line1],
+        expected[:line2],
+        expected[:line3],
+      ].reject {|s| s.nil? || s.empty?}.join(', ')
       assert_equal addr.to_s, expected_result
     end
   end
@@ -278,7 +287,11 @@ class AddressTest < MiniTest::Test
     INFORMAL_ADDRESSES.each_pair do |address, expected|
       addr = StreetAddress::US.parse(address)
       expected_result = expected[:to_s]
-      expected_result ||= [expected[:line1], expected[:line2]].select{|l| !l.empty?}.join(', ')
+      expected_result ||= [
+        expected[:line1],
+        expected[:line2],
+        expected[:line3],
+      ].reject {|s| s.nil? || s.empty?}.join(', ')
       assert_equal addr.to_s, expected_result
     end
   end

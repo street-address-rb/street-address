@@ -39,7 +39,7 @@ module StreetAddress
 
 
     def state_name
-      name = StreetAddress::US::STATE_NAMES[state] and name.capitalize
+      name = (US::STATE_NAMES[state] || CA::STATE_NAMES[state]) and name.capitalize
     end
 
 
@@ -87,6 +87,11 @@ module StreetAddress
     end
 
 
+    def line3(s = "")
+      s + country.to_s
+    end
+
+
     def to_s(format = :default)
       s = ""
       case format
@@ -95,7 +100,7 @@ module StreetAddress
       when :line2
         s << line2(s)
       else
-        s << [line1, line2].select{ |l| !l.empty? }.join(', ')
+        s << [line1, line2, line3].select{ |l| !l.empty? }.join(', ')
       end
       s
     end
@@ -111,6 +116,10 @@ module StreetAddress
 
     def ==(other)
       to_s == other.to_s
+    end
+
+    def <=>(other)
+      to_s <=> other.to_s
     end
   end
 end
