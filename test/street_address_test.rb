@@ -30,7 +30,8 @@ class StreetAddressTest < MiniTest::Test
         "33112 Marshall Rd, Abbotsford, BC V2S 1K5, CAN",
         "33112 Marshall Rd, Abbotsford, BC V2S 1K5, Canada",
         "164 Endeavour Drive, Cambridge ON N3C 4C9, Canada",
-        "164 Endeavour Drive, Cambridge, Ontario N3C, Canada"
+        "164 Endeavour Drive, Cambridge, Ontario N3C, Canada",
+        "210 Fir Street, Sherwood Park, Alberta T8A 2G6, Canada"
       ]
     }
 

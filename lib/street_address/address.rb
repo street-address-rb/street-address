@@ -119,7 +119,7 @@ module StreetAddress
     end
 
     def <=>(other)
-      to_s <=> other.to_s
+      to_s.length <=> other.to_s.length
     end
   end
 end
