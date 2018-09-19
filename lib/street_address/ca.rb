@@ -202,6 +202,7 @@ module StreetAddress
       'street_type1' => STREET_TYPES,
       'street_type2' => STREET_TYPES,
       'state'   => STATE_CODES,
+      'country' => Hash.new('Canada')
     }
 
     class << self

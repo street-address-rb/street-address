@@ -516,6 +516,7 @@ module StreetAddress
       'street_type1' => STREET_TYPES,
       'street_type2' => STREET_TYPES,
       'state'   => STATE_CODES,
+      'country' => Hash.new('United States')
     }
 
     class << self
@@ -655,7 +656,7 @@ module StreetAddress
     /ix;
 
     self.country_regexp = /
-      (?<country> U\.?S\.?A?\.?|United States)
+      (?<country> U\.?S\.?A?\.?|United\sStates)
     /ix;
 
     self.place_regexp = /

@@ -314,6 +314,24 @@ class StreetAddressCaTest < MiniTest::Test
       :postal_code => 'T3C 3X7',
       :country => 'Canada'
     },
+    "164 Endeavour Drive, Cambridge ON N3C 4C9, Canada" => {
+      :number => '164',
+      :street => 'Endeavour',
+      :street_type => 'Dr',
+      :city => 'Cambridge',
+      :state => 'ON',
+      :postal_code => 'N3C 4C9',
+      :country => 'Canada'
+    },
+    "164 Endeavour Drive, Cambridge, Ontario N3C, Canada" => {
+      :number => '164',
+      :street => 'Endeavour',
+      :street_type => 'Dr',
+      :city => 'Cambridge',
+      :state => 'ON',
+      :postal_code => 'N3C',
+      :country => 'Canada'
+    }
   }
 
 

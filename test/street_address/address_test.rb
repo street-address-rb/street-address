@@ -106,7 +106,7 @@ class AddressTest < MiniTest::Test
     "1 First St, e San Jose CA USA" => {
       :line1 => "1 First St",
       :line2 => "East San Jose, CA",
-      :line3 => "USA"
+      :line3 => "United States"
     },
     "lt42 99 Some Road, Some City LA" => {
       :line1 => "99 Some Rd Lt 42",

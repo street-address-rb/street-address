@@ -177,7 +177,7 @@ class StreetAddressUsTest < MiniTest::Test
       :street_type => nil,
       :unit_prefix => '#',
       :prefix => 'S',
-      :country => 'USA'
+      :country => 'United States'
     },
     "6641 N 2200 W Apt D304 Park City, UT 84098, U.S.A." => {
       :number => '6641',
