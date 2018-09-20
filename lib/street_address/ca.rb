@@ -394,10 +394,12 @@ module StreetAddress
 
     class << self
       def parse(location, args={})
-        if( corner_regexp.match(location) )
-          return parse_intersection(location, args)
+        if corner_regexp.match(location)
+          parse_intersection(location, args)
+        elsif args[:informal]
+          parse_address(location, args) || parse_informal_address(location, args)
         else
-          return parse_address(location, args) || parse_informal_address(location, args)
+          parse_address(location, args)
         end
       end
 
