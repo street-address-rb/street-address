@@ -66,6 +66,14 @@ class StreetAddressCaTest < MiniTest::Test
       :state => 'BC',
       :postal_code => 'V2S 1K5'
     },
+    "33112 Marshall Rd, Abbotsford, BC V2S1K5" => {
+      :number => '33112',
+      :street => 'Marshall',
+      :street_type => 'Rd',
+      :city => 'Abbotsford',
+      :state => 'BC',
+      :postal_code => 'V2S 1K5'
+    },
     # "33112 Marshall Rd Abbotsford BC V2S 1K5" => {
     #   :number => '33112',
     #   :street => 'Marshall',
@@ -599,7 +607,7 @@ class StreetAddressCaTest < MiniTest::Test
 
   def test_comparison
     addr = StreetAddress::CA.parse(ADDRESSES.first[0])
-    assert_equal addr, "33112 Marshall Rd, V2S 1K5"
+    assert_equal addr.to_s, "33112 Marshall Rd, V2S 1K5"
     assert_equal addr, StreetAddress::CA.parse(ADDRESSES.first[0])
     refute_equal addr, StreetAddress::CA.parse(EXPECTED_FAILURES.first)
     refute_equal addr, nil

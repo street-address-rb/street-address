@@ -215,7 +215,7 @@ module StreetAddress
         :city_and_state_regexp,
         :country_regexp,
         :direct_regexp,
-        :zip_regexp,
+        :postal_code_regexp,
         :corner_regexp,
         :unit_regexp,
         :street_regexp,
@@ -254,7 +254,9 @@ module StreetAddress
       Regexp::IGNORECASE
     )
     self.dircode_regexp = Regexp.new(DIRECTION_CODES.keys.join("|"), Regexp::IGNORECASE)
-    self.zip_regexp = /(?:(?<postal_code>\w{3}(?:\s\w{3})?)?)/
+    self.postal_code_regexp = /
+      (?:(?<postal_code>\w\d\w)\s?(?<postal_code_ext>\d\w\d)?)?
+    /ix
 
     self.corner_regexp  = /(?:\band\b|\bat\b|&|\@)/i
 
@@ -348,7 +350,7 @@ module StreetAddress
     /ix;
 
     self.place_regexp = /
-      (?:#{city_and_state_regexp}\W*)? (?:#{zip_regexp}\W*)?
+      (?:#{city_and_state_regexp}\W*)? (?:#{postal_code_regexp}\W*)?
       (?:#{country_regexp})?
     /ix;
 
@@ -491,6 +493,14 @@ module StreetAddress
             input['city'].gsub!(/^(#{dircode_regexp})\s+(?=\S)/) { |match|
               DIRECTION_CODES[match[0].upcase] + ' '
             }
+          end
+
+          # Return full postal code by default for Canadian addresses
+          if input['postal_code'] && input['postal_code_ext']
+            input['postal_code'] = [
+              input['postal_code'], input['postal_code_ext']
+            ].join(' ')
+            input['postal_code_ext'] = nil
           end
 
           %w(street street_type street2 street_type2 city unit_prefix).each do |k|
