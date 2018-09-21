@@ -254,8 +254,10 @@ module StreetAddress
       Regexp::IGNORECASE
     )
     self.dircode_regexp = Regexp.new(DIRECTION_CODES.keys.join("|"), Regexp::IGNORECASE)
+    # FSA: Forward Sortation Area - LDU: Local Delivery Unit
+    # https://en.wikipedia.org/wiki/Postal_codes_in_Canada#Components_of_a_postal_code
     self.postal_code_regexp = /
-      (?:(?<postal_code>\w\d\w)\s?(?<postal_code_ext>\d\w\d)?)?
+      (?:(?<FSA>\w\d\w)\s?(?<LDU>\d\w\d)?)?
     /ix
 
     self.corner_regexp  = /(?:\band\b|\bat\b|&|\@)/i
@@ -496,11 +498,9 @@ module StreetAddress
           end
 
           # Return full postal code by default for Canadian addresses
-          if input['postal_code'] && input['postal_code_ext']
-            input['postal_code'] = [
-              input['postal_code'], input['postal_code_ext']
-            ].join(' ')
-            input['postal_code_ext'] = nil
+          if input['FSA']
+            fsa = input.delete('FSA'); ldu = input.delete('LDU')
+            input['postal_code'] = [fsa, ldu].compact.join(' ')
           end
 
           %w(street street_type street2 street_type2 city unit_prefix).each do |k|
