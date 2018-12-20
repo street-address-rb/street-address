@@ -337,6 +337,9 @@ class StreetAddressTest < Minitest::Test
     },
     "100 North Lake Street" => {
       number: "100", street: "Lake", street_type: "St", prefix: "N"
+    },
+    "100 South Lake Street" => {
+      number: "100", street: "Lake", street_type: "St", prefix: "S"
     }
   }.freeze
 
