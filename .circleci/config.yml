@@ -17,6 +17,7 @@ jobs:
     working_directory: ~/repo
 
     steps:
+      - run: sudo apt-get install cmake
       - checkout
 
       # Download and cache dependencies
