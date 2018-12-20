@@ -1,0 +1,73 @@
+AllCops:
+  TargetRubyVersion: 2.3
+  TargetRailsVersion: 4.2
+  Exclude:
+    - db/schema.rb
+
+Metrics/LineLength:
+  Max: 125
+
+Style/RaiseArgs:
+  EnforcedStyle: compact
+
+# Wants us to use %w or %W for arrays of strings
+Style/WordArray:
+  Enabled: false
+
+# Adds Rails linting suggestions
+Rails:
+  Enabled: true
+
+# Double quotes > single quotes
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+
+# Explicit return at the end of a method helps with readability
+Style/RedundantReturn:
+  Enabled: false
+
+# We don't usually want to separate our ints with '_' for readability
+Style/NumericLiterals:
+  Enabled: false
+
+# This is a weird suggested syntax, and not as readable
+ConditionalAssignment:
+  Enabled: false
+
+Style/RedundantSelf:
+  Enabled: false
+
+Style/NegatedIf:
+  Enabled: false
+
+Style/SymbolArray:
+  EnforcedStyle: brackets
+
+Metrics/MethodLength:
+  Max: 30
+  Exclude:
+    - "db/**/*"
+
+ClassLength:
+  Max: 500
+
+Style/ClassAndModuleChildren:
+  EnforcedStyle: compact
+
+Metrics/AbcSize:
+  Enabled: false
+
+Metrics/CyclomaticComplexity:
+  Enabled: false
+
+Metrics/PerceivedComplexity:
+  Enabled: false
+
+Metrics/BlockLength:
+  Max: 30
+  Exclude:
+    - "db/**/*"
+
+# HttpPositionalArguments doesnt work with rails 4: https://github.com/bbatsov/rubocop/issues/3629
+Rails/HttpPositionalArguments:
+  Enabled: false
