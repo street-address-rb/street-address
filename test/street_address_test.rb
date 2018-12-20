@@ -460,8 +460,8 @@ class StreetAddressTest < Minitest::Test
     addr = StreetAddress.parse(ADDRESSES.first[0])
     assert_equal addr, "1005 Gravenstein Hwy, 95472"
     assert_equal addr, StreetAddress.parse(ADDRESSES.first[0])
-    assert_not_equal addr, StreetAddress.parse(EXPECTED_FAILURES.first)
-    assert_not_equal addr, nil
+    refute_equal addr, StreetAddress.parse(EXPECTED_FAILURES.first)
+    refute_equal addr, nil
   end
 
   def compare_expected_to_actual_hash(expected, actual, address)

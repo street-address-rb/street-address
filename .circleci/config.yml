@@ -38,6 +38,5 @@ jobs:
           key: v1-dependencies-{{ checksum "Gemfile.lock" }}
 
       # run tests!
-      - run:
-          name: run tests
-          command: bundle exec rake test
+      - run: bundle exec rake test
+      - run: bundle exec danger
