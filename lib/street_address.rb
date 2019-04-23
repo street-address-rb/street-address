@@ -663,7 +663,7 @@ module StreetAddress
     self.address_regexp = /
       \A
       [^\w\x23]*    # skip non-word chars except # (eg unit)
-      #{number_regexp} \W*
+      #{number_regexp}\s\W* # \s required since regular space is ignored in x-mode
       (?:#{fraction_regexp}\W*)?
       #{street_regexp}\W+
       (?:#{unit_regexp}\W+)?
