@@ -536,6 +536,8 @@ module StreetAddress
         :place_regexp,
         :address_regexp,
         :informal_address_regexp,
+        :street_address_regexp,
+        :informal_street_address_regexp,
         :dircode_regexp,
         :unit_prefix_numbered_regexp,
         :unit_prefix_unnumbered_regexp,
@@ -672,6 +674,17 @@ module StreetAddress
       \z           # right up to end of string
     /ix;
 
+    self.street_address_regexp = /
+      \A
+      [^\w\x23]*    # skip non-word chars except # (eg unit)
+      #{number_regexp} \W*
+      (?:#{fraction_regexp}\W*)?
+      #{street_regexp}\W+
+      (?:#{unit_regexp}\W+)?
+      \W*         # require on non-word chars at end
+      \z           # right up to end of string
+    /ix;
+
     self.sep_regexp = /(?:\W+|\Z)/;
     self.sep_avoid_unit_regexp = /(?:[^\#\w]+|\Z)/;
 
@@ -684,6 +697,17 @@ module StreetAddress
       #{street_regexp} #{sep_avoid_unit_regexp}
       (?:#{unit_regexp} #{sep_regexp})?
       (?:#{place_regexp})?
+      # don't require match to reach end of string
+    /ix;
+
+    self.informal_street_address_regexp = /
+      \A
+      \s*         # skip leading whitespace
+      (?:#{unit_regexp} #{sep_regexp})?
+      (?:#{number_regexp})? \W*
+      (?:#{fraction_regexp} \W*)?
+      #{street_regexp} #{sep_avoid_unit_regexp}
+      (?:#{unit_regexp} #{sep_regexp})?
       # don't require match to reach end of string
     /ix;
 
@@ -707,6 +731,12 @@ module StreetAddress
         else
           return parse_address(location, args) || parse_informal_address(location, args)
         end
+      end
+
+      def parse_street_address(address, args={})
+        return unless match = street_address_regexp.match(address) || informal_street_address_regexp.match(address)
+
+        to_address( match_to_hash(match), args )
       end
 
       def parse_address(address, args={})
