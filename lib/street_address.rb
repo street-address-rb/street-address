@@ -679,8 +679,8 @@ module StreetAddress
       [^\w\x23]*    # skip non-word chars except # (eg unit)
       #{number_regexp} \W*
       (?:#{fraction_regexp}\W*)?
-      #{street_regexp}\W+
-      (?:#{unit_regexp}\W+)?
+      #{street_regexp}
+      (?:\W+#{unit_regexp}\W+)?
       \W*         # require on non-word chars at end
       \z           # right up to end of string
     /ix;
