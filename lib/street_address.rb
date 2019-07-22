@@ -680,7 +680,7 @@ module StreetAddress
       #{number_regexp} \W*
       (?:#{fraction_regexp}\W*)?
       #{street_regexp}
-      (?:\W+#{unit_regexp}\W+)?
+      (?:\W+#{unit_regexp})?
       \W*         # require on non-word chars at end
       \z           # right up to end of string
     /ix;
