@@ -372,8 +372,8 @@ module StreetAddress
       'vst'   => "vis",
       'vsta'  => "vis",
       'walks' => "walk",
-      'well'  => "wl",
-      'wells' => "wls",
+#       'well'  => "wl",
+#       'wells' => "wls",
       'wy'    => "way",
     }
 
