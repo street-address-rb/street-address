@@ -665,7 +665,7 @@ module StreetAddress
       [^\w\x23]*    # skip non-word chars except # (eg unit)
       #{number_regexp} \W*
       (?:#{fraction_regexp}\W*)?
-      #{street_regexp}\W+
+      ((?=.*#{street_type_regexp}.*(CT|KY|LA|MT).*) #{street_regexp}\W+(?=.*(CT|KY|LA|MT).) | #{street_regexp}\W+ )
       (?:#{unit_regexp}\W+)?
       #{place_regexp}
       \W*         # require on non-word chars at end
