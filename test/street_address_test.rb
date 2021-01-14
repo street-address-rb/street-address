@@ -594,8 +594,8 @@ class StreetAddressUsTest < MiniTest::Test
   end
 
   def test_parse
-    assert_equal StreetAddress::US.parse("&"), nil
-    assert_equal StreetAddress::US.parse(" and "), nil
+    assert_nil StreetAddress::US.parse("&")
+    assert_nil StreetAddress::US.parse(" and ")
 
     parseable = [
       "1600 Pennsylvania Ave Washington DC 20006",
@@ -630,7 +630,11 @@ class StreetAddressUsTest < MiniTest::Test
 
   def compare_expected_to_actual_hash(expected, actual, address)
     expected.each_pair do |expected_key, expected_value|
-      assert_equal actual[expected_key], expected_value, "For address '#{address}',  #{actual[expected_key]} != #{expected_value}"
+      if expected_value.nil?
+        assert_nil actual[expected_key], "For address '#{address}', expected nil value for field '#{expected_key}', got: #{actual[expected_key]}"
+      else
+        assert_equal actual[expected_key], expected_value, "For address '#{address}', expected value '#{expected[expected_key]}' for field '#{expected_key}', got: #{actual[expected_key]}"
+      end
     end
   end
 
