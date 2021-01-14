@@ -301,7 +301,7 @@ class StreetAddressUsTest < MiniTest::Test
       :city => "Alexandria",
       :street2 => nil
     },
-    "1600 Pennsylvania Ave Washington DC" => {
+    "1600 Pennsylvania Ave NW Washington DC" => {
       :number => "1600",
       :postal_code => nil,
       :prefix => nil,
@@ -311,7 +311,8 @@ class StreetAddressUsTest < MiniTest::Test
       :unit => nil,
       :unit_prefix => nil,
       :city => "Washington",
-      :street2 => nil
+      :street2 => nil,
+      :suffix => "NW"
     },
     "1005 Gravenstein Hwy N, Sebastopol CA 95472" => {
       :number => "1005",
@@ -334,6 +335,20 @@ class StreetAddressUsTest < MiniTest::Test
       :unit_prefix=>"#",
       :suffix=>nil,
       :prefix=>"S",
+      :city=>"Arlington",
+      :state=>"VA",
+      :postal_code=>"22206",
+      :postal_code_ext=>nil
+    },
+
+    "P.O. BOX 293930, ARLINGTON, VA 22206" => {
+      :number=>nil,
+      :street=>"PO Box 293930",
+      :street_type=>nil,
+      :unit=>nil,
+      :unit_prefix=>nil,
+      :suffix=>nil,
+      :prefix=>nil,
       :city=>"Arlington",
       :state=>"VA",
       :postal_code=>"22206",
@@ -489,8 +504,6 @@ class StreetAddressUsTest < MiniTest::Test
     "Gravenstein Hwy 95472",
     "E1005 Gravenstein Hwy 95472",
     # "1005E Gravenstein Hwy 95472"
-    ## adding from original ruby test suite
-    "PO BOX 450, Chicago IL 60657"
   ]
 
 
@@ -581,8 +594,8 @@ class StreetAddressUsTest < MiniTest::Test
   end
 
   def test_parse
-    assert_equal StreetAddress::US.parse("&"), nil
-    assert_equal StreetAddress::US.parse(" and "), nil
+    assert_nil StreetAddress::US.parse("&")
+    assert_nil StreetAddress::US.parse(" and ")
 
     parseable = [
       "1600 Pennsylvania Ave Washington DC 20006",
@@ -617,7 +630,11 @@ class StreetAddressUsTest < MiniTest::Test
 
   def compare_expected_to_actual_hash(expected, actual, address)
     expected.each_pair do |expected_key, expected_value|
-      assert_equal actual[expected_key], expected_value, "For address '#{address}',  #{actual[expected_key]} != #{expected_value}"
+      if expected_value.nil?
+        assert_nil actual[expected_key], "For address '#{address}', expected nil value for field '#{expected_key}', got: #{actual[expected_key]}"
+      else
+        assert_equal actual[expected_key], expected_value, "For address '#{address}', expected value '#{expected[expected_key]}' for field '#{expected_key}', got: #{actual[expected_key]}"
+      end
     end
   end
 

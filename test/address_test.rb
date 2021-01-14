@@ -21,11 +21,15 @@ class AddressTest < MiniTest::Test
     },
     "1005 N Gravenstein Highway, Sebastopol, CA" => {
       :line1 => "1005 N Gravenstein Hwy",
-      :line2 => "Sebastopol, CA"
+      :line2 => "Sebastopol, CA",
+      :street_address_1 => "1005 N Gravenstein Hwy",
+      :street_address_2 => ""
     },
     "1005 N Gravenstein Highway, Suite 500, Sebastopol, CA" => {
       :line1 => "1005 N Gravenstein Hwy Suite 500",
-      :line2 => "Sebastopol, CA"
+      :line2 => "Sebastopol, CA",
+      :street_address_1 => "1005 N Gravenstein Hwy",
+      :street_address_2 => "Suite 500"
     },
     "1005 N Gravenstein Hwy Suite 500 Sebastopol, CA" => {
       :line1 => "1005 N Gravenstein Hwy Suite 500",
@@ -134,6 +138,40 @@ class AddressTest < MiniTest::Test
     "44 Canal Center Plaza Suite 500, Alexandria, VA 22314" => {
       :line1 => "44 Canal Center Plz Suite 500",
       :line2 => "Alexandria, VA 22314"
+    },
+    "One East 161st Street, Bronx, NY 10451" => {
+      :line1 => "One East 161st St",
+      :line2 => "Bronx, NY 10451",
+      :street_address_1 => "One East 161st St",
+      :street_address_2 => ""
+    },
+    "One East 161st Street Suite 10, Bronx, NY 10451" => {
+      :line1 => "One East 161st St Suite 10",
+      :line2 => "Bronx, NY 10451",
+      :street_address_1 => "One East 161st St",
+      :street_address_2 => "Suite 10"
+    },
+    "P.O. Box 280568 Queens Village, New York 11428" => {
+      :line1 => "PO Box 280568",
+      :line2 => "Queens Village, NY 11428"
+    },
+    "PO BOX 280568 Queens Village, New York 11428" => {
+      :line1 => "PO Box 280568",
+      :line2 => "Queens Village, NY 11428",
+      :street_address_1 => "PO Box 280568",
+      :street_address_2 => ""
+    },
+    "PO 280568 Queens Village, New York 11428" => {
+      :line1 => "PO 280568",
+      :line2 => "Queens Village, NY 11428"
+    },
+    "Two Pennsylvania Plaza New York, NY 10121-0091" => {
+      :line1 => "Two Pennsylvania Plz",
+      :line2 => "New York, NY 10121-0091"
+    },
+    "1400 CONNECTICUT AVE NW, WASHINGTON, DC 20036" => {
+      :line1 => "1400 Connecticut Ave NW",
+      :line2 => "Washington, DC 20036"
     }
   }
 
@@ -199,20 +237,27 @@ class AddressTest < MiniTest::Test
       :line1 => "233 S Wacker Dr Lobby",
       :line2 => "60606"
     }
-    #FIXME
+    # FIXME
     # "(233 S Wacker Dr lobby 60606)" => {
     # :line1 => "233 S Wacker Dr Lobby",
-      # :line2 => ""}
+    #   :line2 => ""}
   }
 
 
   def test_line1_with_valid_addresses
     ADDRESSES.each_pair do |address, expected|
       addr = StreetAddress::US.parse(address)
-      assert_equal addr.line1, expected[:line1]
+      assert_equal expected[:line1], addr.line1
     end
   end
 
+  def test_street_address_1_with_valid_addresses
+    ADDRESSES.select { |k,v| !v[:street_address_1].nil? }.each_pair do |address, expected|
+      addr = StreetAddress::US.parse(address)
+      assert_equal expected[:street_address_1], addr.street_address_1
+      assert_equal expected[:street_address_2], addr.street_address_2
+    end
+  end
 
   def test_line1_with_intersections
     INTERSECTIONS.each_pair do |address, expected|
@@ -259,7 +304,7 @@ class AddressTest < MiniTest::Test
       addr = StreetAddress::US.parse(address)
       expected_result = expected[:to_s]
       expected_result ||= [expected[:line1], expected[:line2]].select{|l| !l.empty?}.join(', ')
-      assert_equal addr.to_s, expected_result
+      assert_equal expected_result, addr.to_s
     end
   end
 
@@ -311,6 +356,29 @@ class AddressTest < MiniTest::Test
     assert_equal addr.to_s(:line2), addr.line2
   end
 
+  def test_to_s_for_street_address_1
+    address = "7800 Mill Station Rd, Apt. 7B, Sebastopol CA 95472-1234"
+    addr = StreetAddress::US.parse(address)
+    assert_equal addr.to_s(:street_address_1), "7800 Mill Station Rd"
+  end
+
+  def test_to_s_for_street_address_2
+    address = "7800 Mill Station Rd, Apt. 7B, Sebastopol CA 95472-1234"
+    addr = StreetAddress::US.parse(address)
+    assert_equal addr.to_s(:street_address_2), "Apt 7B"
+  end
+
+  def test_to_s_for_city_state_zip
+    address = "7800 Mill Station Rd Sebastopol CA 95472-1234"
+    addr = StreetAddress::US.parse(address)
+    assert_equal addr.to_s(:line2), addr.line2
+  end
+
+  def test_to_s_for_PO_box
+    address = "PO 7800 Sebastopol CA 95472-1234"
+    addr = StreetAddress::US.parse(address)
+    assert_equal "PO 7800", addr.to_s(:line1)
+  end
 
   def test_full_postal_code
     address = "7800 Mill Station Rd Sebastopol CA 95472-1234"
