@@ -19,19 +19,19 @@ StreetAddress::US version 2+ is designed to work with ruby 2+.  It may work with
 then in your code
 
 ```ruby
-    require 'street_address'
+    require "street_address"
 ```
 
 or from Gemfile
 
 ```ruby
-    gem 'StreetAddress', :require => "street_address"
+    gem "StreetAddress", :require => "street_address"
 ```
 
 ## Basic Usage
 
 ```ruby
-    require 'street_address'
+    require "street_address"
 
     address = StreetAddress::US.parse("1600 Pennsylvania Ave, Washington, DC, 20500")
     address.street # Pennsylvania
