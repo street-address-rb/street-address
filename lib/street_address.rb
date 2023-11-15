@@ -795,7 +795,7 @@ module StreetAddress
           # strip off some punctuation and whitespace
           input.values.each { |string|
             string.strip!
-            string.gsub!(/[^\w\s\-\#\&]/, '')
+            string.gsub!(/[^\w\s\-\#\&\p{L}]/, '')
           }
 
           input['redundant_street_type'] = false
