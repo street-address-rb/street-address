@@ -567,6 +567,7 @@ module StreetAddress
         :corner_regexp,
         :unit_regexp,
         :street_regexp,
+        :prefix_regexp,
         :place_regexp,
         :address_regexp,
         :informal_address_regexp,
@@ -618,7 +619,6 @@ module StreetAddress
            (?<street_type> #{street_type_regexp})\b
         )
         |
-        (?:(?<prefix> #{direct_regexp})\W+)?
         (?:
           (?<street> [^,]*\d)
           (?:[^\w,]* (?<suffix> #{direct_regexp})\b)
@@ -633,6 +633,18 @@ module StreetAddress
         )
       )
     /ix;
+
+    self.prefix_regexp = Regexp.new(
+      "(?<prefix>" +
+        DIRECTIONAL.values.sort { |a, b|
+          b.length <=> a.length
+        }.map { |c|
+          f = c.gsub(/(\w)/, '\1.')
+          [Regexp.quote(f), Regexp.quote(c)]
+        }.flatten.join("|") +
+      ")\\b",
+      Regexp::IGNORECASE
+    )
 
     # http://pe.usps.com/text/pub28/pub28c2_003.htm
     self.unit_prefix_numbered_regexp = /
@@ -689,6 +701,7 @@ module StreetAddress
       (?:#{unit_regexp} #{sep_regexp})?
       (?:#{number_regexp})? \W*
       (?:#{fraction_regexp} \W*)?
+      #{prefix_regexp} \W*
       #{street_regexp} #{sep_avoid_unit_regexp}
       (?:#{unit_regexp} #{sep_regexp})?
       (?:#{place_regexp})?
