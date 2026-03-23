@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module StreetAddress
   class US
     VERSION = '2.0.0'
@@ -11,8 +13,8 @@ module StreetAddress
       "southwest" => "SW",
       "west" => "W",
       "northwest" => "NW"
-    }
-    DIRECTION_CODES = DIRECTIONAL.invert
+    }.freeze
+    DIRECTION_CODES = DIRECTIONAL.invert.freeze
 
     STREET_TYPES = {
       'allee' => "aly",
@@ -377,12 +379,15 @@ module StreetAddress
       'well'  => "wl",
       'wells' => "wls",
       'wy'    => "way",
-    }
+    }.freeze
 
-    STREET_TYPES_LIST = {}
-    STREET_TYPES.to_a.each do |item|
-      STREET_TYPES_LIST[item[0]] = true
-      STREET_TYPES_LIST[item[1]] = true
+    STREET_TYPES_LIST = begin
+      list = {}
+      STREET_TYPES.each_pair do |key, val|
+        list[key] = true
+        list[val] = true
+      end
+      list.freeze
     end
 
     STATE_CODES = {
@@ -445,9 +450,9 @@ module StreetAddress
       "west virginia" => "WV",
       "wisconsin" => "WI",
       "wyoming" => "WY"
-    }
+    }.freeze
 
-    STATE_NAMES = STATE_CODES.invert
+    STATE_NAMES = STATE_CODES.invert.freeze
 
     STATE_FIPS = {
       "01" => "AL",
@@ -503,9 +508,9 @@ module StreetAddress
       "56" => "WY",
       "72" => "PR",
       "78" => "VI"
-    }
+    }.freeze
 
-    FIPS_STATES = STATE_FIPS.invert
+    FIPS_STATES = STATE_FIPS.invert.freeze
 
     NORMALIZE_MAP = {
       'prefix'  => DIRECTIONAL,
@@ -518,7 +523,7 @@ module StreetAddress
       'street_type1' => STREET_TYPES,
       'street_type2' => STREET_TYPES,
       'state'   => STATE_CODES,
-    }
+    }.freeze
 
     class << self
       attr_accessor(
@@ -845,7 +850,8 @@ module StreetAddress
 
 
       def state_name
-        name = StreetAddress::US::STATE_NAMES[state] and name.capitalize
+        name = StreetAddress::US::STATE_NAMES[state]
+        name&.split&.map(&:capitalize)&.join(" ")
       end
 
 
@@ -854,14 +860,14 @@ module StreetAddress
       end
 
 
-      def line1(s = "")
+      def line1
         parts = []
         if intersection?
           parts << prefix       if prefix
           parts << street
           parts << street_type  if street_type
           parts << suffix       if suffix
-          parts << 'and'
+          parts << "and"
           parts << prefix2      if prefix2
           parts << street2
           parts << street_type2 if street_type2
@@ -873,37 +879,35 @@ module StreetAddress
           parts << street_type if street_type && !redundant_street_type
           parts << suffix if suffix
           parts << unit_prefix if unit_prefix
-          #follow guidelines: http://pe.usps.gov/cpim/ftp/pubs/Pub28/pub28.pdf pg28
-          parts << (unit_prefix ? unit : "\# #{unit}") if unit
+          # follow USPS guidelines: http://pe.usps.gov/cpim/ftp/pubs/Pub28/pub28.pdf pg28
+          parts << (unit_prefix ? unit : "# #{unit}") if unit
         end
-        s + parts.join(' ').strip
+        parts.join(" ").strip
       end
 
 
-      def line2(s = "")
+      def line2
         parts = []
         parts << city  if city
         parts << state if state
-        s = s + parts.join(', ')
+        s = parts.join(", ")
         if postal_code
-          s << " #{postal_code}"
-          s << "-#{postal_code_ext}" if postal_code_ext
+          s = "#{s} #{postal_code}"
+          s = "#{s}-#{postal_code_ext}" if postal_code_ext
         end
         s.strip
       end
 
 
       def to_s(format = :default)
-        s = ""
         case format
         when :line1
-          s << line1(s)
+          line1
         when :line2
-          s << line2(s)
+          line2
         else
-          s << [line1, line2].select{ |l| !l.empty? }.join(', ')
+          [line1, line2].reject(&:empty?).join(", ")
         end
-        s
       end
 
 
@@ -916,6 +920,7 @@ module StreetAddress
       end
 
       def ==(other)
+        return false if other.nil?
         to_s == other.to_s
       end
     end
