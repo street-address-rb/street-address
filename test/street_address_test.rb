@@ -579,6 +579,40 @@ class StreetAddressUsTest < Minitest::Test
       :state => 'DC',
       :postal_code => '20500',
       :postal_code_ext => '0003'
+    },
+    # State abbreviation / street type conflicts (issue #48)
+    # These state codes conflict with street types: CT=Court, LA=Lane, MT=Mount
+    "100 Oak Ln, Hartford, CT 06101" => {
+      :number => '100',
+      :street => 'Oak',
+      :street_type => 'Ln',
+      :city => 'Hartford',
+      :state => 'CT',
+      :postal_code => '06101'
+    },
+    "100 Main St, Louisville, KY 40202" => {
+      :number => '100',
+      :street => 'Main',
+      :street_type => 'St',
+      :city => 'Louisville',
+      :state => 'KY',
+      :postal_code => '40202'
+    },
+    "100 Bourbon St, New Orleans, LA 70116" => {
+      :number => '100',
+      :street => 'Bourbon',
+      :street_type => 'St',
+      :city => 'New Orleans',
+      :state => 'LA',
+      :postal_code => '70116'
+    },
+    "100 Main St, Billings, MT 59101" => {
+      :number => '100',
+      :street => 'Main',
+      :street_type => 'St',
+      :city => 'Billings',
+      :state => 'MT',
+      :postal_code => '59101'
     }
   }
 
@@ -698,6 +732,33 @@ class StreetAddressUsTest < Minitest::Test
       :city=>nil,
       :state=>nil,
       :postal_code=>nil
+    },
+    # Street types that conflict with state codes (issue #48)
+    # These should parse as street type, not state
+    "122 Blueberry Ct" => {
+      :number => '122',
+      :street => 'Blueberry',
+      :street_type => 'Ct',
+      :state => nil
+    },
+    "122 N Virginia" => {
+      :number => '122',
+      :street => 'Virginia',
+      :prefix => 'N',
+      :street_type => nil,
+      :state => nil
+    },
+    "100 Main La" => {
+      :number => '100',
+      :street => 'Main',
+      :street_type => 'Ln',
+      :state => nil
+    },
+    "100 Elm Mt" => {
+      :number => '100',
+      :street => 'Elm',
+      :street_type => 'Mt',
+      :state => nil
     },
     "321 S. Washington" => { # RT#82146
       :street_type => nil,
