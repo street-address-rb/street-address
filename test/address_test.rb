@@ -136,6 +136,68 @@ class AddressTest < Minitest::Test
     "44 Canal Center Plaza Suite 500, Alexandria, VA 22314" => {
       :line1 => "44 Canal Center Plz Suite 500",
       :line2 => "Alexandria, VA 22314"
+    },
+    # Numbered streets
+    "123 E 42nd St, New York, NY 10017" => {
+      :line1 => "123 E 42nd St",
+      :line2 => "New York, NY 10017"
+    },
+    "350 5th Ave, New York, NY 10118" => {
+      :line1 => "350 5th Ave",
+      :line2 => "New York, NY 10118"
+    },
+    # Multi-word cities
+    "200 Oak Ave, West Palm Beach, FL 33401" => {
+      :line1 => "200 Oak Ave",
+      :line2 => "West Palm Beach, FL 33401"
+    },
+    "400 Pine St, San Luis Obispo, CA 93401" => {
+      :line1 => "400 Pine St",
+      :line2 => "San Luis Obispo, CA 93401"
+    },
+    # Multi-word street names
+    "500 Martin Luther King Jr Blvd, Atlanta, GA 30303" => {
+      :line1 => "500 Martin Luther King Jr Blvd",
+      :line2 => "Atlanta, GA 30303"
+    },
+    # Various unit types
+    "100 Main St Fl 3, Boston, MA 02101" => {
+      :line1 => "100 Main St Fl 3",
+      :line2 => "Boston, MA 02101"
+    },
+    "100 Main St Unit 4B, Boston, MA 02101" => {
+      :line1 => "100 Main St Unit 4B",
+      :line2 => "Boston, MA 02101"
+    },
+    # Full state names normalize to codes
+    "100 Main St, Rochester, New York 14604" => {
+      :line1 => "100 Main St",
+      :line2 => "Rochester, NY 14604"
+    },
+    # All-caps normalizes
+    "100 MAIN ST, BOSTON, MA 02101" => {
+      :line1 => "100 Main St",
+      :line2 => "Boston, MA 02101"
+    },
+    # Directional with periods
+    "100 N.W. Main St, Portland, OR 97201" => {
+      :line1 => "100 NW Main St",
+      :line2 => "Portland, OR 97201"
+    },
+    # Hyphenated street number
+    "42-15 Crescent St, Long Island City, NY 11101" => {
+      :line1 => "42-15 Crescent St",
+      :line2 => "Long Island City, NY 11101"
+    },
+    # No street type
+    "1 Broadway, New York, NY 10004" => {
+      :line1 => "1 Broadway",
+      :line2 => "New York, NY 10004"
+    },
+    # ZIP+4 with suffix direction
+    "1600 Pennsylvania Ave NW, Washington, DC 20500-0003" => {
+      :line1 => "1600 Pennsylvania Ave NW",
+      :line2 => "Washington, DC 20500-0003"
     }
   }
 

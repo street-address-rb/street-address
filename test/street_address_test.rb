@@ -340,6 +340,245 @@ class StreetAddressUsTest < Minitest::Test
       :state=>"VA",
       :postal_code=>"22206",
       :postal_code_ext=>nil
+    },
+    # Numbered streets
+    "123 E 42nd St, New York, NY 10017" => {
+      :number => '123',
+      :street => '42nd',
+      :street_type => 'St',
+      :prefix => 'E',
+      :city => 'New York',
+      :state => 'NY',
+      :postal_code => '10017'
+    },
+    "456 W 1st Ave, Columbus, OH 43201" => {
+      :number => '456',
+      :street => '1st',
+      :street_type => 'Ave',
+      :prefix => 'W',
+      :city => 'Columbus',
+      :state => 'OH',
+      :postal_code => '43201'
+    },
+    "350 5th Ave, New York, NY 10118" => {
+      :number => '350',
+      :street => '5th',
+      :street_type => 'Ave',
+      :city => 'New York',
+      :state => 'NY',
+      :postal_code => '10118'
+    },
+    # Multi-word cities
+    "100 Main St, Salt Lake City, UT 84101" => {
+      :number => '100',
+      :street => 'Main',
+      :street_type => 'St',
+      :city => 'Salt Lake City',
+      :state => 'UT',
+      :postal_code => '84101'
+    },
+    "200 Oak Ave, West Palm Beach, FL 33401" => {
+      :number => '200',
+      :street => 'Oak',
+      :street_type => 'Ave',
+      :city => 'West Palm Beach',
+      :state => 'FL',
+      :postal_code => '33401'
+    },
+    "400 Pine St, San Luis Obispo, CA 93401" => {
+      :number => '400',
+      :street => 'Pine',
+      :street_type => 'St',
+      :city => 'San Luis Obispo',
+      :state => 'CA',
+      :postal_code => '93401'
+    },
+    # Multi-word street names
+    "500 Martin Luther King Jr Blvd, Atlanta, GA 30303" => {
+      :number => '500',
+      :street => 'Martin Luther King Jr',
+      :street_type => 'Blvd',
+      :city => 'Atlanta',
+      :state => 'GA',
+      :postal_code => '30303'
+    },
+    "600 John F Kennedy Dr, San Francisco, CA 94118" => {
+      :number => '600',
+      :street => 'John F Kennedy',
+      :street_type => 'Dr',
+      :city => 'San Francisco',
+      :state => 'CA',
+      :postal_code => '94118'
+    },
+    # US Highway / State Route
+    "1234 US Highway 20, Lexington, NE 68001" => {
+      :number => '1234',
+      :street => 'Us Highway 20',
+      :street_type => 'Hwy',
+      :city => 'Lexington',
+      :state => 'NE',
+      :postal_code => '68001'
+    },
+    "5678 State Route 9, Saratoga Springs, NY 12866" => {
+      :number => '5678',
+      :street => 'State Route 9',
+      :street_type => 'Rte',
+      :city => 'Saratoga Springs',
+      :state => 'NY',
+      :postal_code => '12866'
+    },
+    # Various unit types
+    "100 Main St Fl 3, Boston, MA 02101" => {
+      :number => '100',
+      :street => 'Main',
+      :street_type => 'St',
+      :unit_prefix => 'Fl',
+      :unit => '3',
+      :city => 'Boston',
+      :state => 'MA',
+      :postal_code => '02101'
+    },
+    "100 Main St Rm 101, Boston, MA 02101" => {
+      :number => '100',
+      :street => 'Main',
+      :street_type => 'St',
+      :unit_prefix => 'Rm',
+      :unit => '101',
+      :city => 'Boston',
+      :state => 'MA',
+      :postal_code => '02101'
+    },
+    "100 Main St Bldg 5, Boston, MA 02101" => {
+      :number => '100',
+      :street => 'Main',
+      :street_type => 'St',
+      :unit_prefix => 'Bldg',
+      :unit => '5',
+      :city => 'Boston',
+      :state => 'MA',
+      :postal_code => '02101'
+    },
+    "100 Main St Dept A, Boston, MA 02101" => {
+      :number => '100',
+      :street => 'Main',
+      :street_type => 'St',
+      :unit_prefix => 'Dept',
+      :unit => 'A',
+      :city => 'Boston',
+      :state => 'MA',
+      :postal_code => '02101'
+    },
+    "100 Main St Unit 4B, Boston, MA 02101" => {
+      :number => '100',
+      :street => 'Main',
+      :street_type => 'St',
+      :unit_prefix => 'Unit',
+      :unit => '4B',
+      :city => 'Boston',
+      :state => 'MA',
+      :postal_code => '02101'
+    },
+    "100 Main St Apt A, Boston, MA 02101" => {
+      :number => '100',
+      :street => 'Main',
+      :street_type => 'St',
+      :unit_prefix => 'Apt',
+      :unit => 'A',
+      :city => 'Boston',
+      :state => 'MA',
+      :postal_code => '02101'
+    },
+    "100 Main St Apt 1A, Boston, MA 02101" => {
+      :number => '100',
+      :street => 'Main',
+      :street_type => 'St',
+      :unit_prefix => 'Apt',
+      :unit => '1A',
+      :city => 'Boston',
+      :state => 'MA',
+      :postal_code => '02101'
+    },
+    # Full state names
+    "100 Main St, Rochester, New York 14604" => {
+      :number => '100',
+      :street => 'Main',
+      :street_type => 'St',
+      :city => 'Rochester',
+      :state => 'NY',
+      :postal_code => '14604'
+    },
+    "200 Oak Ave, Portland, Oregon 97201" => {
+      :number => '200',
+      :street => 'Oak',
+      :street_type => 'Ave',
+      :city => 'Portland',
+      :state => 'OR',
+      :postal_code => '97201'
+    },
+    # All-caps input should normalize
+    "100 MAIN ST, BOSTON, MA 02101" => {
+      :number => '100',
+      :street => 'Main',
+      :street_type => 'St',
+      :city => 'Boston',
+      :state => 'MA',
+      :postal_code => '02101'
+    },
+    "1600 PENNSYLVANIA AVE, WASHINGTON, DC 20500" => {
+      :number => '1600',
+      :street => 'Pennsylvania',
+      :street_type => 'Ave',
+      :city => 'Washington',
+      :state => 'DC',
+      :postal_code => '20500'
+    },
+    # Directional abbreviations with periods
+    "100 N.W. Main St, Portland, OR 97201" => {
+      :number => '100',
+      :street => 'Main',
+      :street_type => 'St',
+      :prefix => 'NW',
+      :city => 'Portland',
+      :state => 'OR',
+      :postal_code => '97201'
+    },
+    # Hyphenated street number (Queens, NY style)
+    "42-15 Crescent St, Long Island City, NY 11101" => {
+      :number => '42-15',
+      :street => 'Crescent',
+      :street_type => 'St',
+      :city => 'Long Island City',
+      :state => 'NY',
+      :postal_code => '11101'
+    },
+    # No street type
+    "1 Broadway, New York, NY 10004" => {
+      :number => '1',
+      :street => 'Broadway',
+      :street_type => nil,
+      :city => 'New York',
+      :state => 'NY',
+      :postal_code => '10004'
+    },
+    # Famous addresses
+    "1 Infinite Loop, Cupertino, CA 95014" => {
+      :number => '1',
+      :street => 'Infinite',
+      :street_type => 'Loop',
+      :city => 'Cupertino',
+      :state => 'CA',
+      :postal_code => '95014'
+    },
+    # ZIP+4 with suffix direction
+    "1600 Pennsylvania Ave NW, Washington, DC 20500-0003" => {
+      :number => '1600',
+      :street => 'Pennsylvania',
+      :street_type => 'Ave',
+      :suffix => 'NW',
+      :city => 'Washington',
+      :state => 'DC',
+      :postal_code => '20500',
+      :postal_code_ext => '0003'
     }
   }
 
@@ -485,15 +724,26 @@ class StreetAddressUsTest < Minitest::Test
   }
 
 
-  EXPECTED_FAILURES =  [
-    "1005 N Gravenstein Hwy Sebastopol",
-    "1005 N Gravenstein Hwy Sebastopol CZ",
-    "Gravenstein Hwy 95472",
-    "E1005 Gravenstein Hwy 95472",
-    # "1005E Gravenstein Hwy 95472"
-    ## adding from original ruby test suite
-    "PO BOX 450, Chicago IL 60657"
-  ]
+  # Addresses that should either return nil or not produce a valid state.
+  # These represent known unsupported formats.
+  EXPECTED_FAILURES = [
+    "1005 N Gravenstein Hwy Sebastopol",      # no state, ambiguous city
+    "1005 N Gravenstein Hwy Sebastopol CZ",    # invalid state code
+    "Gravenstein Hwy 95472",                   # no street number
+    "E1005 Gravenstein Hwy 95472",             # letter prefix on number
+    "PO BOX 450, Chicago IL 60657",            # PO Box not supported
+    "PSC 1234, Box 12345, APO AE 09001",       # military APO address
+    "RR 1 Box 234, Smalltown, KS 67890",       # rural route
+    "HC 68 Box 23, Ruralville, NM 87001",      # highway contract route
+    "General Delivery, Anytown, US 99999",     # general delivery
+  ].freeze
+
+  # Addresses that parse but produce incorrect results due to
+  # limitations in the regex engine. These should be fixed in
+  # future versions.
+  KNOWN_MISPARSES = [
+    "1S155 Myrtle Ave, Oakbrook Terrace, IL 60181", # DuPage County grid number
+  ].freeze
 
 
   def test_address_parsing
@@ -615,6 +865,86 @@ class StreetAddressUsTest < Minitest::Test
     assert_equal addr, StreetAddress::US.parse(ADDRESSES.first[0])
     refute_equal addr, StreetAddress::US.parse(EXPECTED_FAILURES.first)
     refute_equal addr, nil
+  end
+
+  def test_known_misparses
+    # These addresses parse but produce incorrect field values.
+    # This test documents them and ensures they at least don't raise.
+    KNOWN_MISPARSES.each do |address|
+      addr = StreetAddress::US.parse(address)
+      assert addr, "#{address} should parse (even if incorrectly)"
+    end
+  end
+
+  def test_to_h
+    addr = StreetAddress::US.parse("1600 Pennsylvania Ave, Washington, DC 20500")
+    hash = addr.to_h
+    assert_equal "1600", hash[:number]
+    assert_equal "Pennsylvania", hash[:street]
+    assert_equal "Ave", hash[:street_type]
+    assert_equal "Washington", hash[:city]
+    assert_equal "DC", hash[:state]
+    assert_equal "20500", hash[:postal_code]
+    assert_nil hash[:unit]
+    assert_nil hash[:street2]
+  end
+
+  def test_to_h_with_intersection
+    addr = StreetAddress::US.parse("Hollywood Blvd and Vine St, Los Angeles, CA")
+    hash = addr.to_h
+    assert_equal "Hollywood", hash[:street]
+    assert_equal "Blvd", hash[:street_type]
+    assert_equal "Vine", hash[:street2]
+    assert_equal "St", hash[:street_type2]
+    assert_equal "Los Angeles", hash[:city]
+  end
+
+  def test_state_name
+    addr = StreetAddress::US.parse("100 Main St, Rochester, NY 14604")
+    assert_equal "New York", addr.state_name
+  end
+
+  def test_state_name_multi_word
+    addr = StreetAddress::US.parse("1600 Pennsylvania Ave, Washington, DC 20500")
+    assert_equal "District Of Columbia", addr.state_name
+  end
+
+  def test_state_name_nil_state
+    addr = StreetAddress::US.parse("100 Main St")
+    assert_nil addr.state_name
+  end
+
+  def test_state_fips
+    addr = StreetAddress::US.parse("100 Main St, Rochester, NY 14604")
+    assert_equal "36", addr.state_fips
+  end
+
+  def test_state_fips_nil_state
+    addr = StreetAddress::US.parse("100 Main St")
+    assert_nil addr.state_fips
+  end
+
+  def test_full_postal_code_with_ext
+    addr = StreetAddress::US.parse("100 Main St, Boston, MA 02101-1234")
+    assert_equal "02101-1234", addr.full_postal_code
+  end
+
+  def test_full_postal_code_without_ext
+    addr = StreetAddress::US.parse("100 Main St, Boston, MA 02101")
+    assert_equal "02101", addr.full_postal_code
+  end
+
+  def test_full_postal_code_nil
+    addr = StreetAddress::US.parse("100 Main St, Boston, MA")
+    assert_nil addr.full_postal_code
+  end
+
+  def test_intersection_flag
+    addr = StreetAddress::US.parse("Hollywood Blvd and Vine St, Los Angeles, CA")
+    assert addr.intersection?
+
+    addr = StreetAddress::US.parse("1600 Pennsylvania Ave, Washington, DC 20500")
+    refute addr.intersection?
   end
 
   def compare_expected_to_actual_hash(expected, actual, address)
