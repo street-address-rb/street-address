@@ -1,7 +1,7 @@
 require 'minitest/autorun'
 require 'street_address'
 
-class AddressTest < MiniTest::Test
+class AddressTest < Minitest::Test
   ADDRESSES = {
     "1005 Gravenstein Hwy 95472" => {
       :line1 => "1005 Gravenstein Hwy",

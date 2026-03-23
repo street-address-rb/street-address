@@ -531,7 +531,6 @@ module StreetAddress
         :direct_regexp,
         :zip_regexp,
         :corner_regexp,
-        :unit_regexp,
         :street_regexp,
         :place_regexp,
         :address_regexp,
