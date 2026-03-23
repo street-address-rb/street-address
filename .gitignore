@@ -1,11 +1,11 @@
 .DS_Store
-.swp
+*.swp
 *.log
 .ruby-version
 .bundle
-Gemfile.lock
-.gem
+*.gem
 *.bak
 *~
 *.old
 *.tar.gz
+pkg/

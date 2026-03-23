@@ -1,71 +1,103 @@
-![Gem Version](http://img.shields.io/gem/v/StreetAddress.svg)
-![Build Status](https://circleci.com/gh/derrek/street-address.svg?style=shield)
+[![Gem Version](https://img.shields.io/gem/v/StreetAddress.svg)](https://rubygems.org/gems/StreetAddress)
+[![CI](https://github.com/street-address-rb/street-address/actions/workflows/ci.yml/badge.svg)](https://github.com/street-address-rb/street-address/actions/workflows/ci.yml)
 
-# DESCRIPTION
-  
-Parses a string returning a normalized Address object. When the string is not an US address it returns nil.
+# StreetAddress
 
-This is a port of the perl module [Geo::StreetAddress::US](https://github.com/timbunce/Geo-StreetAddress-US) originally written by Schuyler D. Erle. 
+Parses a US street address string and returns a normalized Address object. Returns `nil` when the string is not a recognized US address format.
+
+This is a port of the Perl module [Geo::StreetAddress::US](https://github.com/timbunce/Geo-StreetAddress-US) originally written by Schuyler D. Erle.
 
 ## Ruby Version
-StreetAddress::US version 2+ is designed to work with ruby 2+.  It may work with ruby 1.9.3, but will not work with ruby 1.8.x. If you need this to work pre ruby 2.0 please use gem version 1.0.6 or below.
+
+Requires Ruby 3.3 or later. For Ruby 2.x support, use gem version 1.0.6.
 
 ## Installation
 
 ```shell
-    gem install StreetAddress
+gem install StreetAddress
 ```
 
 then in your code
 
 ```ruby
-    require 'street_address'
+require 'street_address'
 ```
 
-or from Gemfile
+or in your Gemfile
 
 ```ruby
-    gem 'StreetAddress', :require => "street_address"
+gem 'StreetAddress', require: 'street_address'
 ```
 
 ## Basic Usage
 
 ```ruby
-    require 'street_address'
+require 'street_address'
 
-    address = StreetAddress::US.parse("1600 Pennsylvania Ave, Washington, DC, 20500")
-    address.street # Pennsylvania
-    address.number # 1600
-    address.postal_code # 20500
-    address.city # Washington
-    address.state # DC
-    address.state_name # District of columbia
-    address.street_type # Ave
-    address.intersection? # false
-    address.to_s # "1600 Pennsylvania Ave, Washington, DC 20500"
-    address.to_s(:line1) # 1600 Pennsylvania Ave
+address = StreetAddress::US.parse("1600 Pennsylvania Ave, Washington, DC, 20500")
+address.number      # "1600"
+address.street      # "Pennsylvania"
+address.street_type # "Ave"
+address.city        # "Washington"
+address.state       # "DC"
+address.state_name  # "District Of Columbia"
+address.postal_code # "20500"
+address.intersection? # false
+address.to_s        # "1600 Pennsylvania Ave, Washington, DC 20500"
+address.to_s(:line1) # "1600 Pennsylvania Ave"
+address.to_s(:line2) # "Washington, DC 20500"
+address.to_h        # { number: "1600", street: "Pennsylvania", ... }
 
-    address = StreetAddress::US.parse("1600 Pennsylvania Ave") 
-    address.street # Pennsylvania
-    address.number # 1600
-    address.state # nil
-
-    address = StreetAddress::US.parse("5904 Richmond Hwy Ste 340 Alexandria VA 22303-1864")
-    address.postal_code_ext # 1846
-    address = StreetAddress::US.parse("5904 Richmond Hwy Ste 340 Alexandria VA 223031864")
-    address.postal_code_ext # 1846
+address = StreetAddress::US.parse("1600 Pennsylvania Ave")
+address.street # "Pennsylvania"
+address.number # "1600"
+address.state  # nil
 ```
+
+## ZIP+4 Support
+
+```ruby
+address = StreetAddress::US.parse("5904 Richmond Hwy Ste 340 Alexandria VA 22303-1864")
+address.postal_code     # "22303"
+address.postal_code_ext # "1864"
+address.full_postal_code # "22303-1864"
+
+# Also works without the hyphen
+address = StreetAddress::US.parse("5904 Richmond Hwy Ste 340 Alexandria VA 223031864")
+address.postal_code_ext # "1864"
+```
+
+## Intersection Parsing
+
+```ruby
+address = StreetAddress::US.parse("Hollywood Blvd and Vine St, Los Angeles, CA")
+address.intersection? # true
+address.street        # "Hollywood"
+address.street_type   # "Blvd"
+address.street2       # "Vine"
+address.street_type2  # "St"
+```
+
 ## Stricter Parsing
 
 ```ruby
-    address = StreetAddress::US.parse_address("1600 Pennsylvania Avenue")
-    # nil - not enough information to be a full address
-    
-    address = StreetAddress::US.parse_address("1600 Pennsylvania Ave, Washington, DC, 20500")
-    # same results as above
+address = StreetAddress::US.parse_address("1600 Pennsylvania Avenue")
+# nil - not enough information to be a full address
+
+address = StreetAddress::US.parse_address("1600 Pennsylvania Ave, Washington, DC, 20500")
+# Returns Address object - full address provided
 ```
 
-## License
-The [MIT Licencse](http://opensource.org/licenses/MIT)
+## Known Limitations
 
-Copyright (c) 2007,2008,2009,2010,2011,2012,2013,2014,2015 Derrek Long and Contributors
+- US addresses only (returns `nil` for international addresses)
+- PO Boxes are not supported
+- Military addresses (APO/FPO) are not supported
+- Rural routes (RR) and highway contract routes (HC) are not supported
+- Addresses ending in "United States" or "USA" may not parse correctly
+
+## License
+
+The [MIT License](http://opensource.org/licenses/MIT)
+
+Copyright (c) 2007-2026 Derrek Long and Contributors
