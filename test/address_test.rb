@@ -102,7 +102,7 @@ class AddressTest < Minitest::Test
       :line2 => "Minneapolis, MN"
     },
     "3813 1/2 Some Road, Los Angeles, CA" => {
-      :line1 => "3813 Some Rd",
+      :line1 => "3813 1/2 Some Rd",
       :line2 => "Los Angeles, CA"
     },
     "1 First St, e San Jose CA" => {
