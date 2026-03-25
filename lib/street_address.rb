@@ -556,7 +556,7 @@ module StreetAddress
     }
 
     self.street_type_regexp = Regexp.new(STREET_TYPES_LIST.keys.join("|"), Regexp::IGNORECASE)
-    self.fraction_regexp = /\d+\/\d+/
+    self.fraction_regexp = /(?<fraction>\d+\/\d+)/
     self.state_regexp = Regexp.new(
       '\b' + STATE_CODES.flatten.map{ |code| Regexp.quote(code) }.join("|") + '\b',
       Regexp::IGNORECASE
@@ -766,10 +766,16 @@ module StreetAddress
         end
 
         def to_address(input, args)
+          # append fraction to number before punctuation cleanup
+          if input['fraction'] && input['number']
+            input['number'] = "#{input['number']} #{input['fraction']}"
+            input.delete('fraction')
+          end
+
           # strip off some punctuation and whitespace
           input.values.each { |string|
             string.strip!
-            string.gsub!(/[^\w\s\-\#\&]/, '')
+            string.gsub!(/[^\w\s\-\#\&\/]/, '')
           }
 
           input['redundant_street_type'] = false

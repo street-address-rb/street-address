@@ -208,11 +208,19 @@ class StreetAddressUsTest < Minitest::Test
       :prefix => 'SE'
     },
     "3813 1/2 Some Road, Los Angeles, CA" => {
-      :number => '3813',
+      :number => '3813 1/2',
       :street => 'Some',
       :state => 'CA',
       :city => 'Los Angeles',
       :street_type => 'Rd',
+    },
+    "123 1/2 Main St, New York, NY 10001" => { # fractional house number (USPS Pub 28)
+      :number => '123 1/2',
+      :street => 'Main',
+      :street_type => 'St',
+      :city => 'New York',
+      :state => 'NY',
+      :postal_code => '10001'
     },
     "1 First St, e San Jose CA" => { # lower case city direction
       :number => '1',
