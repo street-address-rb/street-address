@@ -613,6 +613,23 @@ class StreetAddressUsTest < Minitest::Test
       :city => 'Billings',
       :state => 'MT',
       :postal_code => '59101'
+    },
+    # Unicode street names
+    "100 Cañon Rd, Santa Fe, NM 87501" => {
+      :number => '100',
+      :street => 'Cañon',
+      :street_type => 'Rd',
+      :city => 'Santa Fe',
+      :state => 'NM',
+      :postal_code => '87501'
+    },
+    "200 José Martí Blvd, Miami, FL 33101" => {
+      :number => '200',
+      :street => 'José Martí',
+      :street_type => 'Blvd',
+      :city => 'Miami',
+      :state => 'FL',
+      :postal_code => '33101'
     }
   }
 
