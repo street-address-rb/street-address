@@ -288,6 +288,7 @@ module StreetAddress
       'road'  => "rd",
       'roads' => "rds",
       'route' => "rte",
+      'run'   => "run",
       'rvr'   => "riv",
       'shoal' => "shl",
       'shoals'=> "shls",

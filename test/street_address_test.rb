@@ -630,6 +630,15 @@ class StreetAddressUsTest < Minitest::Test
       :city => 'Miami',
       :state => 'FL',
       :postal_code => '33101'
+    },
+    # "Run" street type
+    "400 Mill Run, Lancaster, PA 17601" => {
+      :number => '400',
+      :street => 'Mill',
+      :street_type => 'Run',
+      :city => 'Lancaster',
+      :state => 'PA',
+      :postal_code => '17601'
     }
   }
 
