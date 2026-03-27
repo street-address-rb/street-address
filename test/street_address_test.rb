@@ -808,6 +808,8 @@ class StreetAddressUsTest < Minitest::Test
     "500 BROADWAY APT 2N, NEW YORK NY 10012", # directional letter in unit number (issue #52)
     "500 BROADWAY APT 3W, NEW YORK NY 10012", # directional letter in unit number (issue #52)
     "500 BROADWAY APT 4S, NEW YORK NY 10012", # directional letter in unit number (issue #52)
+    "120 S Main St Salt Lake City UT 84101", # street type in city name without commas (issue #10)
+    "123 Estrada Ave Fort Knox KY 40121", # street type in city name without commas (issue #10)
   ].freeze
 
 
