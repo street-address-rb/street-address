@@ -804,6 +804,10 @@ class StreetAddressUsTest < Minitest::Test
   # future versions.
   KNOWN_MISPARSES = [
     "1S155 Myrtle Ave, Oakbrook Terrace, IL 60181", # DuPage County grid number
+    "500 BROADWAY APT 1E, NEW YORK NY 10012", # directional letter in unit number (issue #52)
+    "500 BROADWAY APT 2N, NEW YORK NY 10012", # directional letter in unit number (issue #52)
+    "500 BROADWAY APT 3W, NEW YORK NY 10012", # directional letter in unit number (issue #52)
+    "500 BROADWAY APT 4S, NEW YORK NY 10012", # directional letter in unit number (issue #52)
   ].freeze
 
 
