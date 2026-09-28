@@ -775,9 +775,13 @@ module StreetAddress
 
           input['redundant_street_type'] = false
           if( input['street'] && !input['street_type'] )
-            match = street_regexp.match(input['street'])
-            input['street_type'] = match['street_type']
-          input['redundant_street_type'] = true
+            if( match = street_regexp.match(input['street']) )
+              input['street_type'] = match['street_type']
+              input['redundant_street_type'] = true
+            else
+              # street was not parseable (e.g. only punctuation); keep the rest of the address
+              input.delete('street')
+            end
           end
 
           NORMALIZE_MAP.each_pair { |key, map|
