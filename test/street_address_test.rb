@@ -925,6 +925,18 @@ class StreetAddressUsTest < Minitest::Test
     assert_equal "St", a.street_type
   end
 
+  def test_unparseable_street_returns_partial_address
+    {
+      "123 [, AUSTIN, TX 78701" => { number: "123", street: nil, city: "Austin", state: "TX", postal_code: "78701" },
+      "100 N. , AUSTIN, TX"     => { number: "100", street: nil, prefix: "N", city: "Austin", state: "TX" },
+      "123 - , AUSTIN, TX"      => { number: "123", street: nil, city: "Austin", state: "TX" },
+    }.each_pair do |address, expected|
+      compare_expected_to_actual_hash(expected, StreetAddress::US.parse_address(address).to_h, address)
+      compare_expected_to_actual_hash(expected, StreetAddress::US.parse(address).to_h, address)
+    end
+    assert_equal "123", StreetAddress::US.parse("123 [, AUSTIN, TX 78701").line1
+  end
+
   def test_parse
     assert_nil StreetAddress::US.parse("&")
     assert_nil StreetAddress::US.parse(" and ")

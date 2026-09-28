@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [Unreleased]
+
+### Fixed
+- `parse` / `parse_address` no longer raise `NoMethodError` when the street is unparseable (e.g. only punctuation, as in `"123 [, Austin, TX 78701"`); the address is returned with `street` set to `nil`
+
 ## [2.0.0] - 2026-03-23
 
 ### Added

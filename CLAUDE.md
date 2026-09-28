@@ -29,7 +29,7 @@ street_address.gemspec          # gem spec (version hardcoded as "2.0.0")
 - **Constants**: All lookup hashes are frozen
 
 ## Tests
-- 38 runs, 872 assertions
+- 39 runs, 973 assertions
 - Tests use data-driven pattern: hash of input -> expected output
 - `EXPECTED_FAILURES`: addresses that should return nil or no state (PO Box, military, rural route, etc.)
 - `KNOWN_MISPARSES`: addresses that parse but produce incorrect values (DuPage County grid numbers)
